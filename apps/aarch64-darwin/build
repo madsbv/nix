@@ -15,6 +15,6 @@ echo "${GREEN}Starting build...${NC}"
 nix --extra-experimental-features 'nix-command flakes' build .#$SYSTEM $@
 
 echo "${GREEN}Cleaning up...${NC}"
-unlink ./result
+# unlink ./result
 
 echo "${GREEN}Build complete!${NC}"
