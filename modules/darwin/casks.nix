@@ -34,6 +34,13 @@ _:
   "firefox"
   "vivaldi"
 
+  # Communication
+  "signal"
+
+  # Docs
+  "calibre"
+  "djview4"
+
   # System stuff
   "pirj/noclamshell/noclamshell "
   "felixkratz/formulae/border"

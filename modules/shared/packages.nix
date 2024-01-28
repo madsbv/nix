@@ -46,7 +46,7 @@ with pkgs; [
   # Communication tools
   zoom-us
   discord
-  signal-desktop
+  # signal-desktop # nix pkg only supported on linux
 
   # Text and terminal utilities
   htop
@@ -70,15 +70,15 @@ with pkgs; [
   bibutils
   stylelint
   texlab
-  wordnet
+  # wordnet # Build broken
   # TODO: Enable when everything else works
   # texliveFull
 
   # Documents
   djvulibre
-  djview
+  # djview # Broken on darwin
   poppler
-  calibre
+  # calibre # Currently broken on darwin
 
   # Email
   isync

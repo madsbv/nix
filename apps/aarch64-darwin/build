@@ -17,4 +17,4 @@ nix --extra-experimental-features 'nix-command flakes' build .#$SYSTEM $@
 echo "${GREEN}Cleaning up...${NC}"
 unlink ./result
 
-echo "${GREEN}Switch to new generation complete!${NC}"
+echo "${GREEN}Build complete!${NC}"

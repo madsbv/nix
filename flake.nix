@@ -36,10 +36,10 @@
       url = "github:homebrew/homebrew-cask-fonts";
       flake = false;
     };
-    koekeishiya-formulae = {
-      url = "github:koekeishiya/homebrew-formulae";
-      flake = false;
-    };
+    # koekeishiya-formulae = {
+    #   url = "github:koekeishiya/homebrew-formulae";
+    #   flake = false;
+    # };
     felixkratz-formulae = {
       url = "github:felixkratz/homebrew-formulae";
       flake = false;
@@ -63,10 +63,9 @@
     };
   };
   outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
-    , homebrew-cask, homebrew-cask-fonts, homebrew-services
-    , koekeishiya-formulae, felixkratz-formulae, pirj-noclamshell
-    , railwaycat-emacsmacport, home-manager, nixpkgs, disko, agenix, secrets
-    }@inputs:
+    , homebrew-cask, homebrew-cask-fonts, homebrew-services, felixkratz-formulae
+    , pirj-noclamshell, railwaycat-emacsmacport, home-manager, nixpkgs, disko
+    , agenix, secrets }@inputs:
     let
       user = "mvilladsen";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
