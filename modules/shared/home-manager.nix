@@ -12,8 +12,8 @@ in {
     enableZshIntegration = true;
   };
   bacon = {
-    true;
-    settings = {};
+    enable = true;
+    settings = { };
   };
   neovim.enable = true;
 

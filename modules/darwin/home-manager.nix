@@ -42,10 +42,14 @@ in {
     };
   };
 
+  # TODO: Try to move the xdg, sessionVariables and shellAliases parts into modules/shared somewhere.
+  # TODO: Create a '.config' directory in home-manager directory, together with a variable referencing its absolute path in nix, and put non-nix config files in there?
+
   # Enable home-manager
   home-manager = {
     useGlobalPkgs = true;
     users.${user} = { pkgs, config, lib, ... }: {
+      xdg.enable = true;
       home = {
         packages = pkgs.callPackage ./packages.nix { };
         file = lib.mkMerge [
@@ -55,7 +59,27 @@ in {
         ];
 
         stateVersion = "23.11";
+        sessionVariables = {
+          LESSHISTFILE = "$XDG_CACHE_HOME/lesshst";
+          WGETRC = "$XDG_CONFIG_HOME/wgetrc";
+          EDITOR = "ec";
+          ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
+          ZSH_CACHE = "$XDG_CACHE_HOME/zsh";
+        };
+
+        shellAliases = {
+          wget = "wget --hsts-file=$XDG_CACHE_HOME/.wget-hsts";
+          ec = "emacsclient -c -n -a nvim";
+
+          grep = "grep -i --color=always";
+          ls = "ls -A -B -F -G -h";
+          # Supposedly the space at the end of these aliases should make these commands
+          # work with other aliases as input.
+          watch = "watch -cd ";
+          sudo = "sudo ";
+        };
       };
+
       programs = { }
         // import ../shared/home-manager.nix { inherit config pkgs lib; };
     };
@@ -90,30 +114,6 @@ in {
         }
       ];
     };
-  };
-
-  # TODO: Try to move the following into modules/shared somewhere.
-  # TODO: Create a '.config' directory in home-manager directory, together with a variable referencing its absolute path in nix, and put non-nix config files in there?
-  xdg.enable = true;
-
-  home.sessionVariables = {
-    LESSHISTFILE = "$XDG_CACHE_HOME/lesshst";
-    WGETRC = "$XDG_CONFIG_HOME/wgetrc";
-    EDITOR = "ec";
-    ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
-    ZSH_CACHE = "$XDG_CACHE_HOME/zsh";
-  };
-
-  home.shellAliases = {
-    wget = "wget --hsts-file=$XDG_CACHE_HOME/.wget-hsts";
-    ec = "emacsclient -c -n -a nvim";
-
-    grep = "grep -i --color=always";
-    ls = "ls -A -B -F -G -h";
-    # Supposedly the space at the end of these aliases should make these commands
-    # work with other aliases as input.
-    watch = "watch -cd ";
-    sudo = "sudo ";
   };
 
 }

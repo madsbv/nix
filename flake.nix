@@ -16,7 +16,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew = { url = "github:zhaofengli-wip/nix-homebrew"; };
-    # TODO: Write a function to turn a list of github urls directly into homebrew taps to clean this up.
     homebrew-bundle = {
       url = "github:homebrew/homebrew-bundle";
       flake = false;
@@ -27,6 +26,30 @@
     };
     homebrew-cask = {
       url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    homebrew-services = {
+      url = "github:homebrew/homebrew-services";
+      flake = false;
+    };
+    homebrew-cask-fonts = {
+      url = "github:homebrew/homebrew-cask-fonts";
+      flake = false;
+    };
+    koekeishiya-formulae = {
+      url = "github:koekeishiya/homebrew-formulae";
+      flake = false;
+    };
+    felixkratz-formulae = {
+      url = "github:felixkratz/homebrew-formulae";
+      flake = false;
+    };
+    pirj-noclamshell = {
+      url = "github:pirj/homebrew-noclamshell";
+      flake = false;
+    };
+    railwaycat-emacsmacport = {
+      url = "github:railwaycat/homebrew-emacsmacport";
       flake = false;
     };
     # Declarative disk partitioning in nixos
@@ -40,7 +63,10 @@
     };
   };
   outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
-    , homebrew-cask, home-manager, nixpkgs, disko, agenix, secrets }@inputs:
+    , homebrew-cask, homebrew-cask-fonts, homebrew-services
+    , koekeishiya-formulae, felixkratz-formulae, pirj-noclamshell
+    , railwaycat-emacsmacport, home-manager, nixpkgs, disko, agenix, secrets
+    }@inputs:
     let
       user = "mvilladsen";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
@@ -112,6 +138,12 @@
                   "homebrew/homebrew-core" = homebrew-core;
                   "homebrew/homebrew-cask" = homebrew-cask;
                   "homebrew/homebrew-bundle" = homebrew-bundle;
+                  "homebrew/cask-fonts" = homebrew-cask-fonts;
+                  "homebrew/services" = homebrew-services;
+                  "koekeishiya/formulae" = koekeishiya-formulae;
+                  "felixkratz/formulae" = felixkratz-formulae;
+                  "pirj/noclamshell" = pirj-noclamshell;
+                  "railwaycat/emacsmacport" = railwaycat-emacsmacport;
                 };
                 mutableTaps = false;
                 autoMigrate = true;
