@@ -6,7 +6,7 @@ let
   user = "mvilladsen";
   email = "mvilladsen@pm.me";
 
-  gitignore_global = (builtins.readFile ./gitignore_global.nix);
+  gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
 in {
   java.enable = true;
   pyenv = {
