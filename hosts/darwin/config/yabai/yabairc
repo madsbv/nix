@@ -1,0 +1,80 @@
+#!/bin/sh
+# for this to work you must configure sudo such that
+# it will be able to run the command without password.
+# This needs to be updated at every upgrade, see https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
+# Instructions: Run
+# sudo visudo -f /private/etc/sudoers.d/yabai
+# and update the sha256 hash (computed as the output of 'shasum -a 256 $(which yabai)')
+# You can also just replace the existing line with the output of this command:
+# echo "$(whoami) ALL=(root) NOPASSWD: sha256:$(shasum -a 256 $(which yabai) | cut -d " " -f 1) $(which yabai) --load-sa"
+
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
+# Corresponds to the sketchybarrc $CONFIG_DIR
+SKETCHYBAR_DIR="$HOME/.config/sketchybar"
+
+# Config
+yabai -m config \
+    mouse_follows_focus          off            \
+    focus_follows_mouse          off            \
+    window_origin_display        focused        \
+    window_placement             second_child   \
+    window_zoom_persist          on             \
+    window_shadow                float          \
+    window_animation_duration    0.0            \
+    window_animation_frame_rate  120            \
+    window_opacity_duration      0.0            \
+    active_window_opacity        1.0            \
+    normal_window_opacity        0.80           \
+    window_opacity               off             \
+    insert_feedback_color        0xffd75f5f     \
+    split_ratio                  0.50           \
+    split_type                   auto           \
+    auto_balance                 off            \
+    layout                       bsp            \
+    mouse_modifier               fn             \
+    mouse_action1                move           \
+    mouse_action2                resize         \
+    mouse_drop_action            swap
+
+# Looks
+## Heavily inspired by https://github.com/julian-heng/yabai-config/blob/master/yabairc
+yabai -m config top_padding                 3
+yabai -m config bottom_padding              3
+yabai -m config left_padding                2
+yabai -m config right_padding               2
+yabai -m config window_gap                  2
+
+
+# Rules (mainly to make certain badly behaved apps float)
+yabai -m rule --add label="Software Update" title="Software Update" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+
+
+# From https://github.com/koekeishiya/yabai/issues/1445
+# Note: Completely sane behaviour is not really possible due to MacOS default behaviour taking effect first, and yabai not having a good way to override it. That is, the signals below only take effect after MacOS does its thing, namely to focus other windows from the same app.
+# 231215: There's still some weirdness happening with this, but probably not fixable.
+yabai -m signal --add event=window_destroyed action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq '.[0].id') &> /dev/null"
+yabai -m signal --add event=window_minimized action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq '.[0].id') &> /dev/null"
+yabai -m signal --add event=application_terminated action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq '.[0].id') &> /dev/null"
+yabai -m signal --add event=application_hidden action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq '.[0].id') &> /dev/null"
+
+
+borders hidpi=on active_color='0xFFF17013' inactive_color='0x00000000' style=square width=4 &
+
+yabai -m signal --add event=space_changed action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=space_created action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=space_destroyed action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=window_created action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=window_destroyed action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=window_minimized action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=window_deminimized action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=application_terminated action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=application_launched action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=application_hidden action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=application_unhidden action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=display_added action="$SKETCHYBAR_DIR/plugins/space.sh"
+yabai -m signal --add event=display_removed action="$SKETCHYBAR_DIR/plugins/space.sh"
+
+echo "yabai configuration loaded on $(date)"

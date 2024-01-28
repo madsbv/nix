@@ -5,6 +5,8 @@ let
   name = "Mads Bach Villadsen";
   user = "mvilladsen";
   email = "mvilladsen@pm.me";
+
+  gitignore_global = (builtins.readFile ./gitignore_global.nix);
 in {
   java.enable = true;
   pyenv = {
@@ -52,18 +54,15 @@ in {
     history.path = "${config.xdg.dataHome}/zsh/zsh_history";
   };
 
+  gh.enable = true;
   git = {
     enable = true;
-    # ignores = [ "*.swp" ];
+    ignores = gitignore_global;
     userName = name;
     userEmail = email;
     extraConfig = {
       init.defaultBranch = "main";
-      # core = {
-      #   editor = "vim";
-      #   autocrlf = "input";
-      # };
-      # commit.gpgsign = true;
+      credential.helper = "store";
       pull.rebase = true;
       rebase.autoStash = true;
     };

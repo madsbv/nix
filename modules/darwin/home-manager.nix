@@ -58,7 +58,7 @@ in {
     };
   };
 
-  # TODO: Try to move the xdg, sessionVariables and shellAliases parts into modules/shared somewhere.
+  # TODO: Try to move the xdg, sessionVariables and shellAliases parts into modules/shared somewhere. This requires that we figure out exactly where to set these things in nixos.
   # TODO: Create a '.config' directory in home-manager directory, together with a variable referencing its absolute path in nix, and put non-nix config files in there?
 
   # Enable home-manager

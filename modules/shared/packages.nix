@@ -15,7 +15,6 @@ with pkgs; [
   wget
   zip
   fd
-  gh
 
   # Encryption and security tools
   age

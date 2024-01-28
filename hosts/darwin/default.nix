@@ -49,6 +49,7 @@ in {
   # Enable fonts dir
   fonts.fontDir.enable = true;
 
+  # TODO: What exactly does this do? Do I need to install emacs system-wide for this to work? If so I'll have to duplicate some emacs logic from darwin/home-manager.nix. Define in flake.nix and output?
   # launchd.user.agents.emacs.path = [ config.environment.systemPath ];
   # launchd.user.agents.emacs.serviceConfig = {
   #   KeepAlive = true;
@@ -61,10 +62,8 @@ in {
   #   StandardOutPath = "/tmp/emacs.out.log";
   # };
 
-  # TODO: Update or remove this (at least temporarily)
   system = {
     stateVersion = 4;
-
     # TODO: Go through all of these settings and set as desired.
     # defaults = {
     #   NSGlobalDomain = {
@@ -102,5 +101,10 @@ in {
     #   enableKeyMapping = true;
     #   remapCapsLockToControl = true;
     # };
+  };
+  services.yabai = {
+    enable = true;
+    enableScriptingAddition = true;
+    extraConfig = (builtins.readFile ./config/yabai/yabairc);
   };
 }
