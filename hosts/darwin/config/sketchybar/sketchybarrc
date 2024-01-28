@@ -1,0 +1,81 @@
+source "$CONFIG_DIR/colors.sh"
+source "$CONFIG_DIR/icons.sh"
+
+ITEM_DIR="$CONFIG_DIR/items"
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+bar=(
+height=34
+blur_radius=30
+position=top
+padding_left=5
+padding_right=5
+color=$BAR_COLOR
+notch_width=200
+notch_offset=0
+display=main
+sticky=on
+)
+
+
+default=(
+icon.font="Hack Nerd Font:Bold:17.0"
+icon.color=$ICON_COLOR
+label.font="Hack Nerd Font:Bold:14.0"
+label.color=$LABEL_COLOR
+padding_left=5
+padding_right=5
+label.padding_left=4
+label.padding_right=4
+icon.padding_left=4
+icon.padding_right=4
+)
+sketchybar --hotload true --default "${default[@]}" --bar "${bar[@]}"
+
+source "$ITEM_DIR/spaces.sh"
+
+items=(
+# Left
+--add item space_separator left                         \
+--set space_separator icon=
+padding_left=10
+padding_right=10
+label.drawing=off
+
+--add item front_app left
+--set front_app       script="$PLUGIN_DIR/front_app.sh"
+icon.drawing=off
+--subscribe front_app front_app_switched
+
+# Right
+--add item clock right
+--set clock   update_freq=10
+icon=
+script="$PLUGIN_DIR/clock.sh"
+
+--add item volume right
+--set volume  script="$PLUGIN_DIR/volume.sh"
+--subscribe volume volume_change
+
+--add item battery right
+--set battery script="$PLUGIN_DIR/battery.sh"
+update_freq=120
+--subscribe battery system_woke power_source_change
+--add item wifi right
+--set wifi    script="$PLUGIN_DIR/wifi.sh"
+background.padding_right=12
+update_freq=5
+
+--add bracket system volume battery wifi
+--set system background.corner_radius=4
+background.border_width=2
+background.height=25
+background.border_color=$BLUE
+background.drawing=on
+)
+
+sketchybar "${items[@]}"
+
+sketchybar --update
+# Since spaces don't have scripts registered, run this once when refreshing config.
+$CONFIG_DIR/plugins/space.sh
