@@ -107,4 +107,8 @@ in {
     enableScriptingAddition = true;
     extraConfig = (builtins.readFile ./config/yabai/yabairc);
   };
+  services.skhd = {
+    enable = true;
+    skhdConfig = (builtins.readFile ./config/skhd/skhdrc);
+  };
 }
