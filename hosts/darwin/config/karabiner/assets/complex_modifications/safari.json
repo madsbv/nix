@@ -1,0 +1,37 @@
+{
+    "title": "Use ctrl+l,r,w instead of cmd+l,r,w in Safari",
+    "rules": [
+        "description": "Remap ctrl+l to cmd+l in Safari",
+        "manipulators": [
+            {
+                "from": {
+                    "key_code": "l",
+                    "modifiers": {
+                        "mandatory": [
+                            "left_control"
+                        ]
+                    }
+                },
+                "to": [
+                    {
+                        "key_code": "l",
+                        "modifiers": {
+                            "mandatory": [
+                                "left_command"
+                            ]
+                        }
+                    }
+                ],
+                "conditions": [
+                    {
+                        "type": "frontmost_application_if",
+                        "bundle_identifiers": [
+                            "^com.apple.Safari"
+                        ]
+                    }
+                ],
+                "type": "basic"
+            }
+        ]
+    ]
+}

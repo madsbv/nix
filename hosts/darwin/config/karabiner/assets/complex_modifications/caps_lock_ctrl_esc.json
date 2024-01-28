@@ -1,0 +1,57 @@
+{
+    "title": "Caps lock to ctrl if held, esc if pressed alone, double press esc to caps lock",
+    "author": "Mads Bach Villadsen",
+    "rules": [
+        {
+        "description": "Hold caps lock for ctrl, press for esc",
+        "manipulators": [
+            {
+            "type": "basic",
+            "from": {
+                "key_code": "caps_lock",
+                "modifiers": {
+                    "optional": [
+                        "any"
+                    ]
+                }
+            },
+            "to": [
+                {
+                "key_code":"left_control",
+                "lazy": true
+            }
+            ],
+            "to_if_alone": [{
+                "key_code": "escape"}]
+        }
+        ]
+    },
+        {
+        "description": "Hold down esc to activate caps lock, press to emit esc",
+        "manipulators": [
+            {
+            "type": "basic",
+            "from": {
+                "key_code": "escape",
+                "modifiers": {
+                    "optional": [
+                        "any"
+                    ]
+                }
+            },
+            "to_after_key_up": [
+                {
+                "key_code": "escape"
+            }
+            ],
+            "to_if_held_down": [
+                {
+                "key_code": "caps_lock",
+                "halt": true
+            }
+            ]
+        }
+        ]
+    }
+    ]
+}
