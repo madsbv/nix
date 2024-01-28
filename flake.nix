@@ -138,12 +138,12 @@
                   "homebrew/homebrew-core" = homebrew-core;
                   "homebrew/homebrew-cask" = homebrew-cask;
                   "homebrew/homebrew-bundle" = homebrew-bundle;
-                  "homebrew/cask-fonts" = homebrew-cask-fonts;
-                  "homebrew/services" = homebrew-services;
-                  "koekeishiya/formulae" = koekeishiya-formulae;
-                  "felixkratz/formulae" = felixkratz-formulae;
-                  "pirj/noclamshell" = pirj-noclamshell;
-                  "railwaycat/emacsmacport" = railwaycat-emacsmacport;
+                  "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
+                  "homebrew/homebrew-services" = homebrew-services;
+                  # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
+                  "felixkratz/homebrew-formulae" = felixkratz-formulae;
+                  "pirj/homebrew-noclamshell" = pirj-noclamshell;
+                  "railwaycat/homebrew-emacsmacport" = railwaycat-emacsmacport;
                 };
                 mutableTaps = false;
                 autoMigrate = true;

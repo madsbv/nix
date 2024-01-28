@@ -35,8 +35,8 @@ _:
   "vivaldi"
 
   # System stuff
-  "pirj/noclamshell/noclamsh\n "
-  felixkratz/formulae/borde
+  "pirj/noclamshell/noclamshell "
+  "felixkratz/formulae/border"
   "felixkratz/formulae/svim"
 ]
 # Built in nix-darwin services:

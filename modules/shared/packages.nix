@@ -71,7 +71,8 @@ with pkgs; [
   stylelint
   texlab
   wordnet
-  texliveFull
+  # TODO: Enable when everything else works
+  # texliveFull
 
   # Documents
   djvulibre
