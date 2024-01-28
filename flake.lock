@@ -103,6 +103,22 @@
         "type": "github"
       }
     },
+    "doomemacs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1706420946,
+        "narHash": "sha256-KCGzS8l8ZBh2UPTplIT9xMvhGoxUGKKTKDenNqqNdCQ=",
+        "owner": "doomemacs",
+        "repo": "doomemacs",
+        "rev": "ff33ec8f7a89d168ca533612e2562883c89e029f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "doomemacs",
+        "repo": "doomemacs",
+        "type": "github"
+      }
+    },
     "felixkratz-formulae": {
       "flake": false,
       "locked": {
@@ -258,6 +274,22 @@
         "type": "github"
       }
     },
+    "my-doomemacs-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1706479197,
+        "narHash": "sha256-JNdY9i4wd+UD6ukQrICeehpHy64PPR971CqqADNEVzg=",
+        "ref": "refs/heads/main",
+        "rev": "faef464dd63d2f1ff2df3c48659ba9062bb374f6",
+        "revCount": 25,
+        "type": "git",
+        "url": "ssh://git@github.com/madsbv/doom.d.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/madsbv/doom.d.git"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -379,6 +411,7 @@
         "agenix": "agenix",
         "darwin": "darwin_2",
         "disko": "disko",
+        "doomemacs": "doomemacs",
         "felixkratz-formulae": "felixkratz-formulae",
         "home-manager": "home-manager_2",
         "homebrew-bundle": "homebrew-bundle",
@@ -386,6 +419,7 @@
         "homebrew-cask-fonts": "homebrew-cask-fonts",
         "homebrew-core": "homebrew-core",
         "homebrew-services": "homebrew-services",
+        "my-doomemacs-config": "my-doomemacs-config",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_3",
         "pirj-noclamshell": "pirj-noclamshell",

@@ -184,6 +184,13 @@ in {
     '';
   };
 
+  kitty = {
+    enable = true;
+    shellIntegration.enableZshIntegration = true;
+    # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
+    extraConfig = (builtins.readFile ./config/kitty/kitty.conf);
+  };
+
   # mbv: Let's just use this for now
   alacritty = {
     enable = true;

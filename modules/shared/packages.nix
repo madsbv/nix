@@ -2,13 +2,11 @@
 
 with pkgs; [
   # General packages for development and system management
-  alacritty
   bash-completion
   bat
   btop
   coreutils
   killall
-  kitty
   openssh
   sqlite
   perl

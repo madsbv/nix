@@ -14,7 +14,7 @@ export NIXPKGS_ALLOW_UNFREE=1
 echo "${GREEN}Starting build...${NC}"
 nix --extra-experimental-features 'nix-command flakes' build .#$SYSTEM $@
 
-echo "${GREEN}Cleaning up...${NC}"
+# echo "${GREEN}Cleaning up...${NC}"
 # unlink ./result
 
 echo "${GREEN}Build complete!${NC}"

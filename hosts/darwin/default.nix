@@ -121,4 +121,5 @@ in {
     # Dependencies of config
     extraPackages = [ pkgs.jq ];
   };
+  # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
 }

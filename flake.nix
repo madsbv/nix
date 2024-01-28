@@ -36,10 +36,6 @@
       url = "github:homebrew/homebrew-cask-fonts";
       flake = false;
     };
-    # koekeishiya-formulae = {
-    #   url = "github:koekeishiya/homebrew-formulae";
-    #   flake = false;
-    # };
     felixkratz-formulae = {
       url = "github:felixkratz/homebrew-formulae";
       flake = false;
@@ -61,11 +57,19 @@
       url = "git+ssh://git@github.com/madsbv/nix-secrets.git";
       flake = false;
     };
+    my-doomemacs-config = {
+      url = "git+ssh://git@github.com/madsbv/doom.d.git";
+      flake = false;
+    };
+    doomemacs = {
+      url = "github:doomemacs/doomemacs";
+      flake = false;
+    };
   };
   outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
     , homebrew-cask, homebrew-cask-fonts, homebrew-services, felixkratz-formulae
     , pirj-noclamshell, railwaycat-emacsmacport, home-manager, nixpkgs, disko
-    , agenix, secrets }@inputs:
+    , agenix, secrets, my-doomemacs-config, doomemacs }@inputs:
     let
       user = "mvilladsen";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];

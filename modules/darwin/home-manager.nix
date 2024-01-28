@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, ... }:
+{ config, pkgs, lib, home-manager, doomemacs, my-doomemacs-config, ... }:
 
 let
   user = "mvilladsen";
@@ -11,8 +11,8 @@ let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
 
   my-emacs-mac = pkgs.emacs29-macport.override {
-    withNativeCompliation = true;
-    withImagemagick = true;
+    withNativeCompilation = true;
+    withImageMagick = true;
   };
   # According to https://github.com/NixOS/nixpkgs/issues/267548, the with-packages version might cause problems with doom. If so, try my-emacs-mac instead.
   my-emacs-mac-with-packages =
@@ -99,10 +99,27 @@ in {
       programs = {
         emacs = {
           # TODO: Switch over from homebrew
-          enable = false;
+          enable = true;
           package = my-emacs-mac-with-packages;
         };
       } // import ../shared/home-manager.nix { inherit config pkgs lib; };
+      # If Doom's emacs or config folder don't already exist, get them from their respective github repos defined in flake.nix.
+      # If the emacs folder doesn't exist, install doom following https://github.com/doomemacs/doomemacs/blob/master/docs/getting_started.org#install-doom-manually
+      home.activation.installDoomEmacs =
+        lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          EMACS_DIR = "${config.xdg.configHome}/emacs"
+          DOOM_DIR = "${config.xdg.configHome}/doom"
+          if [ ! -d "$DOOM_DIR" ]; then
+             ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ DOOM_DIR
+          fi
+          if [ ! -d "$EMACS_DIR" ]; then
+             ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ $EMACS_DIR
+             PATH = "$EMACS_DIR/bin:$PATH"
+             doom sync
+             doom env
+             emacs --batch -f nerd-icons-install-fonts
+          fi
+        '';
     };
   };
 
