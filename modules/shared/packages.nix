@@ -3,8 +3,6 @@
 with pkgs; [
   # General packages for development and system management
   alacritty
-  aspell
-  aspellDicts.en
   bash-completion
   bat
   btop
@@ -16,6 +14,8 @@ with pkgs; [
   perl
   wget
   zip
+  fd
+  gh
 
   # Encryption and security tools
   age
@@ -23,23 +23,33 @@ with pkgs; [
   gnupg
   libfido2
   pinentry
+  bitwarden-cli
+
+  # Backups
+  restic
+  autorestic
 
   # Media-related packages
   emacs-all-the-icons-fonts
   nerdfonts
   dejavu_fonts
   ffmpeg
-  fd
   font-awesome
   hack-font
   noto-fonts
   noto-fonts-emoji
   meslo-lgs-nf
   imagemagick
+  graphviz
+  portaudio
+
+  # Communication tools
+  zoom-us
+  discord
+  signal-desktop
 
   # Text and terminal utilities
   htop
-  hunspell
   iftop
   jq
   ripgrep
@@ -48,7 +58,30 @@ with pkgs; [
   unrar
   unzip
   zsh-powerlevel10k
+  multimarkdown
+  pandoc
+
+  # Writing
+  aspell
+  aspellDicts.en
+  hunspell
   languagetool
+  enchant
+  bibutils
+  stylelint
+  texlab
+  wordnet
+  texliveFull
+
+  # Documents
+  djvulibre
+  djview
+  poppler
+  calibre
+
+  # Email
+  isync
+  mu
 
   # nix
   nixfmt
@@ -57,51 +90,21 @@ with pkgs; [
   # rust
   rustup
 
-  # TODO: Figure out which of the old homebrew packages we actually need, and which should be installed shared vs on Darwin specifically, and which can be installed through nix vs homebrew.
+  # Shell scripts
+  nodePackages.bash-language-server
+  shellcheck
+  shfmt
 
-  ### Dev
-  # brew "bash-language-server"
-  # brew "yaml-language-server"
-  # brew "sql-language-server"
-  # brew "lua-language-server"
-  # brew "shellcheck"
-  # brew "shfmt"
-  # brew "stylelint"
-  # brew "texlab"
-  ## Python
-  # brew "isort"
-  #
-  # brew "bibutils"
-  # brew "bitwarden-cli"
-  #
-  # brew "enchant"
-  #
-  # brew "djvulibre"
-  # brew "djview4"
-  # brew "poppler"
-  #
-  # brew "gnupg"
-  #
-  # brew "autorestic"
-  #
-  # brew "isync"
-  # brew "mu"
+  # Python
+  isort
+  pipenv
+
+  # Misc language servers
+  yaml-language-server
+  sqls
+  lua-language-server
+
+  # TODO: Figure out which of the old homebrew packages we actually need, and which should be installed shared vs on Darwin specifically, and which can be installed through nix vs homebrew.
 ]
 
-# brew "pirj/noclamshell/noclamshell"
 #
-# brew "koekeishiya/formulae/skhd"
-# brew "koekeishiya/formulae/yabai"
-# brew "felixkratz/formulae/borders"
-# brew "felixkratz/formulae/sketchybar"
-# brew "felixkratz/formulae/svim"
-
-# brew "graphviz"
-# brew "markdown"
-# brew "pandoc"
-# brew "pinentry-mac"
-# brew "pipenv"
-# brew "pngpaste"
-# brew "portaudio"
-# brew "wordnet"
-# brew "railwaycat/emacsmacport/emacs-mac", args: ["with-imagemagick", "with-native-compilation", "with-no-title-bars", "with-starter", "with-unlimited-select", "with-xwidgets"]

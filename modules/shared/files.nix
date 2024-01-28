@@ -1,5 +1,6 @@
 { pkgs, config, ... }:
 
+# TODO: SSH stuff
 # let
 #  githubPublicKey = "ssh-ed25519 AAAA...";
 # in

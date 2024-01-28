@@ -295,5 +295,6 @@ in {
     inetutils
   ];
 
+  # TODO: Quite old, consider updating?
   system.stateVersion = "21.05"; # Don't change this
 }

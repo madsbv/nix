@@ -9,6 +9,22 @@ let
   '';
   sharedFiles = import ../shared/files.nix { inherit config pkgs; };
   additionalFiles = import ./files.nix { inherit user config pkgs; };
+
+  my-emacs-mac = pkgs.emacs29-macport.override {
+    withNativeCompliation = true;
+    withImagemagick = true;
+  };
+  # According to https://github.com/NixOS/nixpkgs/issues/267548, the with-packages version might cause problems with doom. If so, try my-emacs-mac instead.
+  my-emacs-mac-with-packages =
+    (pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages (epkgs:
+      with epkgs; [
+        pkgs.mu
+        treesit-grammars.with-all-grammars
+        vterm
+        multi-vterm
+        pdf-tools
+      ]);
+  # brew "railwaycat/emacsmacport/emacs-mac", args: ["with-imagemagick", "with-native-compilation", "with-no-title-bars", "with-starter", "with-unlimited-select", "with-xwidgets"]
 in {
   imports = [ ./dock ];
 
@@ -80,8 +96,13 @@ in {
         };
       };
 
-      programs = { }
-        // import ../shared/home-manager.nix { inherit config pkgs lib; };
+      programs = {
+        emacs = {
+          # TODO: Switch over from homebrew
+          enable = false;
+          package = my-emacs-mac-with-packages;
+        };
+      } // import ../shared/home-manager.nix { inherit config pkgs lib; };
     };
   };
 

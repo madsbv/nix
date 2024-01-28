@@ -41,66 +41,66 @@ in {
   # Turn off NIX_PATH warnings now that we're using flakes
   system.checks.verifyNixPath = false;
 
-  # Load configuration that is shared across systems
+  # Load packages that are shared across systems
   environment.systemPackages = with pkgs;
-  # [ emacs-unstable agenix.packages."${pkgs.system}".default ]
     [ agenix.packages."${pkgs.system}".default ]
     ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
 
   # Enable fonts dir
   fonts.fontDir.enable = true;
 
-  # launchd.user.agents.emacs.path = [ config.environment.systemPath ];
-  # launchd.user.agents.emacs.serviceConfig = {
-  #   KeepAlive = true;
-  #   ProgramArguments = [
-  #     "/bin/sh"
-  #     "-c"
-  #     "/bin/wait4path ${pkgs.emacs}/bin/emacs && exec ${pkgs.emacs}/bin/emacs --fg-daemon"
-  #   ];
-  #   StandardErrorPath = "/tmp/emacs.err.log";
-  #   StandardOutPath = "/tmp/emacs.out.log";
-  # };
+  launchd.user.agents.emacs.path = [ config.environment.systemPath ];
+  launchd.user.agents.emacs.serviceConfig = {
+    KeepAlive = true;
+    ProgramArguments = [
+      "/bin/sh"
+      "-c"
+      "/bin/wait4path ${pkgs.emacs}/bin/emacs && exec ${pkgs.emacs}/bin/emacs --fg-daemon"
+    ];
+    StandardErrorPath = "/tmp/emacs.err.log";
+    StandardOutPath = "/tmp/emacs.out.log";
+  };
 
   # TODO: Update or remove this (at least temporarily)
   system = {
     stateVersion = 4;
 
-    defaults = {
-      NSGlobalDomain = {
-        AppleShowAllExtensions = true;
-        ApplePressAndHoldEnabled = false;
+    # TODO: Go through all of these settings and set as desired.
+    # defaults = {
+    #   NSGlobalDomain = {
+    #     AppleShowAllExtensions = true;
+    #     ApplePressAndHoldEnabled = false;
 
-        # 120, 90, 60, 30, 12, 6, 2
-        KeyRepeat = 2;
+    #     # 120, 90, 60, 30, 12, 6, 2
+    #     KeyRepeat = 2;
 
-        # 120, 94, 68, 35, 25, 15
-        InitialKeyRepeat = 15;
+    #     # 120, 94, 68, 35, 25, 15
+    #     InitialKeyRepeat = 15;
 
-        "com.apple.mouse.tapBehavior" = 1;
-        "com.apple.sound.beep.volume" = 0.0;
-        "com.apple.sound.beep.feedback" = 0;
-      };
+    #     "com.apple.mouse.tapBehavior" = 1;
+    #     "com.apple.sound.beep.volume" = 0.0;
+    #     "com.apple.sound.beep.feedback" = 0;
+    #   };
 
-      dock = {
-        autohide = false;
-        show-recents = false;
-        launchanim = true;
-        orientation = "bottom";
-        tilesize = 48;
-      };
+    #   dock = {
+    #     autohide = false;
+    #     show-recents = false;
+    #     launchanim = true;
+    #     orientation = "bottom";
+    #     tilesize = 48;
+    #   };
 
-      finder = { _FXShowPosixPathInTitle = false; };
+    #   finder = { _FXShowPosixPathInTitle = false; };
 
-      trackpad = {
-        Clicking = true;
-        TrackpadThreeFingerDrag = true;
-      };
-    };
+    #   trackpad = {
+    #     Clicking = true;
+    #     TrackpadThreeFingerDrag = true;
+    #   };
+    # };
 
-    keyboard = {
-      enableKeyMapping = true;
-      remapCapsLockToControl = true;
-    };
+    # keyboard = {
+    #   enableKeyMapping = true;
+    #   remapCapsLockToControl = true;
+    # };
   };
 }
