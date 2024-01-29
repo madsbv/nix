@@ -42,6 +42,8 @@ _:
   "djview4"
 
   # System stuff
+  # TODO: Do I have to do something to activate noclamshell?
+  # More importantly, can I do this natively with nix-darwin?
   "pirj/noclamshell/noclamshell "
   "felixkratz/formulae/border"
   "felixkratz/formulae/svim"

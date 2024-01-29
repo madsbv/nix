@@ -64,8 +64,10 @@ in {
   # Enable home-manager
   home-manager = {
     useGlobalPkgs = true;
+    useUserPackages = true;
     users.${user} = { pkgs, config, lib, ... }: {
       xdg.enable = true;
+      xdg.configFile."svim".source = ./config/svim;
       home = {
         packages = pkgs.callPackage ./packages.nix { };
         file = lib.mkMerge [

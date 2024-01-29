@@ -122,4 +122,5 @@ in {
     extraPackages = [ pkgs.jq ];
   };
   # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
+  # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
 }
