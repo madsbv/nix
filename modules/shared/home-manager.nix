@@ -19,6 +19,14 @@ in {
   };
   neovim.enable = true;
 
+  # TODO: Move maildirs to XDG_DATA_HOME
+  # Also look into home-managers accounts.email options
+  mbsync = {
+    enable = true;
+    extraConfig = (builtins.readFile ./config/mbsyncrc);
+  };
+  mu.enable = true;
+
   # Shared shell configuration
   zsh = {
     enable = true;

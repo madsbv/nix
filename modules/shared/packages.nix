@@ -77,10 +77,6 @@ with pkgs; [
   poppler
   # calibre # Currently broken on darwin
 
-  # Email
-  isync
-  mu
-
   # nix
   nixfmt
   nil
