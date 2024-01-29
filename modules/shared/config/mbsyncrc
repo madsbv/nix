@@ -1,0 +1,32 @@
+FSync yes
+BufferLimit 100M
+
+IMAPAccount proton
+Host 127.0.0.1
+Port 1143
+User mvilladsen@pm.me
+PassCmd "gpg -q -d ~/.authinfo.gpg | awk 'FNR == 1 {print $8}'"
+AuthMechs LOGIN
+SSLType NONE
+CertificateFile /etc/ssl/cert.pem
+
+
+IMAPStore proton-remote
+Account proton
+
+MaildirStore proton-local
+Subfolders Verbatim
+Path ~/isync-mail/proton/
+Inbox ~/isync-mail/proton/inbox
+Trash Trash
+
+Channel proton
+Far :proton-remote:
+Near :proton-local:
+Patterns * !"Recovered Messages"
+Create Both
+Remove Both
+Expunge Both
+CopyArrivalDate yes
+SyncState *
+
