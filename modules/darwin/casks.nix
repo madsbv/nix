@@ -39,19 +39,6 @@ _:
 
   # Docs
   "calibre"
-  "djview4"
+  "djview"
 
-  # System stuff
-  # TODO: Do I have to do something to activate noclamshell?
-  # More importantly, can I do this natively with nix-darwin?
-  "pirj/noclamshell/noclamshell "
-  "felixkratz/formulae/border"
-  "felixkratz/formulae/svim"
 ]
-# Built in nix-darwin services:
-# sketchybar
-# skhd
-# yabai
-# karabiner-elements
-
-# brew "railwaycat/emacsmacport/emacs-mac", args: ["with-imagemagick", "with-native-compilation", "with-no-title-bars", "with-starter", "with-unlimited-select", "with-xwidgets"]

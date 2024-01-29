@@ -2,6 +2,8 @@
   description = "Starter Configuration with secrets for MacOS and NixOS";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Local copy of fork of nixpkgs for development/testing package upgrades
+    #nixpkgs.url = "github:madsbv/nixpkgs";
     # Secrets management
     agenix = {
       url = "github:ryantm/agenix";

@@ -52,12 +52,12 @@ in {
     ];
     initExtraBeforeCompInit = ''
       # p10k instant prompt
-      local P10K_INSTANT_PROMPT=''${config.xdg.cacheHome}/p10k-instant-prompt-''${(%):-%n}.zsh"
+      local P10K_INSTANT_PROMPT="${config.xdg.cacheHome}/p10k-instant-prompt-''${(%):-%n}.zsh"
       [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
     '';
     envExtra = ''
       export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
-      export PATH="$HOME/.emacs.d.doom/bin:$HOME/.cargo/bin:$HOME/.local/bin''${PATH+:$PATH}";
+      export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.cargo/bin:$HOME/.local/bin''${PATH+:$PATH}";
     '';
     history.path = "${config.xdg.dataHome}/zsh/zsh_history";
   };
@@ -224,13 +224,14 @@ in {
         ];
       };
 
-      dynamic_padding = true;
-      decorations = "full";
-      title = "Terminal";
-      class = {
-        instance = "Alacritty";
-        general = "Alacritty";
-      };
+      # These are apparently unused?
+      #dynamic_padding = true;
+      #decorations = "full";
+      #title = "Terminal";
+      #class = {
+      #  instance = "Alacritty";
+      #  general = "Alacritty";
+      #};
 
       colors = {
         primary = {

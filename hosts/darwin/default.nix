@@ -32,9 +32,8 @@ in {
     };
 
     # Turn this on to make command line easier
-    # mbv: Not sure this is necessary any more?
     extraOptions = ''
-      experimental-features = nix-command flakes
+      experimental-features = nix-command flakes repl-flake
     '';
   };
 
@@ -115,7 +114,7 @@ in {
   services.karabiner-elements.enable = true;
   # TODO: Figure out how to have nix put the config files in ./config/sketchybar in the right place, and how to give yabai access to them.
   services.sketchybar = {
-    enable = false;
+    enable = true;
     # Empty config string means nix won't manage the config.
     config = "";
     # Dependencies of config

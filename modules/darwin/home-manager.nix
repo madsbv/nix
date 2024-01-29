@@ -38,7 +38,17 @@ in {
 
   homebrew = {
     enable = true;
+    onActivation.cleanup = "uninstall";
     casks = pkgs.callPackage ./casks.nix { };
+
+    brews = [
+      # System stuff
+      # TODO: Do I have to do something to activate noclamshell?
+      # More importantly, can I do this natively with nix-darwin?
+      "pirj/noclamshell/noclamshell"
+      "felixkratz/formulae/borders"
+      "felixkratz/formulae/svim"
+    ];
 
     # These app IDs are from using the mas CLI app
     # mas = mac app store
@@ -48,7 +58,7 @@ in {
     # $ mas search <app name>
     #
     masApps = {
-      "wireguard" = 1451685025;
+      "WireGuard" = 1451685025;
       "AdGuard for Safari" = 1440147259;
       "Bitwarden" = 1352778147;
       "MindNode" = 1289197285;
@@ -64,7 +74,6 @@ in {
   # Enable home-manager
   home-manager = {
     useGlobalPkgs = true;
-    useUserPackages = true;
     users.${user} = { pkgs, config, lib, ... }: {
       xdg.enable = true;
       xdg.configFile."svim".source = ./config/svim;
