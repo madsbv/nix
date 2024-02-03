@@ -48,19 +48,6 @@ in {
   # Enable fonts dir
   fonts.fontDir.enable = true;
 
-  # TODO: What exactly does this do? Do I need to install emacs system-wide for this to work? If so I'll have to duplicate some emacs logic from darwin/home-manager.nix. Define in flake.nix and output?
-  # launchd.user.agents.emacs.path = [ config.environment.systemPath ];
-  # launchd.user.agents.emacs.serviceConfig = {
-  #   KeepAlive = true;
-  #   ProgramArguments = [
-  #     "/bin/sh"
-  #     "-c"
-  #     "/bin/wait4path ${pkgs.emacs}/bin/emacs && exec ${pkgs.emacs}/bin/emacs --fg-daemon"
-  #   ];
-  #   StandardErrorPath = "/tmp/emacs.err.log";
-  #   StandardOutPath = "/tmp/emacs.out.log";
-  # };
-
   system = {
     stateVersion = 4;
     # TODO: Go through all of these settings and set as desired.

@@ -6,6 +6,7 @@ let
   xdg_stateHome = "${config.users.users.${user}.home}/.local/state";
 in {
   # Raycast script so that "Run Emacs" is available and uses Emacs daemon
+  # TODO
   "${xdg_dataHome}/bin/emacsclient" = {
     executable = true;
     text = ''
@@ -23,10 +24,10 @@ in {
 
       if [[ $1 = "-t" ]]; then
         # Terminal mode
-        ${pkgs.emacs}/bin/emacsclient -t $@
+        ${pkgs.my-emacs-mac}/bin/emacsclient -t $@
       else
         # GUI mode
-        ${pkgs.emacs}/bin/emacsclient -c -n $@
+        ${pkgs.my-emacs-mac}/bin/emacsclient -c -n $@
       fi
     '';
   };

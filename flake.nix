@@ -3,7 +3,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # Local copy of fork of nixpkgs for development/testing package upgrades
-    #nixpkgs.url = "github:madsbv/nixpkgs";
+    #nixpkgs.url = "github:madsbv/nixpkgs/emacs-no-titlebar-patch";
+    # nixpkgs.url = "git+file:///Users/mvilladsen/workspace/github.com/madsbv/nixpkgs/";
     # Secrets management
     agenix = {
       url = "github:ryantm/agenix";
@@ -46,10 +47,10 @@
       url = "github:pirj/homebrew-noclamshell";
       flake = false;
     };
-    railwaycat-emacsmacport = {
-      url = "github:railwaycat/homebrew-emacsmacport";
-      flake = false;
-    };
+    #railwaycat-emacsmacport = {
+    #  url = "github:railwaycat/homebrew-emacsmacport";
+    #  flake = false;
+    #};
     # Declarative disk partitioning in nixos
     disko = {
       url = "github:nix-community/disko";
@@ -70,8 +71,8 @@
   };
   outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
     , homebrew-cask, homebrew-cask-fonts, homebrew-services, felixkratz-formulae
-    , pirj-noclamshell, railwaycat-emacsmacport, home-manager, nixpkgs, disko
-    , agenix, secrets, my-doomemacs-config, doomemacs }@inputs:
+    , pirj-noclamshell, home-manager, nixpkgs, disko, agenix, secrets
+    , my-doomemacs-config, doomemacs }@inputs:
     let
       user = "mvilladsen";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
@@ -148,7 +149,7 @@
                   # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
                   "felixkratz/homebrew-formulae" = felixkratz-formulae;
                   "pirj/homebrew-noclamshell" = pirj-noclamshell;
-                  "railwaycat/homebrew-emacsmacport" = railwaycat-emacsmacport;
+                  #"railwaycat/homebrew-emacsmacport" = railwaycat-emacsmacport;
                 };
                 mutableTaps = false;
                 autoMigrate = true;

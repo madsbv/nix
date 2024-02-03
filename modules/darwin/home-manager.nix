@@ -1,4 +1,5 @@
-{ config, pkgs, lib, home-manager, doomemacs, my-doomemacs-config, ... }:
+{ config, pkgs, lib, home-manager, my-emacs-mac, doomemacs, my-doomemacs-config
+, ... }:
 
 let
   user = "mvilladsen";
@@ -15,7 +16,6 @@ let
   emacsDir = "${xdg_configHome}/emacs";
   doomDir = "${xdg_configHome}/doom";
 
-  # brew "railwaycat/emacsmacport/emacs-mac", args: ["with-imagemagick", "with-native-compilation", "with-no-title-bars", "with-starter", "with-unlimited-select", "with-xwidgets"]
 in {
   imports = [ ./dock ];
 
@@ -70,6 +70,7 @@ in {
         packages = pkgs.callPackage ./packages.nix { };
         file = lib.mkMerge [
           sharedFiles
+          # TODO: Do I need all the scripts and launchers for emacs?
           additionalFiles
           { "emacs-launcher.command".source = myEmacsLauncher; }
         ];
@@ -94,16 +95,28 @@ in {
           watch = "watch -cd ";
           sudo = "sudo ";
         };
-      };
+        # If Doom's emacs or config folder don't already exist, get them from their respective github repos defined in flake.nix.
+        # If the emacs folder doesn't exist, install doom
+        activation.installDoomEmacs =
+          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+            if [ ! -d "${doomDir}" ]; then
+               ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
+            fi
+            if [ ! -d "${emacsDir}" ]; then
+               ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
+               export PATH="${emacsDir}/bin:$PATH"
+               doom install
+            fi
+          '';
 
+      };
       programs = {
         # Note: Trying to use `(pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages` and an override at the same time breaks things via weird nix double wrapping issues, so use extraPackages instead.
+        # TODO: Define a launchd service for emacs daemon? Could be useful, could break tinkering. If yes, see ryan4yin-nix-config for an example.
         emacs = {
           enable = true;
-          package = pkgs.emacs29-macport.override {
-            withNativeCompilation = true;
-            withImageMagick = true;
-          };
+          # Patched emacs-macport from overlay
+          package = pkgs.my-emacs-mac;
           extraPackages = epkgs:
             with epkgs; [
               # Packages that pull in non-lisp stuff
@@ -116,20 +129,6 @@ in {
             ];
         };
       } // import ../shared/home-manager.nix { inherit config pkgs lib; };
-
-      # If Doom's emacs or config folder don't already exist, get them from their respective github repos defined in flake.nix.
-      # If the emacs folder doesn't exist, install doom
-      home.activation.installDoomEmacs =
-        lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -d "${doomDir}" ]; then
-             ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
-          fi
-          if [ ! -d "${emacsDir}" ]; then
-             ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
-             export PATH="${emacsDir}/bin:$PATH"
-             doom install
-          fi
-        '';
     };
   };
 

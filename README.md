@@ -1,6 +1,7 @@
 
 # TODO
 - [x] Make emacs work properly.
+- [x] Figure out how to apply no-titlebar patch
 - [ ] Have skhd keybindings for Kitty/Alacritty work better
 - [ ] Refactor config to make more sense
 - [ ] Learn secrets management using age

@@ -5,6 +5,7 @@ in {
 
   nixpkgs = {
     config = {
+      # TODO: Turn off allowBroken and allowUnsupported, and see how many packages I currently have installed that are either of those.
       allowUnfree = true;
       allowBroken = true;
       allowInsecure = false;

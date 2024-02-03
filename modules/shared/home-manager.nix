@@ -277,7 +277,7 @@ in {
         IdentityFile /home/${user}/.ssh/id_github
       '')
       (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''
-        IdentityFile /Users/${user}/.ssh/id_github
+        IdentityFile /Users/${user}/.ssh/id_ed25519
       '')
     ];
   };
