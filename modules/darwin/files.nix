@@ -5,8 +5,9 @@ let
   xdg_dataHome = "${config.users.users.${user}.home}/.local/share";
   xdg_stateHome = "${config.users.users.${user}.home}/.local/state";
 in {
+  "sketchybar".source = ./config/sketchybar;
+  "karabiner".source = ./config/karabiner;
   # Raycast script so that "Run Emacs" is available and uses Emacs daemon
-  # TODO
   "${xdg_dataHome}/bin/emacsclient" = {
     executable = true;
     text = ''

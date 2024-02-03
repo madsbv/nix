@@ -65,7 +65,11 @@ in {
     useGlobalPkgs = true;
     users.${user} = { pkgs, config, lib, ... }: {
       xdg.enable = true;
-      xdg.configFile."svim".source = ./config/svim;
+      xdg.configFile = {
+        "svim".source = ./config/svim;
+        "sketchybar".source = ./config/sketchybar;
+        "karabiner".source = ./config/karabiner;
+      };
       home = {
         packages = pkgs.callPackage ./packages.nix { };
         file = lib.mkMerge [

@@ -7,4 +7,4 @@
 - [ ] Learn secrets management using age
 - [ ] Set up SSH keys properly, including git and gh
 - [ ] Set up gpg and agent
-- [ ] Get Sketchybar working again
+- [x] Get Sketchybar working again

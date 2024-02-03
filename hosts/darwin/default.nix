@@ -97,9 +97,9 @@ in {
     enable = true;
     skhdConfig = (builtins.readFile ./config/skhd/skhdrc);
   };
-  # TODO: Nix-darwin doesn't seem to have any options for setting config of karabiner. Figure out how to make nix place the contents of ./config/karabiner in the right place.
+  # Note: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
+  # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
   services.karabiner-elements.enable = true;
-  # TODO: Figure out how to have nix put the config files in ./config/sketchybar in the right place, and how to give yabai access to them.
   services.sketchybar = {
     enable = true;
     # Empty config string means nix won't manage the config.
