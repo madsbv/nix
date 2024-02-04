@@ -8,3 +8,4 @@
 - [ ] Set up SSH keys properly, including git and gh
 - [ ] Set up gpg and agent
 - [x] Get Sketchybar working again
+- [ ] ZSH autocompletion/suggestion, zplug, ...

@@ -9,10 +9,10 @@ let
   gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
 in {
   java.enable = true;
-  pyenv = {
-    enable = true;
-    enableZshIntegration = true;
-  };
+  # pyenv = {
+  #   enable = true;
+  #   enableZshIntegration = true;
+  # };
   bacon = {
     enable = true;
     settings = { };
@@ -32,6 +32,10 @@ in {
     enable = true;
     enableCompletion = true;
     enableAutosuggestions = true;
+    syntaxHighlighting.enable = true;
+    defaultKeymap = "viins";
+    # TODO: Get into zplug
+    # zplug.enable = true;
     autocd = false;
     cdpath = [ "~/Dropbox/docs/" ];
     dotDir = ".config/zsh";
@@ -57,7 +61,7 @@ in {
     '';
     envExtra = ''
       export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
-      export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.cargo/bin:$HOME/.local/bin''${PATH+:$PATH}";
+      export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin''${PATH+:$PATH}";
     '';
     history.path = "${config.xdg.dataHome}/zsh/zsh_history";
   };

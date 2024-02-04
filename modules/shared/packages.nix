@@ -91,14 +91,11 @@ with pkgs; [
 
   # Python
   isort
-  pipenv
+  # pipenv
 
   # Misc language servers
   yaml-language-server
   sqls
   lua-language-server
 
-  # TODO: Figure out which of the old homebrew packages we actually need, and which should be installed shared vs on Darwin specifically, and which can be installed through nix vs homebrew.
 ]
-
-#
