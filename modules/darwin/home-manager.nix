@@ -129,7 +129,7 @@ in {
               treesit-grammars.with-all-grammars
               vterm
               multi-vterm
-              pdf-tools
+              # pdf-tools
             ];
         };
       } // import ../shared/home-manager.nix { inherit config pkgs lib; };

@@ -61,20 +61,21 @@ yabai -m signal --add event=application_terminated action="yabai -m query --wind
 yabai -m signal --add event=application_hidden action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq '.[0].id') &> /dev/null"
 
 
-borders hidpi=on active_color='0xFFF17013' inactive_color='0x00000000' style=square width=4 &
+# The /opt/homebrew/bin directory is not on the Path using Nix, and generally shouldn't be since we might accidentally shadow Nix paths.
+/opt/homebrew/bin/borders hidpi=on active_color='0xFFF17013' inactive_color='0x00000000' style=square width=4 &
 
 yabai -m signal --add event=space_changed action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=space_created action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=space_destroyed action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=window_created action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=window_destroyed action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=window_minimized action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=window_deminimized action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=application_terminated action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=application_launched action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=application_hidden action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=application_unhidden action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=display_added action="$SKETCHYBAR_DIR/plugins/space.sh"
-yabai -m signal --add event=display_removed action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=space_created action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=space_destroyed action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=window_created action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=window_destroyed action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=window_minimized action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=window_deminimized action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=application_terminated action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=application_launched action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=application_hidden action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=application_unhidden action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=display_added action="$SKETCHYBAR_DIR/plugins/space.sh"
+# yabai -m signal --add event=display_removed action="$SKETCHYBAR_DIR/plugins/space.sh"
 
 echo "yabai configuration loaded on $(date)"

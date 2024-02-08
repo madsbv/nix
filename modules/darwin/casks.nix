@@ -1,7 +1,6 @@
 _:
 
 [
-  # TODO: See which of these can be moved to native nix management, ideally shared.
   # Development Tools
 
   # Fonts
@@ -9,18 +8,19 @@ _:
 
   # Math
   "sage" # There's a sage package in nixpkgs, but it's linux specific
-  # "mactex"
+  "jabref"
 
   # Gaming
   "steam" # Seems like nixos has a programs.steam, but nix-darwin does not.
 
   # Documents
-  # "calibre"
-  # "djview"
+  "calibre"
+  "djview"
 
   # Communication Tools
-  # "discord"
-  # "zoom"
+  "discord"
+  "zoom"
+  "signal"
 
   # Entertainment Tools
   "vlc" # The nixpkgs version is linux-specific
@@ -28,17 +28,11 @@ _:
   # System/Productivity Tools
   "raycast"
   "unnaturalscrollwheels"
+  "dropbox"
+  "bitwarden"
 
   # Browsers
   # The nixpkgs versions seem linux-specific
   "firefox"
   "vivaldi"
-
-  # Communication
-  "signal"
-
-  # Docs
-  "calibre"
-  "djview"
-
 ]

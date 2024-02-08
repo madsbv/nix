@@ -69,7 +69,7 @@ with pkgs; [
   texlab
   # wordnet # Build broken
   # TODO: Enable when everything else works
-  # texliveFull
+  texliveFull
 
   # Documents
   djvulibre
