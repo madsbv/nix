@@ -29,7 +29,10 @@ in {
 
   homebrew = {
     enable = true;
-    onActivation.cleanup = "uninstall";
+    onActivation = {
+      cleanup = "uninstall";
+      upgrade = true;
+    };
     casks = pkgs.callPackage ./casks.nix { };
 
     brews = [

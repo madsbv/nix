@@ -93,6 +93,11 @@ with pkgs; [
   isort
   # pipenv
 
+  # JavaScript
+  nodePackages.nodejs
+  # For yaml formatting, among other things
+  nodePackages.prettier
+
   # Misc language servers
   yaml-language-server
   sqls
