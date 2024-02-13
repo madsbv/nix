@@ -5,7 +5,8 @@ let
 
   user = "mvilladsen";
   # HACK: Manual specification of xdg config dir, should figure out how to access config.xdg.configHome. Maybe do the xdg stuff in a separate file earlier in the process, programs later? That would make sense anyway.
-  xdg_configHome = "${config.users.users.${user}.home}/.config";
+  # xdg_configHome = "${config.users.users.${user}.home}/.config";
+  xdg_configHome = "/Users/mvilladsen/.config";
   emacsDir = "${xdg_configHome}/emacs";
   doomDir = "${xdg_configHome}/doom";
 in {

@@ -156,6 +156,7 @@
               };
             }
             ./hosts/darwin
+            # { inherit user; }
           ];
         };
       };

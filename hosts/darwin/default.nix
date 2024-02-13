@@ -1,11 +1,13 @@
-{ agenix, config, pkgs, ... }:
+{ agenix, config, pkgs, lib, ... }:
 
 let user = "mvilladsen";
-
 in {
   # TODO: Consider which parts of this to move to modules/darwin/default.nix
   imports = [
-    ../../modules/darwin
+    # ../../modules/darwin
+    # {
+    #   inherit inputs user config pkgs lib;
+    # }
     ../../modules/shared
     ../../modules/shared/cachix
     agenix.darwinModules.default
