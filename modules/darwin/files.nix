@@ -2,9 +2,9 @@
 
 let
   user = "mvilladsen";
-  xdg_configHome = "${config.users.users.${user}.home}/.config";
-  xdg_dataHome = "${config.users.users.${user}.home}/.local/share";
-  xdg_stateHome = "${config.users.users.${user}.home}/.local/state";
+  xdg_configHome = "/Users/mvilladsen/.config";
+  xdg_dataHome = "/Users/mvilladsen/.local/share";
+  xdg_stateHome = "/Users/mvilladsen/.local/state";
 in {
   # Raycast script so that "Run Emacs" is available and uses Emacs daemon
   "${xdg_dataHome}/bin/emacsclient" = {

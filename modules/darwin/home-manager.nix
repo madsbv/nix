@@ -44,16 +44,16 @@ in {
     };
     # If Doom's emacs or config folder don't already exist, get them from their respective github repos defined in flake.nix.
     # If the emacs folder doesn't exist, install doom
-    activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if [ ! -d "${doomDir}" ]; then
-         ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
-      fi
-      if [ ! -d "${emacsDir}" ]; then
-         ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
-         export PATH="${emacsDir}/bin:$PATH"
-         doom install
-      fi
-    '';
+    # activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    #   if [ ! -d "${doomDir}" ]; then
+    #      ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
+    #   fi
+    #   if [ ! -d "${emacsDir}" ]; then
+    #      ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
+    #      export PATH="${emacsDir}/bin:$PATH"
+    #      doom install
+    #   fi
+    # '';
 
   };
   # NOTE: Trying to use `(pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages` and an override at the same time breaks things via weird nix double wrapping issues, so use extraPackages instead.

@@ -4,7 +4,7 @@ let user = "mvilladsen";
 in {
   # TODO: Consider which parts of this to move to modules/darwin/default.nix
   imports = [
-    # ../../modules/darwin
+    ../../modules/darwin
     # {
     #   inherit inputs user config pkgs lib;
     # }
