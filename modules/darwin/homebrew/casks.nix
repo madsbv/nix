@@ -7,11 +7,11 @@ _:
   "sf-symbols"
 
   # Math
-  "sage" # There's a sage package in nixpkgs, but it's linux specific
+  "sage"
   "jabref"
 
   # Gaming
-  "steam" # Seems like nixos has a programs.steam, but nix-darwin does not.
+  "steam"
 
   # Documents
   "calibre"
@@ -21,18 +21,19 @@ _:
   "discord"
   "zoom"
   "signal"
+  "protonmail-bridge"
 
   # Entertainment Tools
-  "vlc" # The nixpkgs version is linux-specific
+  "vlc"
 
   # System/Productivity Tools
   "raycast"
   "unnaturalscrollwheels"
   "dropbox"
   "bitwarden"
+  "protonvpn"
 
   # Browsers
-  # The nixpkgs versions seem linux-specific
   "firefox"
   "vivaldi"
 ]

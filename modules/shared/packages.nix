@@ -4,6 +4,7 @@ with pkgs; [
   # General packages for development and system management
   bash-completion
   bat
+  eza
   btop
   coreutils
   killall
@@ -43,7 +44,6 @@ with pkgs; [
   # Communication tools
   zoom-us
   discord
-  # signal-desktop # nix pkg only supported on linux
 
   # Text and terminal utilities
   htop

@@ -2,8 +2,7 @@
 
 let
   user = "mvilladsen";
-  xdg_configHome  = "/home/${user}/.config";
-  shared-programs = import ../shared/home-manager.nix { inherit config pkgs lib; };
+  xdg_configHome = "/home/${user}/.config";
   shared-files = import ../shared/files.nix { inherit config pkgs; };
 
   polybar-user_modules = builtins.readFile (pkgs.substituteAll {
@@ -25,95 +24,101 @@ let
   polybar-bars = builtins.readFile ./config/polybar/bars.ini;
   polybar-colors = builtins.readFile ./config/polybar/colors.ini;
 
-in
-{
-  home = {
-    enableNixpkgsReleaseCheck = false;
-    username = "${user}";
-    homeDirectory = "/home/${user}";
-    packages = pkgs.callPackage ./packages.nix {};
-    file = shared-files // import ./files.nix { inherit user; };
-    stateVersion = "21.05";
-  };
-
-  # Use a dark theme
-  gtk = {
-    enable = true;
-    iconTheme = {
-      name = "Adwaita-dark";
-      package = pkgs.gnome.adwaita-icon-theme;
+in {
+  # imports = [ ../shared/home-manager.nix { inherit config pkgs lib; } ];
+  home-manager.users.${user} = {
+    home = {
+      # enableNixpkgsReleaseCheck = false;
+      stateVersion = "23.11";
+      username = "${user}";
+      homeDirectory = "/home/${user}";
+      packages = pkgs.callPackage ./packages.nix { };
+      file = shared-files // import ./files.nix { inherit user; };
     };
-    theme = {
-      name = "Adwaita-dark";
-      package = pkgs.gnome.adwaita-icon-theme;
-    };
-  };
+    imports = [ ../shared/home-manager.nix { inherit config pkgs lib; } ];
 
-  # Screen lock
-  services = {
-    screen-locker = {
+    # Use a dark theme
+    gtk = {
       enable = true;
-      inactiveInterval = 10;
-      lockCmd = "${pkgs.i3lock-fancy-rapid}/bin/i3lock-fancy-rapid 10 15";
+      iconTheme = {
+        name = "Adwaita-dark";
+        package = pkgs.gnome.adwaita-icon-theme;
+      };
+      theme = {
+        name = "Adwaita-dark";
+        package = pkgs.gnome.adwaita-icon-theme;
+      };
     };
 
-    # Auto mount devices
-    udiskie.enable = true;
+    # Screen lock
+    services = {
+      screen-locker = {
+        enable = true;
+        inactiveInterval = 10;
+        lockCmd = "${pkgs.i3lock-fancy-rapid}/bin/i3lock-fancy-rapid 10 15";
+      };
 
-    polybar = {
-      enable = true;
-      config = polybar-config;
-      extraConfig = polybar-bars + polybar-colors + polybar-modules + polybar-user_modules;
-      package = pkgs.polybarFull;
-      script = "polybar main &";
-    };
+      # Auto mount devices
+      udiskie.enable = true;
 
-    dunst = {
-      enable = true;
-      package = pkgs.dunst;
-      settings = {
-        global = {
-          monitor = 0;
-          follow = "mouse";
-          border = 0;
-          height = 400;
-          width = 320;
-          offset = "33x65";
-          indicate_hidden = "yes";
-          shrink = "no";
-          separator_height = 0;
-          padding = 32;
-          horizontal_padding = 32;
-          frame_width = 0;
-          sort = "no";
-          idle_threshold = 120;
-          font = "Noto Sans";
-          line_height = 4;
-          markup = "full";
-          format = "<b>%s</b>\n%b";
-          alignment = "left";
-          transparency = 10;
-          show_age_threshold = 60;
-          word_wrap = "yes";
-          ignore_newline = "no";
-          stack_duplicates = false;
-          hide_duplicate_count = "yes";
-          show_indicators = "no";
-          icon_position = "left";
-          icon_theme = "Adwaita-dark";
-          sticky_history = "yes";
-          history_length = 20;
-          history = "ctrl+grave";
-          browser = "google-chrome-stable";
-          always_run_script = true;
-          title = "Dunst";
-          class = "Dunst";
-          max_icon_size = 64;
+      polybar = {
+        enable = true;
+        config = polybar-config;
+        extraConfig = polybar-bars + polybar-colors + polybar-modules
+          + polybar-user_modules;
+        package = pkgs.polybarFull;
+        script = "polybar main &";
+      };
+
+      dunst = {
+        enable = true;
+        package = pkgs.dunst;
+        settings = {
+          global = {
+            monitor = 0;
+            follow = "mouse";
+            border = 0;
+            height = 400;
+            width = 320;
+            offset = "33x65";
+            indicate_hidden = "yes";
+            shrink = "no";
+            separator_height = 0;
+            padding = 32;
+            horizontal_padding = 32;
+            frame_width = 0;
+            sort = "no";
+            idle_threshold = 120;
+            font = "Noto Sans";
+            line_height = 4;
+            markup = "full";
+            format = ''
+              <b>%s</b>
+              %b'';
+            alignment = "left";
+            transparency = 10;
+            show_age_threshold = 60;
+            word_wrap = "yes";
+            ignore_newline = "no";
+            stack_duplicates = false;
+            hide_duplicate_count = "yes";
+            show_indicators = "no";
+            icon_position = "left";
+            icon_theme = "Adwaita-dark";
+            sticky_history = "yes";
+            history_length = 20;
+            history = "ctrl+grave";
+            browser = "google-chrome-stable";
+            always_run_script = true;
+            title = "Dunst";
+            class = "Dunst";
+            max_icon_size = 64;
+          };
         };
       };
     };
+
+    programs = { gpg.enable = true; };
+
   };
-
-  programs = shared-programs // { gpg.enable = true; };
-
 }

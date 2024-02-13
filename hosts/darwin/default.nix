@@ -3,10 +3,9 @@
 let user = "mvilladsen";
 
 in {
-
+  # TODO: Consider which parts of this to move to modules/darwin/default.nix
   imports = [
-    ../../modules/darwin/secrets.nix
-    ../../modules/darwin/home-manager.nix
+    ../../modules/darwin
     ../../modules/shared
     ../../modules/shared/cachix
     agenix.darwinModules.default

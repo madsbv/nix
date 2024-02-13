@@ -9,6 +9,7 @@ in {
   imports = [
     ../../modules/nixos/secrets.nix
     ../../modules/nixos/disk-config.nix
+    ../../modules/nixos/home-manager.nix
     ../../modules/shared
     ../../modules/shared/cachix
     agenix.nixosModules.default
@@ -295,6 +296,5 @@ in {
     inetutils
   ];
 
-  # TODO: Quite old, consider updating?
-  system.stateVersion = "21.05"; # Don't change this
+  system.stateVersion = "23.11"; # Don't change this
 }

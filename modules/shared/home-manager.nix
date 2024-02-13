@@ -6,39 +6,74 @@ let
   user = "mvilladsen";
   email = "mvilladsen@pm.me";
 
+  additionalFiles = import ./files.nix { inherit user config pkgs; };
   gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
 in {
-  java.enable = true;
+  # home-manager = {
+  #   useGlobalPkgs = true;
+  #   users.${user} = {
+  xdg.enable = true;
+  home = {
+    packages = pkgs.callPackage ./packages.nix { };
+    file = additionalFiles;
+    stateVersion = "23.11";
+  };
+  programs.java.enable = true;
   # pyenv = {
   #   enable = true;
   #   enableZshIntegration = true;
   # };
-  bacon = {
+  programs.bacon = {
     enable = true;
     settings = { };
   };
-  neovim.enable = true;
+  programs.neovim.enable = true;
 
   # TODO: Move maildirs to XDG_DATA_HOME
   # Also look into home-managers accounts.email options
-  mbsync = {
+  programs.mbsync = {
     enable = true;
     extraConfig = (builtins.readFile ./config/mbsyncrc);
   };
-  mu.enable = true;
+  programs.mu.enable = true;
 
   # Shared shell configuration
-  zsh = {
+  programs.zsh = {
     enable = true;
     enableCompletion = true;
     enableAutosuggestions = true;
-    syntaxHighlighting.enable = true;
-    defaultKeymap = "viins";
-    # TODO: Get into zplug
-    # zplug.enable = true;
+    syntaxHighlighting = {
+      enable = true;
+      highlighters = [ "main" "brackets" ];
+    };
+    # Not sure how this relates to zsh-vi-mode
+    # defaultKeymap = "viins";
     autocd = false;
     cdpath = [ "~/Dropbox/docs/" ];
     dotDir = ".config/zsh";
+    history = {
+      path = "${config.xdg.dataHome}/zsh/zsh_history";
+      ignoreAllDups = true;
+
+    };
+
+    zplug = {
+      enable = true;
+      zplugHome = "${config.xdg.configHome}/zplug";
+      plugins = [
+        {
+          name = "jeffreytse/zsh-vi-mode";
+        }
+        # May need to learn to use: https://github.com/marlonrichert/zsh-autocomplete/
+        { name = "marlonrichert/zsh-autocomplete"; }
+        {
+          name = "wfxr/forgit";
+        }
+        # { name = "romkatv/powerlevel10k, as:theme, depth:1"; }
+      ];
+    };
+
+    # TODO: How do I want to balance using nix vs something like zplug as zsh plugin managers? I'd expect to have to do some manual configuration to use nix, as in P10k below...
     plugins = [
       {
         # To customize prompt, `unset POWERLEVEL9K_CONFIG_FILE` and run `p10k configure`.
@@ -63,11 +98,10 @@ in {
       export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
       export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin''${PATH+:$PATH}";
     '';
-    history.path = "${config.xdg.dataHome}/zsh/zsh_history";
   };
 
-  gh.enable = true;
-  git = {
+  programs.gh.enable = true;
+  programs.git = {
     enable = true;
     ignores = gitignore_global;
     userName = name;
@@ -81,7 +115,7 @@ in {
   };
 
   # mbv: What to do with this? Just remove, or try to use?
-  vim = {
+  programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
       vim-airline
@@ -196,7 +230,7 @@ in {
     '';
   };
 
-  kitty = {
+  programs.kitty = {
     enable = true;
     shellIntegration.enableZshIntegration = true;
     # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
@@ -204,7 +238,7 @@ in {
   };
 
   # mbv: Let's just use this for now
-  alacritty = {
+  programs.alacritty = {
     enable = true;
     settings = {
       cursor = { style = "Block"; };
@@ -268,9 +302,11 @@ in {
     };
   };
 
-  ssh = {
+  programs.ssh = {
     enable = true;
 
+    # TODO: There should be a better way to access the users home directory
+    # Also, I'd prefer for this to be in xdg.configHome, which we should access directly anyway.
     extraConfig = lib.mkMerge [
       ''
         Host github.com
@@ -287,7 +323,7 @@ in {
   };
 
   # mbv: Try this out for now
-  tmux = {
+  programs.tmux = {
     enable = true;
     plugins = with pkgs.tmuxPlugins; [
       vim-tmux-navigator
@@ -370,4 +406,6 @@ in {
       bind-key -T copy-mode-vi 'C-\' select-pane -l
     '';
   };
+  #   };
+  # };
 }

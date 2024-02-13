@@ -1,0 +1,4 @@
+#+title: Structure
+#+begin_src nix
+darwinConfigurations.darwin.lib.darwinSystem
+#+end_src

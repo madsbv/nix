@@ -1,4 +1,3 @@
-# mbv: Not sure what this is all doing.
 { config, pkgs, lib, ... }:
 with lib;
 let
