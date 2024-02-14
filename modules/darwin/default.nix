@@ -32,12 +32,12 @@
         { path = "/System/Applications/Music.app/"; }
         { path = "/System/Applications/Photos.app/"; }
         {
-          path = "${config.users.users.${user}.home}/.local/share/";
+          path = "${config.users.users.${user}.home}/Dropbox/docs/work";
           section = "others";
           options = "--sort name --view grid --display folder";
         }
         {
-          path = "${config.users.users.${user}.home}/.local/share/downloads";
+          path = "${config.users.users.${user}.home}/Downloads";
           section = "others";
           options = "--sort name --view grid --display stack";
         }

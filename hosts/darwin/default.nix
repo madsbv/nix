@@ -1,7 +1,6 @@
 { user, agenix, config, pkgs, lib, ... }:
 
 {
-  # TODO: Consider which parts of this to move to modules/darwin/default.nix
   imports = [
     ../../modules/darwin
     ../../modules/shared
@@ -13,7 +12,11 @@
 
   nix = {
     package = pkgs.nixUnstable;
-    settings.trusted-users = [ "@admin" "${user}" ];
+    settings = {
+      trusted-users = [ "@admin" "${user}" ];
+      auto-optimise-store = true;
+      # sandbox = false;
+    };
 
     gc = {
       user = "root";
@@ -44,7 +47,11 @@
     systemPackages = with pkgs;
       [ agenix.packages."${pkgs.system}".default ]
       ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
+  };
 
+  security = {
+    # Enable sudo authentication with Touch ID
+    pam.enableSudoTouchIdAuth = true;
   };
 
   # Enable fonts dir
@@ -52,43 +59,74 @@
 
   system = {
     stateVersion = 4;
-    # TODO: Go through all of these settings and set as desired.
-    # defaults = {
-    #   NSGlobalDomain = {
-    #     AppleShowAllExtensions = true;
-    #     ApplePressAndHoldEnabled = false;
+    defaults = {
+      NSGlobalDomain = {
+        ApplePressAndHoldEnabled = false;
+        AppleShowAllExtensions = true;
+        AppleEnableMouseSwipeNavigateWithScrolls = true;
+        AppleEnableSwipeNavigateWithScrolls = true;
+        AppleICUForce24HourTime = true;
+        AppleMeasurementUnits = "Centimeters";
+        AppleTemperatureUnit = "Celsius";
+        AppleMetricUnits = 1;
+        AppleInterfaceStyleSwitchesAutomatically = true;
 
-    #     # 120, 90, 60, 30, 12, 6, 2
-    #     KeyRepeat = 2;
+        # 120, 90, 60, 30, 12, 6, 2
+        KeyRepeat = 2;
 
-    #     # 120, 94, 68, 35, 25, 15
-    #     InitialKeyRepeat = 15;
+        # 120, 94, 68, 35, 25, 15
+        InitialKeyRepeat = 15;
 
-    #     "com.apple.mouse.tapBehavior" = 1;
-    #     "com.apple.sound.beep.volume" = 0.0;
-    #     "com.apple.sound.beep.feedback" = 0;
-    #   };
+        # Trackpad speed, 0 to 3
+        "com.apple.trackpad.scaling" = 1.0;
 
-    #   dock = {
-    #     autohide = false;
-    #     show-recents = false;
-    #     launchanim = true;
-    #     orientation = "bottom";
-    #     tilesize = 48;
-    #   };
+        "com.apple.mouse.tapBehavior" = 1;
+        "com.apple.sound.beep.volume" = 0.0;
+        "com.apple.sound.beep.feedback" = 0;
 
-    #   finder = { _FXShowPosixPathInTitle = false; };
+        NSAutomaticSpellingCorrectionEnabled = false;
+        NSAutomaticWindowAnimationsEnabled = false;
 
-    #   trackpad = {
-    #     Clicking = true;
-    #     TrackpadThreeFingerDrag = true;
-    #   };
-    # };
+        # Smooth scrolling
+        NSScrollAnimationEnabled = true;
 
-    # keyboard = {
-    #   enableKeyMapping = true;
-    #   remapCapsLockToControl = true;
-    # };
+        # Autohide menu bar to make space for sketchybar
+        _HIHideMenuBar = true;
+      };
+
+      dock = {
+        autohide = true;
+        autohide-delay = 0.0;
+        autohide-time-modifier = 0.0;
+        show-recents = true;
+
+        # If true, show only open applications in the dock
+        # static-only = true;
+
+        launchanim = false;
+        orientation = "bottom";
+        tilesize = 48;
+        # Whether to arrange spaces based on most recent use
+        mru-spaces = false;
+      };
+
+      finder = {
+        _FXShowPosixPathInTitle = true;
+        CreateDesktop = false;
+        ShowPathbar = true;
+      };
+
+      trackpad = {
+        Clicking = true;
+        TrackpadThreeFingerDrag = true;
+      };
+      universalaccess = { reduceMotion = true; };
+    };
+
+    keyboard = {
+      enableKeyMapping = true;
+      remapCapsLockToControl = true;
+    };
   };
 
   # TODO: Where to put config files? I'd like to keep them with other configs in home-manager modules, especially since these land in user config
