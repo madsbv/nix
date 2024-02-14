@@ -32,10 +32,20 @@
     '';
   };
 
+  networking = {
+    computerName = "mbv-mba";
+    hostName = "mbv-mba";
+    localHostName = "mbv-mba";
+    # dns = [ "1.1.1.1" "1.0.0.1" ];
+  };
+
   # Load packages that are shared across systems
-  environment.systemPackages = with pkgs;
-    [ agenix.packages."${pkgs.system}".default ]
-    ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
+  environment = {
+    systemPackages = with pkgs;
+      [ agenix.packages."${pkgs.system}".default ]
+      ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
+
+  };
 
   # Enable fonts dir
   fonts.fontDir.enable = true;
@@ -83,26 +93,28 @@
 
   # TODO: Where to put config files? I'd like to keep them with other configs in home-manager modules, especially since these land in user config
   # NOTE: The config and extraConfig options put the config files in the nix store via [[https://nixos.org/manual/nixpkgs/stable/#trivial-builder-writeText][nixpkgs.writeScript]], and pass that path to the service via command line argument. Hence this differs from putting the file in xdg.configHome/
-  services.yabai = {
-    enable = true;
-    enableScriptingAddition = true;
-    # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
-    extraConfig = (builtins.readFile ./config/yabai/yabairc);
-  };
-  services.skhd = {
-    enable = true;
-    skhdConfig = (builtins.readFile ./config/skhd/skhdrc);
-  };
-  # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
-  # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
-  services.karabiner-elements.enable = true;
-  # The sketchybar service module has a config option, but it takes the contents of sketchybarrc as argument. My config is split across multiple arguments.
-  services.sketchybar = {
-    enable = true;
-    # Empty config string means nix won't manage the config.
-    config = "";
-    # Dependencies of config
-    extraPackages = [ pkgs.jq ];
+  services = {
+    yabai = {
+      enable = true;
+      enableScriptingAddition = true;
+      # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
+      extraConfig = (builtins.readFile ./config/yabai/yabairc);
+    };
+    skhd = {
+      enable = true;
+      skhdConfig = (builtins.readFile ./config/skhd/skhdrc);
+    };
+    # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
+    # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
+    karabiner-elements.enable = true;
+    # The sketchybar service module has a config option, but it takes the contents of sketchybarrc as argument. My config is split across multiple arguments.
+    sketchybar = {
+      enable = true;
+      # Empty config string means nix won't manage the config.
+      config = "";
+      # Dependencies of config
+      extraPackages = [ pkgs.jq ];
+    };
   };
   # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
   # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
