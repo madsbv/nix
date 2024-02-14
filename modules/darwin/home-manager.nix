@@ -10,7 +10,7 @@ let
   emacsDir = "${xdg_configHome}/emacs";
   doomDir = "${xdg_configHome}/doom";
 in {
-  # imports = [ ../shared/home-manager.nix ];
+  imports = [ ../shared/home-manager.nix ];
   #{ inherit config pkgs lib; }
   # Enable home-manager
   xdg.configFile = {
