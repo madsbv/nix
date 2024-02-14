@@ -63,7 +63,7 @@ in {
         treesit-grammars.with-all-grammars
         vterm
         multi-vterm
-        # pdf-tools
+        pdf-tools
       ];
   };
 }

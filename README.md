@@ -11,8 +11,8 @@
 - [x] Get Sketchybar working again
 - [x] ZSH autocompletion/suggestion, zplug, ...
 - [x] Get back C-r shortcut in ZSH with vim mode
-- [ ] Get spell-checking working in Emacs
-- [ ] Fix pdf-tools in Emacs
+- [x] Get spell-checking working in Emacs
+- [x] Fix pdf-tools in Emacs
 - [ ] Dock
 - [ ] Set up Just
 - [ ]   E.g. something like this for config tinkering: https://nixos-and-flakes.thiscute.world/best-practices/accelerating-dotfiles-debugging
