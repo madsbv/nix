@@ -5,13 +5,12 @@ in {
 
   nixpkgs = {
     config = {
-      # TODO: Turn off allowBroken and allowUnsupported, and see how many packages I currently have installed that are either of those.
+      # Required for Zoom
       allowUnfree = true;
-      allowBroken = true;
+      allowBroken = false;
       allowInsecure = false;
-      allowUnsupportedSystem = true;
+      allowUnsupportedSystem = false;
     };
-    # TODO: Look through overlays, consider whether to use emacs-overlay. Install Doom.
     overlays =
       # Apply each overlay found in the /overlays directory
       let path = ../../overlays;
@@ -21,12 +20,12 @@ in {
         || pathExists (path + ("/" + n + "/default.nix")))
         (attrNames (readDir path)));
 
-      #++ [
-      #  (import (builtins.fetchTarball {
-      #    url =
-      #      "https://github.com/dustinlyons/emacs-overlay/archive/refs/heads/master.tar.gz";
-      #    sha256 = emacsOverlaySha256;
-      #  }))
-      #];
+    #++ [
+    #  (import (builtins.fetchTarball {
+    #    url =
+    #      "https://github.com/dustinlyons/emacs-overlay/archive/refs/heads/master.tar.gz";
+    #    sha256 = emacsOverlaySha256;
+    #  }))
+    #];
   };
 }
