@@ -5,18 +5,13 @@ in {
   # TODO: Consider which parts of this to move to modules/darwin/default.nix
   imports = [
     ../../modules/darwin
-    # {
-    #   inherit inputs user config pkgs lib;
-    # }
     ../../modules/shared
     ../../modules/shared/cachix
     agenix.darwinModules.default
   ];
 
-  # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
 
-  # Setup user, packages, programs
   nix = {
     package = pkgs.nixUnstable;
     settings.trusted-users = [ "@admin" "${user}" ];
@@ -37,9 +32,6 @@ in {
       experimental-features = nix-command flakes repl-flake
     '';
   };
-
-  # Turn off NIX_PATH warnings now that we're using flakes
-  system.checks.verifyNixPath = false;
 
   # Load packages that are shared across systems
   environment.systemPackages = with pkgs;
@@ -89,18 +81,23 @@ in {
     #   remapCapsLockToControl = true;
     # };
   };
+
+  # TODO: Where to put config files? I'd like to keep them with other configs in home-manager modules, especially since these land in user config
+  # NOTE: The config and extraConfig options put the config files in the nix store via [[https://nixos.org/manual/nixpkgs/stable/#trivial-builder-writeText][nixpkgs.writeScript]], and pass that path to the service via command line argument. Hence this differs from putting the file in xdg.configHome/
   services.yabai = {
     enable = true;
     enableScriptingAddition = true;
+    # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
     extraConfig = (builtins.readFile ./config/yabai/yabairc);
   };
   services.skhd = {
     enable = true;
     skhdConfig = (builtins.readFile ./config/skhd/skhdrc);
   };
-  # Note: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
+  # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
   # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
   services.karabiner-elements.enable = true;
+  # The sketchybar service module has a config option, but it takes the contents of sketchybarrc as argument. My config is split across multiple arguments.
   services.sketchybar = {
     enable = true;
     # Empty config string means nix won't manage the config.

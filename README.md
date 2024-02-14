@@ -24,3 +24,7 @@ Install via Brew:
 - [x] JabRef
 - [x] Password manager stuff?
 - [x] ProtonVPN
+
+Refactoring
+- [ ] Pass around "user" as a function argument/inherited value
+- [ ] Figure out how to arrange system vs home-manager modules better. 

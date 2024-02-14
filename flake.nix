@@ -47,10 +47,6 @@
       url = "github:pirj/homebrew-noclamshell";
       flake = false;
     };
-    #railwaycat-emacsmacport = {
-    #  url = "github:railwaycat/homebrew-emacsmacport";
-    #  flake = false;
-    #};
     # Declarative disk partitioning in nixos
     disko = {
       url = "github:nix-community/disko";
@@ -127,7 +123,6 @@
       apps = nixpkgs.lib.genAttrs linuxSystems mkLinuxApps
         // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
 
-      # TODO: Yabai, skhd, karabiner, sketchybar, restic/autorestic, svim?
       darwinConfigurations = let user = "mvilladsen";
       in {
         macos = darwin.lib.darwinSystem {
@@ -149,27 +144,25 @@
                   # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
                   "felixkratz/homebrew-formulae" = felixkratz-formulae;
                   "pirj/homebrew-noclamshell" = pirj-noclamshell;
-                  #"railwaycat/homebrew-emacsmacport" = railwaycat-emacsmacport;
                 };
                 mutableTaps = false;
                 autoMigrate = true;
               };
             }
             ./hosts/darwin
-            # { inherit user; }
           ];
         };
       };
 
-      # nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system:
-      #   nixpkgs.lib.nixosSystem {
-      #     inherit system;
-      #     specialArgs = inputs;
-      #     modules = [
-      #       disko.nixosModules.disko
-      #       home-manager.nixosModules.home-manager
-      #       ./hosts/nixos
-      #     ];
-      #   });
+      nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = inputs;
+          modules = [
+            disko.nixosModules.disko
+            home-manager.nixosModules.home-manager
+            ./hosts/nixos
+          ];
+        });
     };
 }
