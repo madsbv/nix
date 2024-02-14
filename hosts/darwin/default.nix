@@ -1,7 +1,6 @@
-{ agenix, config, pkgs, lib, ... }:
+{ user, agenix, config, pkgs, lib, ... }:
 
-let user = "mvilladsen";
-in {
+{
   # TODO: Consider which parts of this to move to modules/darwin/default.nix
   imports = [
     ../../modules/darwin

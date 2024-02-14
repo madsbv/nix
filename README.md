@@ -9,8 +9,8 @@
 - [ ] Set up SSH keys properly, including git and gh
 - [ ] Set up gpg and agent
 - [x] Get Sketchybar working again
-- [ ] ZSH autocompletion/suggestion, zplug, ...
-- [ ] Get back C-r shortcut in ZSH with vim mode
+- [x] ZSH autocompletion/suggestion, zplug, ...
+- [x] Get back C-r shortcut in ZSH with vim mode
 - [ ] Get spell-checking working in Emacs
 - [ ] Fix pdf-tools in Emacs
 - [ ] Dock
@@ -26,5 +26,5 @@ Install via Brew:
 - [x] ProtonVPN
 
 Refactoring
-- [ ] Pass around "user" as a function argument/inherited value
+- [x] Pass around "user" as a function argument/inherited value
 - [ ] Figure out how to arrange system vs home-manager modules better. 

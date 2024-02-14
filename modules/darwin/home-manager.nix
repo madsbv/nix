@@ -1,18 +1,11 @@
-{ pkgs, config, lib, home-manager, my-doomemacs-config, doomemacs, my-emacs-mac
-, ... }:
+{ pkgs, config, lib, user, my-doomemacs-config, doomemacs, ... }:
 let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
-
-  user = "mvilladsen";
-  # HACK: Manual specification of xdg config dir, should figure out how to access config.xdg.configHome. Maybe do the xdg stuff in a separate file earlier in the process, programs later? That would make sense anyway.
-  # xdg_configHome = "${config.users.users.${user}.home}/.config";
-  xdg_configHome = "/Users/mvilladsen/.config";
-  emacsDir = "${xdg_configHome}/emacs";
-  doomDir = "${xdg_configHome}/doom";
+  emacsDir = "${config.xdg.configHome}/emacs";
+  doomDir = "${config.xdg.configHome}/doom";
 in {
   imports = [ ../shared/home-manager.nix ];
-  #{ inherit config pkgs lib; }
-  # Enable home-manager
+
   xdg.configFile = {
     "svim".source = ./config/svim;
     "sketchybar".source = ./config/sketchybar;
@@ -42,20 +35,19 @@ in {
       watch = "watch -cd ";
       sudo = "sudo ";
     };
-    # If Doom's emacs or config folder don't already exist, get them from their respective github repos defined in flake.nix.
-    # If the emacs folder doesn't exist, install doom
-    # activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    #   if [ ! -d "${doomDir}" ]; then
-    #      ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
-    #   fi
-    #   if [ ! -d "${emacsDir}" ]; then
-    #      ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
-    #      export PATH="${emacsDir}/bin:$PATH"
-    #      doom install
-    #   fi
-    # '';
-
+    # TODO: Replace this with the module type structure from hlissner's dotfiles
+    activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ ! -d "${doomDir}" ]; then
+         ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
+      fi
+      if [ ! -d "${emacsDir}" ]; then
+         ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
+         export PATH="${emacsDir}/bin:$PATH"
+         doom install
+      fi
+    '';
   };
+
   # NOTE: Trying to use `(pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages` and an override at the same time breaks things via weird nix double wrapping issues, so use extraPackages instead.
   # TODO: Define a launchd service for emacs daemon? Could be useful, could break tinkering. If yes, see ryan4yin-nix-config for an example.
   programs.emacs = {

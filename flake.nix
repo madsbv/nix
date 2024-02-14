@@ -123,41 +123,38 @@
       apps = nixpkgs.lib.genAttrs linuxSystems mkLinuxApps
         // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
 
-      darwinConfigurations = let user = "mvilladsen";
-      in {
-        macos = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          specialArgs = inputs;
-          modules = [
-            home-manager.darwinModules.home-manager
-            nix-homebrew.darwinModules.nix-homebrew
-            {
-              nix-homebrew = {
-                enable = true;
-                user = "${user}";
-                taps = {
-                  "homebrew/homebrew-core" = homebrew-core;
-                  "homebrew/homebrew-cask" = homebrew-cask;
-                  "homebrew/homebrew-bundle" = homebrew-bundle;
-                  "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
-                  "homebrew/homebrew-services" = homebrew-services;
-                  # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
-                  "felixkratz/homebrew-formulae" = felixkratz-formulae;
-                  "pirj/homebrew-noclamshell" = pirj-noclamshell;
-                };
-                mutableTaps = false;
-                autoMigrate = true;
+      darwinConfigurations.macos = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = inputs // { inherit user; };
+        modules = [
+          home-manager.darwinModules.home-manager
+          nix-homebrew.darwinModules.nix-homebrew
+          {
+            nix-homebrew = {
+              enable = true;
+              user = "${user}";
+              taps = {
+                "homebrew/homebrew-core" = homebrew-core;
+                "homebrew/homebrew-cask" = homebrew-cask;
+                "homebrew/homebrew-bundle" = homebrew-bundle;
+                "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
+                "homebrew/homebrew-services" = homebrew-services;
+                # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
+                "felixkratz/homebrew-formulae" = felixkratz-formulae;
+                "pirj/homebrew-noclamshell" = pirj-noclamshell;
               };
-            }
-            ./hosts/darwin
-          ];
-        };
+              mutableTaps = false;
+              autoMigrate = true;
+            };
+          }
+          ./hosts/darwin
+        ];
       };
 
       nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = inputs;
+          specialArgs = inputs // { inherit user; };
           modules = [
             disko.nixosModules.disko
             home-manager.nixosModules.home-manager

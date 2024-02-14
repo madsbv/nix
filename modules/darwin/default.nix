@@ -1,13 +1,7 @@
-{ inputs, user, config, pkgs, lib, home-manager, my-emacs-mac, doomemacs
-, my-doomemacs-config, ... }:
+{ user, config, pkgs, lib, home-manager, doomemacs, my-doomemacs-config, ...
+}@inputs:
 
-let
-  user = "mvilladsen";
-
-  xdg_configHome = "/Users/mvilladsen/.config";
-  emacsDir = "${xdg_configHome}/emacs";
-  doomDir = "${xdg_configHome}/doom";
-in {
+{
   imports = [ ./dock ./homebrew ./secrets.nix ];
 
   users.users.${user} = {
@@ -19,31 +13,9 @@ in {
 
   home-manager = {
     useGlobalPkgs = true;
-    users.${user} = {
-      imports = [
-        ./home-manager.nix
-        # {
-        #   # TODO: We can probably pass around things like user in this way
-        #   inherit user;
-        # }
-      ];
-      # TODO: Replace this with the module type structure from hlissner's dotfiles
-      home.activation.installDoomEmacs =
-        home-manager.lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -d "${doomDir}" ]; then
-             ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
-          fi
-          if [ ! -d "${emacsDir}" ]; then
-             ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
-             export PATH="${emacsDir}/bin:$PATH"
-             doom install
-          fi
-        '';
-    };
+    users.${user} = { imports = [ ./home-manager.nix ]; };
     # Arguments exposed to every home-module
-    # extraSpecialArgs = {
-    #   inherit pkgs config lib my-doomemacs-config doomemacs my-emacs-mac;
-    # };
+    extraSpecialArgs = { inherit my-doomemacs-config doomemacs user; };
   };
 
   # TODO: Configure
@@ -58,13 +30,7 @@ in {
         # Kitty or Alacritty?
         { path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
         { path = "/System/Applications/Music.app/"; }
-        {
-          path = "/System/Applications/Photos.app/";
-        }
-        # {
-        #   path = toString myEmacsLauncher;
-        #   section = "others";
-        # }
+        { path = "/System/Applications/Photos.app/"; }
         {
           path = "${config.users.users.${user}.home}/.local/share/";
           section = "others";
@@ -78,5 +44,4 @@ in {
       ];
     };
   };
-
 }
