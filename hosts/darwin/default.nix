@@ -47,8 +47,7 @@
 
   # Load packages that are shared across systems
   environment = {
-    systemPackages = with pkgs;
-      [ agenix.packages."${pkgs.system}".default ]
+    systemPackages = [ agenix.packages."${pkgs.system}".default ]
       ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
   };
 

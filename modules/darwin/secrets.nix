@@ -1,10 +1,7 @@
-{ config, pkgs, agenix, secrets, ... }:
+{ user, config, pkgs, agenix, secrets, ... }:
 
-let user = "mvilladsen";
-in {
-  # age.identityPaths = [
-  #   "/Users/${user}/.ssh/id_ed25519"
-  # ];
+{
+  # age.identityPaths = [ "/Users/${user}/.ssh/id_agenix" ];
 
   # Your secrets go here
   #
@@ -16,11 +13,10 @@ in {
   #       If you change the key name, you'll need to update the SSH extraConfig in shared/home-manager.nix
   #       so Github reads it correctly.
 
-  #
   # age.secrets."github-ssh-key" = {
   #   symlink = true;
   #   path = "/Users/${user}/.ssh/id_github";
-  #   file =  "${secrets}/github-ssh-key.age";
+  #   file = "${secrets}/github-ssh-key.age";
   #   mode = "600";
   #   owner = "${user}";
   #   group = "staff";

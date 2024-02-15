@@ -1,4 +1,4 @@
-{ pkgs, config, lib, user, my-doomemacs-config, doomemacs, ... }:
+{ pkgs, config, lib, user, my-doomemacs-config, doomemacs, agenix, ... }:
 let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
   emacsDir = "${config.xdg.configHome}/emacs";
@@ -12,7 +12,7 @@ in {
     "karabiner".source = ./config/karabiner;
   };
   home = {
-    packages = pkgs.callPackage ./packages.nix { };
+    packages = ./packages.nix { inherit agenix; };
     file = additionalFiles;
 
     stateVersion = "23.11";

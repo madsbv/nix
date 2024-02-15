@@ -1,5 +1,5 @@
-{ user, config, pkgs, lib, home-manager, doomemacs, my-doomemacs-config, ...
-}@inputs:
+{ user, config, pkgs, lib, home-manager, doomemacs, my-doomemacs-config, agenix
+, ... }@inputs:
 
 {
   imports = [ ./dock ./homebrew ./secrets.nix ];
@@ -15,7 +15,7 @@
     useGlobalPkgs = true;
     users.${user} = { imports = [ ./home-manager.nix ]; };
     # Arguments exposed to every home-module
-    extraSpecialArgs = { inherit my-doomemacs-config doomemacs user; };
+    extraSpecialArgs = inputs;
   };
 
   # TODO: Configure
