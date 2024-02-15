@@ -1,7 +1,8 @@
 # Started from https://github.com/julian-heng/yabai-config/blob/master/skhdrc
 
 # opens Terminal
-lctrl + lcmd - return : kitty --single-instance ~
+# With nix-darwin, we don't have access to kitty on the PATH, see services.skhd.
+#lctrl + lcmd - return : kitty --single-instance ~
 lcmd - e : doom +everywhere
 
 # Navigation

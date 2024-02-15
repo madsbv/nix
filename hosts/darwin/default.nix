@@ -141,8 +141,13 @@
       extraConfig = (builtins.readFile ./config/yabai/yabairc);
     };
     skhd = {
+      # When home-manager creates launchd services on Darwin, it tries to use things like $HOME in the PATH set in EnvironmentVariables in the launchd service. However, according to LaunchControl, that field does not support variable expansion. Hence $HOME/.nix-profile/bin does not end up in the PATH for skhd.
+      # See https://github.com/LnL7/nix-darwin/issues/406
+      # Also, nix-based string replacement does not work when reading from separate file, so we have to do that here.
       enable = true;
-      skhdConfig = (builtins.readFile ./config/skhd/skhdrc);
+      skhdConfig = (builtins.readFile ./config/skhd/skhdrc) + ''
+
+        lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
     };
     # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
     # It would be better to be able to set the configs as part of the service definitions, but that is not supported.

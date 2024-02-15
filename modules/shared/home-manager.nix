@@ -102,7 +102,7 @@ in {
 
   programs.gh = {
     enable = true;
-    editor = "vim";
+    settings.editor = "vim";
   };
   programs.git = {
     enable = true;
@@ -241,6 +241,7 @@ in {
     shellIntegration.enableZshIntegration = true;
     # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
     extraConfig = (builtins.readFile ./config/kitty/kitty.conf);
+    darwinLaunchOptions = [ "--single-instance" ];
   };
 
   # mbv: Let's just use this for now

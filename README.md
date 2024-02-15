@@ -7,6 +7,7 @@
 - [ ] Set up Just
 - [ ]   E.g. something like this for config tinkering: https://nixos-and-flakes.thiscute.world/best-practices/accelerating-dotfiles-debugging
 - [ ] Theming, Base16 (see base16.nix, nix-colors, stylix)
+- [x] Fix skhd -> kitty, again.
 
 Refactoring
 - [ ] Figure out how to arrange system vs home-manager modules better. 
