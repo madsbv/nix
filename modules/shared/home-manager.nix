@@ -100,7 +100,10 @@ in {
     '';
   };
 
-  programs.gh.enable = true;
+  programs.gh = {
+    enable = true;
+    editor = "vim";
+  };
   programs.git = {
     enable = true;
     ignores = gitignore_global;
@@ -111,10 +114,13 @@ in {
       credential.helper = "store";
       pull.rebase = true;
       rebase.autoStash = true;
+      # TODO: Should I just set the editor variable to vim/nvim, and only open files in emacs manually?
+      core.editor = "vim";
     };
   };
 
   # mbv: What to do with this? Just remove, or try to use?
+  # TODO: Move config to neovim.
   programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
