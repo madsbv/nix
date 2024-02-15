@@ -36,4 +36,5 @@ _:
   # Browsers
   "firefox"
   "vivaldi"
+  "orion"
 ]

@@ -33,6 +33,7 @@
       "Notability" = 360593530;
       "StopTheMadness" = 1376402589;
       "Xcode" = 497799835;
+      "com.kagimacOS.Kagi-Search" = 1622835804;
     };
   };
 }
