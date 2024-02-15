@@ -314,7 +314,7 @@ in {
           IdentitiesOnly yes
       ''
       (lib.mkIf pkgs.stdenv.hostPlatform.isLinux ''
-        IdentityFile /home/${user}/.ssh/id_github
+        IdentityFile /home/${user}/.ssh/id_ed25519
       '')
       (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''
         IdentityFile /Users/${user}/.ssh/id_ed25519
