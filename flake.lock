@@ -106,11 +106,11 @@
     "doomemacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1707602265,
-        "narHash": "sha256-rURvcenyxP04e8hfdEgmAVFVLyVNV5SZbA0qJ4EXpao=",
+        "lastModified": 1707952342,
+        "narHash": "sha256-6H118x+GnHuBHa/2h8WtAi+VcEtkm38VZclUQWFqSLY=",
         "owner": "doomemacs",
         "repo": "doomemacs",
-        "rev": "d6db0312fdf8c3a69d1aac243808b824ec9491e7",
+        "rev": "9ba6d7191ccb964584f0e392606ff6e5ccaa73db",
         "type": "github"
       },
       "original": {
@@ -181,11 +181,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1707683400,
-        "narHash": "sha256-Zc+J3UO1Xpx+NL8UB6woPHyttEy9cXXtm+0uWwzuYDc=",
+        "lastModified": 1707919853,
+        "narHash": "sha256-qxmBGDzutuJ/tsX4gp+Mr7fjxOZBbeT9ixhS5o4iFOw=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "21b078306a2ab68748abf72650db313d646cf2ca",
+        "rev": "043ba285c6dc20f36441d48525402bcb9743c498",
         "type": "github"
       },
       "original": {
@@ -213,11 +213,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1707851852,
-        "narHash": "sha256-jtPZ1kX9AADwqbAjqPDWvX+FKJwbwCV1/2MTbtbe7Zo=",
+        "lastModified": 1707970299,
+        "narHash": "sha256-zQQcHcogYWLxLiwAC9jSl0OwcES8dTJQmmofSYIOtJI=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "30c5b09cf49e884848c65ce96dcdcda288c28fa1",
+        "rev": "6800ca75df123230c5b3ccd02841840bcd23e060",
         "type": "github"
       },
       "original": {
@@ -229,11 +229,11 @@
     "homebrew-cask-fonts": {
       "flake": false,
       "locked": {
-        "lastModified": 1707690230,
-        "narHash": "sha256-xYNkZCxVshAn1s+r55JAhi33j7I7KUjKNx0VsuVzCNI=",
+        "lastModified": 1707957157,
+        "narHash": "sha256-RjcJgrLJ9Zed6XsRTYuq/yXOBm+K5AMGycOWWW8QIUI=",
         "owner": "homebrew",
         "repo": "homebrew-cask-fonts",
-        "rev": "c8a9ad8e349bcf1d7a7c30f1b178b746591aa160",
+        "rev": "3c9d137956343e190e0feb319613de9ab50cd8c0",
         "type": "github"
       },
       "original": {
@@ -245,11 +245,11 @@
     "homebrew-core": {
       "flake": false,
       "locked": {
-        "lastModified": 1707854720,
-        "narHash": "sha256-gHpPh5DrTE+9gK/HQXVuERbJRPUzXxSltNYHJDwCRFA=",
+        "lastModified": 1707984753,
+        "narHash": "sha256-wSCLM/PTEoY3MnCQLNtqEDxrQ3k7ilpfCZZn4BEBamY=",
         "owner": "homebrew",
         "repo": "homebrew-core",
-        "rev": "25875b892ba8cc05e6c425653566806d4f923181",
+        "rev": "81a0f47cd641169afb4de794be0bda5fbc715634",
         "type": "github"
       },
       "original": {
@@ -277,11 +277,11 @@
     "my-doomemacs-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1707035248,
-        "narHash": "sha256-DWJdzBAuChOdPb1jrdhFNMgWU2J7XWMqYZGxJLoTwEA=",
+        "lastModified": 1707920745,
+        "narHash": "sha256-cxXkhnG4C/uU6zN3GBFkXTdOz+frAruLNCTwefCfhII=",
         "ref": "refs/heads/main",
-        "rev": "89009f50d1849e351663ceb0f12e40540716cf45",
-        "revCount": 27,
+        "rev": "46314c706755e317c84b525c4028ed8f15596490",
+        "revCount": 28,
         "type": "git",
         "url": "ssh://git@github.com/madsbv/doom.d.git"
       },
@@ -360,11 +360,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1707689078,
-        "narHash": "sha256-UUGmRa84ZJHpGZ1WZEBEUOzaPOWG8LZ0yPg1pdDF/yM=",
+        "lastModified": 1707863367,
+        "narHash": "sha256-LdBbCSSP7VHaHA4KXcPGKqkvsowT2+7W4jlEHJj6rPg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f9d39fb9aff0efee4a3d5f4a6d7c17701d38a1d8",
+        "rev": "35ff7e87ee05199a8003f438ec11a174bcbd98ea",
         "type": "github"
       },
       "original": {

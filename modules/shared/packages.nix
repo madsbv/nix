@@ -1,7 +1,6 @@
-{ pkgs, agenix }:
+{ pkgs }:
 
 with pkgs; [
-  # agenix.packages."${pkgs.system}".default
   # General packages for development and system management
   bash-completion
   bat

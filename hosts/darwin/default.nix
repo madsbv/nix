@@ -17,8 +17,8 @@
       auto-optimise-store = true;
       # sandbox = true has problems on Darwin (see https://github.com/NixOS/nix/issues/4119)
       # If you get trapped by this, manually edit /etc/nix/nix.conf to set sandbox = false, kill nix-daemon, then try again (optionally with `--option sandbox false' added as well).
-      # sandbox = "relaxed" seems to work ok.
-      sandbox = "relaxed";
+      # sandbox = "relaxed" eventually also caused problems.
+      sandbox = false;
     };
 
     gc = {

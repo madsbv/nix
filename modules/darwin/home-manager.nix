@@ -12,7 +12,8 @@ in {
     "karabiner".source = ./config/karabiner;
   };
   home = {
-    packages = ./packages.nix { inherit agenix; };
+    packages = pkgs.callPackage ./packages.nix { }
+      ++ [ agenix.packages."${pkgs.system}".default ];
     file = additionalFiles;
 
     stateVersion = "23.11";
