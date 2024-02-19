@@ -122,7 +122,8 @@
         Clicking = true;
         TrackpadThreeFingerDrag = true;
       };
-      universalaccess = { reduceMotion = true; };
+      # Sounds like something I want, but it actually reduces motions related to trackpad movements which I want to keep.
+      universalaccess = { reduceMotion = false; };
     };
 
     keyboard = {

@@ -93,6 +93,7 @@ with pkgs; [
 
   # JavaScript
   nodePackages.nodejs
+  nodePackages.typescript-language-server
   # For yaml formatting, among other things
   nodePackages.prettier
 
