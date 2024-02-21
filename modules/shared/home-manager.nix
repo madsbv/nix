@@ -61,6 +61,7 @@ in {
       enable = true;
       zplugHome = "${config.xdg.configHome}/zplug";
       plugins = [
+        { name = "ajeetdsouza/zoxide"; }
         {
           name = "jeffreytse/zsh-vi-mode";
         }

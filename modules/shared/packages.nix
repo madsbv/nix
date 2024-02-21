@@ -50,6 +50,8 @@ with pkgs; [
   iftop
   jq
   ripgrep
+  zoxide
+  fzf
   tree
   tmux
   unrar
@@ -74,6 +76,9 @@ with pkgs; [
   # Documents
   djvulibre
   poppler
+
+  # Compile tools
+  pkg-config
 
   # nix
   nixfmt
