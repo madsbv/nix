@@ -49,7 +49,12 @@
   environment = {
     systemPackages = [ agenix.packages."${pkgs.system}".default ]
       ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
+    systemPath = [ /run/current-system/sw/bin ];
   };
+
+  # IMPORTANT: Necessary for nix-darwin to set PATH correctly
+  # NOTE: Can use programs.zsh.variables to set environment variables in the global environment.
+  programs.zsh.enable = true;
 
   security = {
     # Enable sudo authentication with Touch ID
