@@ -14,6 +14,7 @@ with pkgs; [
   wget
   zip
   fd
+  gdu
 
   # Encryption and security tools
   age
@@ -50,6 +51,7 @@ with pkgs; [
   iftop
   jq
   ripgrep
+  ripgrep-all
   zoxide
   fzf
   tree
@@ -95,17 +97,34 @@ with pkgs; [
 
   # Python
   isort
-  # pipenv
+  black
+  python311Packages.pyflakes
+  python311Packages.pytest
+  nodePackages.pyright
 
   # JavaScript
   nodePackages.nodejs
   nodePackages.typescript-language-server
+  nodePackages.js-beautify
   # For yaml formatting, among other things
   nodePackages.prettier
+  nodePackages.eslint
+
+  # Golang
+  gopls
+  gomodifytags
+  gotests
+  gore
+  gotools
 
   # Misc language servers
   yaml-language-server
   sqls
   lua-language-server
+  vscode-langservers-extracted
 
+  # Misc Doomemacs dependencies
+  coreutils-prefixed # Mostly for GNU ls
+  cmake
+  fontconfig
 ]
