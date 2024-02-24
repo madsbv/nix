@@ -70,22 +70,23 @@ with pkgs; [
   bibutils
   stylelint
   texlab
-  # wordnet # Build broken
   texliveFull
 
   # Documents
   djvulibre
   poppler
 
-  # Compile tools
-  pkg-config
-
   # nix
   nixfmt
   nil
 
   # rust
-  rustup
+  # cargo-audit # Dependency libgit fails to compil
+  cargo-flamegraph
+  # cargo-instruments # Not in nixpkgs
+  cargo-generate
+  cargo-diet
+  cargo-msrv
 
   # Shell scripts
   nodePackages.bash-language-server

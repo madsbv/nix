@@ -64,11 +64,15 @@
       url = "github:doomemacs/doomemacs";
       flake = false;
     };
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
     , homebrew-cask, homebrew-cask-fonts, homebrew-services, felixkratz-formulae
     , pirj-noclamshell, home-manager, nixpkgs, disko, agenix, secrets
-    , my-doomemacs-config, doomemacs }@inputs:
+    , my-doomemacs-config, doomemacs, fenix }@inputs:
     let
       user = "mvilladsen";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
@@ -148,6 +152,17 @@
             };
           }
           ./hosts/darwin
+          # TODO: Move this somewhere else. HM module probably?
+          ({ pkgs, ... }: {
+            nixpkgs.overlays = [ fenix.overlays.default ];
+            environment.systemPackages = with pkgs; [
+              # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
+              # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.
+              # Can also get toolchains for specified targets, e.g. targets.wasm32-unknown-unknown.latest.toolchain
+              fenix.packages.aarch64-darwin.default.toolchain
+              rust-analyzer-nightly
+            ];
+          })
         ];
       };
 
