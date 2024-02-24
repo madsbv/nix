@@ -9,9 +9,6 @@ let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
   gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
 in {
-  # home-manager = {
-  #   useGlobalPkgs = true;
-  #   users.${user} = {
   xdg.enable = true;
   home = {
     packages = pkgs.callPackage ./packages.nix { };

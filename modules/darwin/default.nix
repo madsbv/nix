@@ -13,6 +13,7 @@
 
   home-manager = {
     useGlobalPkgs = true;
+    useUserPackages = true;
     users.${user} = { imports = [ ./home-manager.nix ]; };
     # Arguments exposed to every home-module
     extraSpecialArgs = { inherit my-doomemacs-config doomemacs user agenix; };
