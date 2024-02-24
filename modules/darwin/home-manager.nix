@@ -3,6 +3,7 @@ let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
   emacsDir = "${config.xdg.configHome}/emacs";
   doomDir = "${config.xdg.configHome}/doom";
+  doomRepoUrl = "https://github.com/doomemacs/doomemacs";
 in {
   imports = [ ../shared/home-manager.nix ];
 
@@ -37,14 +38,14 @@ in {
       sudo = "sudo ";
     };
     # TODO: Replace this with the module type structure from hlissner's dotfiles
+    # TODO: Replace the rsync stuff with git clone, take the URLs for doom and doom-config as input from flake.nix.inputs
     activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if [ ! -d "${doomDir}" ]; then
          ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
       fi
       if [ ! -d "${emacsDir}" ]; then
-         ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${emacsDir}
-         export PATH="${emacsDir}/bin:$PATH"
-         doom install
+         ${pkgs.git}/bin/git clone --depth=1 --single-branch "${doomRepoUrl}" "${emacsDir}"
+         ${emacsDir}/bin/doom install
       fi
     '';
   };
