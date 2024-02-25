@@ -1,5 +1,5 @@
 { user, config, pkgs, lib, home-manager, doomemacs, my-doomemacs-config, agenix
-, ... }@inputs:
+, color-scheme, ... }@inputs:
 
 {
   imports = [ ./dock ./homebrew ./secrets.nix ];
@@ -14,9 +14,17 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.${user} = { imports = [ ./home-manager.nix ]; };
+    users.${user} = {
+      imports = [
+        ./home-manager.nix
+        inputs.base16.homeManagerModule
+        { scheme = color-scheme; }
+      ];
+    };
     # Arguments exposed to every home-module
-    extraSpecialArgs = { inherit my-doomemacs-config doomemacs user agenix; };
+    extraSpecialArgs = {
+      inherit my-doomemacs-config doomemacs user agenix inputs;
+    };
   };
 
   # TODO: Configure

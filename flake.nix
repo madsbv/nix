@@ -1,6 +1,7 @@
 {
   description = "Starter Configuration with secrets for MacOS and NixOS";
   inputs = {
+    ### Nix basics ###
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # Local copy of fork of nixpkgs for development/testing package upgrades
     #nixpkgs.url = "github:madsbv/nixpkgs/emacs-no-titlebar-patch";
@@ -14,6 +15,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    ### Darwin ###
     darwin = {
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,19 +50,30 @@
       url = "github:pirj/homebrew-noclamshell";
       flake = false;
     };
+    ### NixOS ###
     # Declarative disk partitioning in nixos
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    secrets = {
-      url = "git+ssh://git@github.com/madsbv/nix-secrets.git";
+
+    ### Theming ###
+    base16.url = "github:SenchoPens/base16.nix";
+    # Color schemes
+    base16-schemes = {
+      url = "github:tinted-theming/schemes";
       flake = false;
     };
-    my-doomemacs-config = {
-      url = "git+ssh://git@github.com/madsbv/doom.d.git";
+    base16-vim = {
+      url = "github:tinted-theming/base16-vim";
       flake = false;
     };
+    base16-kitty = {
+      url = "github:kdrag0n/base16-kitty";
+      flake = false;
+    };
+
+    ### Other ###
     doomemacs = {
       url = "github:doomemacs/doomemacs";
       flake = false;
@@ -68,13 +82,46 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    ### Personal config ###
+    secrets = {
+      url = "git+ssh://git@github.com/madsbv/nix-secrets.git";
+      flake = false;
+    };
+    my-doomemacs-config = {
+      url = "git+ssh://git@github.com/madsbv/doom.d.git";
+      flake = false;
+    };
   };
   outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
     , homebrew-cask, homebrew-cask-fonts, homebrew-services, felixkratz-formulae
     , pirj-noclamshell, home-manager, nixpkgs, disko, agenix, secrets
-    , my-doomemacs-config, doomemacs, fenix }@inputs:
+    , my-doomemacs-config, doomemacs, fenix, ... }@inputs:
     let
       user = "mvilladsen";
+      # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
+      molokai = {
+        slug = "molokai";
+        scheme = "Port of the Doomemacs port of Tomas Restrepo's Molokai";
+        author = "madsbv";
+        base00 = "#1c1e1f";
+        base01 = "#222323";
+        base02 = "#4e4e4e";
+        base03 = "#555556";
+        base04 = "#767679";
+        base05 = "#d6d6d4";
+        base06 = "#f5f4f1";
+        base07 = "#ffffff";
+        base08 = "#fb2874";
+        base09 = "#fd971f";
+        base0A = "#e2c770";
+        base0B = "#b6e63e";
+        base0C = "#66d9ef";
+        base0D = "#268bd2";
+        base0E = "#9c91e4";
+        base0F = "#cc6633";
+      };
+      color-scheme = molokai;
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
@@ -129,7 +176,7 @@
 
       darwinConfigurations.macos = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        specialArgs = inputs // { inherit user; };
+        specialArgs = inputs // { inherit user color-scheme; };
         modules = [
           home-manager.darwinModules.home-manager
           nix-homebrew.darwinModules.nix-homebrew
@@ -152,6 +199,15 @@
             };
           }
           ./hosts/darwin
+
+          # TODO: Move this
+          # The nixOS module doesn't seem to use anything nixOS specific, and in fact the home manager module is identical, so this should work just fine for nix-darwin too
+          inputs.base16.nixosModule
+          # TODO: Choose theme
+          {
+            scheme = color-scheme;
+          }
+
           # TODO: Move this somewhere else. HM module probably?
           ({ pkgs, ... }: {
             nixpkgs.overlays = [ fenix.overlays.default ];

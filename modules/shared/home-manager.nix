@@ -1,5 +1,5 @@
 # This file is called from modules/{darwin,nixos}/home-manager.nix, and is merged into home-manager.programs attribute set.
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   name = "Mads Bach Villadsen";
@@ -24,7 +24,6 @@ in {
     enable = true;
     settings = { };
   };
-  programs.neovim.enable = true;
 
   # TODO: Move maildirs to XDG_DATA_HOME
   # Also look into home-managers accounts.email options
@@ -117,17 +116,20 @@ in {
     };
   };
 
-  # mbv: What to do with this? Just remove, or try to use?
-  # TODO: Move config to neovim.
-  programs.vim = {
+  programs.neovim = {
     enable = true;
+    # Symlink vim to nvim
+    vimAlias = true;
     plugins = with pkgs.vimPlugins; [
       vim-airline
       vim-airline-themes
       vim-startify
       vim-tmux-navigator
+      molokai
+      (pkgs.vimPlugins.base16-vim.overrideAttrs (old:
+        let schemeFile = config.scheme inputs.base16-vim;
+        in { patchPhase = "cp ${schemeFile} colors/base16-scheme.vim"; }))
     ];
-    settings = { ignorecase = true; };
     extraConfig = ''
       "" General
       set number
@@ -147,7 +149,6 @@ in {
       set ruler
       set backspace=indent,eol,start
       set laststatus=2
-      set clipboard=autoselect
 
       " Dir stuff
       set nobackup
@@ -173,7 +174,7 @@ in {
       "" Statusbar
       set nocompatible " Disable vi-compatibility
       set laststatus=2 " Always show the statusline
-      let g:airline_theme='bubblegum'
+      let g:airline_theme='molokai'
       let g:airline_powerline_fonts = 1
 
       "" Local keys and such
@@ -229,16 +230,22 @@ in {
         \ '~/.local/share/src',
         \ ]
 
-      let g:airline_theme='bubblegum'
-      let g:airline_powerline_fonts = 1
+      " base16
+      set termguicolors background=dark
+      " let base16colorspace=256
+      " colorscheme base16-scheme
+      colorscheme molokai
     '';
+    # NOTE: Molokai was originally a vim theme modified from Monokai, so just use the native one here.
+    # Can we do this programmatically depending on color-scheme? Would be pretty convoluted
   };
 
   programs.kitty = {
     enable = true;
     shellIntegration.enableZshIntegration = true;
     # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
-    extraConfig = (builtins.readFile ./config/kitty/kitty.conf);
+    extraConfig = builtins.readFile ./config/kitty/kitty.conf
+      + builtins.readFile (config.scheme inputs.base16-kitty);
     darwinLaunchOptions = [ "--single-instance" ];
   };
 
@@ -267,43 +274,56 @@ in {
         ];
       };
 
-      # These are apparently unused?
-      #dynamic_padding = true;
-      #decorations = "full";
-      #title = "Terminal";
-      #class = {
-      #  instance = "Alacritty";
-      #  general = "Alacritty";
-      #};
-
-      colors = {
-        primary = {
-          background = "0x1f2528";
-          foreground = "0xc0c5ce";
+      # Base16 colors
+      colors = with config.scheme.withHashtag;
+        let
+          default = {
+            black = base00;
+            white = base07;
+            inherit red green yellow blue cyan magenta;
+          };
+        in {
+          primary = {
+            background = base00;
+            foreground = base07;
+          };
+          cursor = {
+            text = base02;
+            cursor = base07;
+          };
+          normal = default;
+          bright = default;
+          dim = default;
         };
 
-        normal = {
-          black = "0x1f2528";
-          red = "0xec5f67";
-          green = "0x99c794";
-          yellow = "0xfac863";
-          blue = "0x6699cc";
-          magenta = "0xc594c5";
-          cyan = "0x5fb3b3";
-          white = "0xc0c5ce";
-        };
+      # colors = {
+      #   primary = {
+      #     background = "0x1f2528";
+      #     foreground = "0xc0c5ce";
+      #   };
 
-        bright = {
-          black = "0x65737e";
-          red = "0xec5f67";
-          green = "0x99c794";
-          yellow = "0xfac863";
-          blue = "0x6699cc";
-          magenta = "0xc594c5";
-          cyan = "0x5fb3b3";
-          white = "0xd8dee9";
-        };
-      };
+      #   normal = {
+      #     black = "0x1f2528";
+      #     red = "0xec5f67";
+      #     green = "0x99c794";
+      #     yellow = "0xfac863";
+      #     blue = "0x6699cc";
+      #     magenta = "0xc594c5";
+      #     cyan = "0x5fb3b3";
+      #     white = "0xc0c5ce";
+      #   };
+
+      #   bright = {
+      #     black = "0x65737e";
+      #     red = "0xec5f67";
+      #     green = "0x99c794";
+      #     yellow = "0xfac863";
+      #     blue = "0x6699cc";
+      #     magenta = "0xc594c5";
+      #     cyan = "0x5fb3b3";
+      #     white = "0xd8dee9";
+      #   };
+      # };
     };
   };
 
@@ -411,6 +431,4 @@ in {
       bind-key -T copy-mode-vi 'C-\' select-pane -l
     '';
   };
-  #   };
-  # };
 }
