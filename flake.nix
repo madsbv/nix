@@ -211,13 +211,15 @@
           # TODO: Move this somewhere else. HM module probably?
           ({ pkgs, ... }: {
             nixpkgs.overlays = [ fenix.overlays.default ];
-            environment.systemPackages = with pkgs; [
-              # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
-              # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.
-              # Can also get toolchains for specified targets, e.g. targets.wasm32-unknown-unknown.latest.toolchain
-              fenix.packages.aarch64-darwin.default.toolchain
-              rust-analyzer-nightly
-            ];
+            environment.systemPackages = with pkgs;
+              [
+                # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
+                # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.
+                # Can also get toolchains for specified targets, e.g. targets.wasm32-unknown-unknown.latest.toolchain
+                # TODO: Probably move to latest or monthly-latest, get rust-src as well
+                fenix.packages.aarch64-darwin.latest.toolchain
+                # rust-analyzer-nightly
+              ];
           })
         ];
       };

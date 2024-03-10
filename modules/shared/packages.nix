@@ -13,6 +13,7 @@ with pkgs; [
   perl
   wget
   zip
+  zstd
   fd
   gdu
 
@@ -27,6 +28,9 @@ with pkgs; [
   # Backups
   restic
   autorestic
+
+  # Networking
+  tailscale
 
   # Media-related packages
   emacs-all-the-icons-fonts
@@ -83,9 +87,8 @@ with pkgs; [
   nil
 
   # rust
-  # cargo-audit # Dependency libgit fails to compil
+  cargo-audit
   cargo-flamegraph
-  # cargo-instruments # Not in nixpkgs
   cargo-generate
   cargo-diet
   cargo-msrv
@@ -111,6 +114,7 @@ with pkgs; [
   nodePackages.eslint
 
   # Golang
+  go
   gopls
   gomodifytags
   gotests

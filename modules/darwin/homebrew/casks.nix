@@ -37,4 +37,6 @@ _:
   "firefox"
   "vivaldi"
   "orion"
+
+  # "teamviewer"
 ]
