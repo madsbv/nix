@@ -127,6 +127,9 @@ with pkgs; [
   lua-language-server
   vscode-langservers-extracted
 
+  # Other programming tools
+  hyperfine
+
   # Misc Doomemacs dependencies
   coreutils-prefixed # Mostly for GNU ls
   cmake

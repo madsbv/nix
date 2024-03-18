@@ -143,6 +143,7 @@
       enable = true;
       enableScriptingAddition = true;
       # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
+      # Could maybe use services.yabai.config to pass reference to skhd config dir?
       extraConfig = (builtins.readFile ./config/yabai/yabairc);
     };
     skhd = {
