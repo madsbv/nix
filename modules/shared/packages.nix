@@ -22,8 +22,10 @@ with pkgs; [
   age-plugin-yubikey
   gnupg
   libfido2
-  pinentry
+  pinentry-emacs # 2024-03-18: The pinentry packages has been split up into multiple different packages exposing the different frontends. pinentry-emacs should expose the emacs, curses and tty frontends, but not the gtk and qt frontends which require linux.
   bitwarden-cli
+  yubikey-agent
+  yubikey-manager # Should be a CLI tool and shouldn't conflict with the homebrew yubico-yubikey-manager on Darwin
 
   # Backups
   restic

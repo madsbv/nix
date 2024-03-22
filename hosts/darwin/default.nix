@@ -63,6 +63,13 @@
   # Enable fonts dir
   fonts.fontDir.enable = true;
 
+  # Note: To correlate settings in System Settings with their names here, you can use `defaults read` to output (I think) all system settings. You can then save that to a file, change something in System Settings, and diff the new output of defaults read against the previous output. E.g.:
+  # ```sh
+  # defaults read > before
+  # # Do change
+  # defaults read | diff before -
+  # # See which options changed
+  # ```
   system = {
     stateVersion = 4;
     defaults = {

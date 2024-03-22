@@ -32,6 +32,8 @@ _:
   "dropbox"
   "bitwarden"
   "protonvpn"
+  "yubico-yubikey-manager"
+  "yubico-authenticator"
 
   # Browsers
   "firefox"
