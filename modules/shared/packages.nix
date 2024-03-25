@@ -84,6 +84,11 @@ with pkgs; [
   djvulibre
   poppler
 
+  # Virtualization
+  qemu
+  libvirt
+  virt-manager
+
   # nix
   nixfmt
   nil
