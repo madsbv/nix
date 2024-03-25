@@ -101,6 +101,7 @@ with pkgs; [
   shfmt
 
   # Python
+  python3
   isort
   black
   python311Packages.pyflakes
