@@ -91,9 +91,10 @@ in {
       local P10K_INSTANT_PROMPT="${config.xdg.cacheHome}/p10k-instant-prompt-''${(%):-%n}.zsh"
       [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
     '';
+    # TODO: This is not machine agnostic, fix
     envExtra = ''
       export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
-      export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin''${PATH+:$PATH}";
+      export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin:$HOME/.cargo/bin''${PATH+:$PATH}";
     '';
   };
 

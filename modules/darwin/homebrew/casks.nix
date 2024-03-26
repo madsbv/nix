@@ -26,6 +26,9 @@ _:
   # Entertainment Tools
   "vlc"
 
+  # Virtualization
+  "utm"
+
   # System/Productivity Tools
   "raycast"
   "unnaturalscrollwheels"

@@ -85,9 +85,9 @@ with pkgs; [
   poppler
 
   # Virtualization
-  qemu
-  libvirt
-  virt-manager
+  # qemu
+  # libvirt
+  # virt-manager
 
   # nix
   nixfmt
