@@ -20,6 +20,10 @@ NOTE: The combination of netboot and tailscale with this level of automation has
 
 Then use NixOS-anywhere for the actual install, and `nixos-rebuild switch` with the `--target-host root@<ip>` option to deploy flake output remotely.
 
+
+Another thought: NixOS has system.autoUpgrade.flake which allows for pointing to a github repo for the flake to build, for example. We could in principle make our configs public and transition from install image this way, or even just pull the final config directly from github for the initial install, without any hard coding in the install image. Debugging would be harder though.
+We could then even build CI in with Github actions, and run autoUpgrade in the final config as well with flake input updates run in Github CI too.
+
 ### Plan of attack
 
 1. ~~Get VM install script fully working, without any of the fancy tools above. Don't worry about automatically transferring configuration files or scripts, that will be solved by nixos-generators later.~~
@@ -28,25 +32,31 @@ Then use NixOS-anywhere for the actual install, and `nixos-rebuild switch` with 
      - Script transfer-config.sh which uses scp to transfer nix config and setup script to /root/nixos on vm
      - script install-nixos.sh which, when run on vm, automatically configures disks and installs nixos, then shuts down vm.
      - Remove install iso from vm and boot to installed os
-2. Convert to nixos-generators flake and get a working install iso/vm image that does everything from the script in step 1 hands off.
-3. Integrate tailscale and tailscale SSH in the above on VMs.
+2. ~~Convert to nixos-generators flake and get a working install iso/vm image that does everything from the script in step 1 hands off.~~
+     - Find a way to include the final config in the iso without hard-coding, e.g. by pointing to a config folder in install-script.nix.
+     - Probable solution: Follow the example of https://github.com/JustinLex/jlh-h5b/blob/main/nodes/flake.nix and define system config and nixos-generator config in the same flake, then in the install script, refer to self.outPath... in the nixos-install command. Can I also cp the result to /etc/nixos?
+3. Integrate tailscale and tailscale SSH in the above on VMs, including deploying with authkeys somehow (look into agenix-rekey).
 4. Get a working image on the xps.
 5. If supported, get PXE boot on xps working with pixiecore.
 
-The value proposition of nixos-anywhere is a bit unclear to me. If we use it, the flow would look like:
+So far, the steps above should get us to a state where nixos is installed on the machine hands-free, and we have ssh access over Tailscale. There's some missing pieces:
+- This only works if we already have the disk layout and hardware-configuration.nix
+- The configuration has to be hardcoded in the install iso; the iso will go out of date quickly, so we'd have to go in and update the config anyway.
+
+We can use nixos-anywhere to fix this. The workflow will be as follows:
 - Use custom installer image to boot to install environment with tailscale running
-- If this is a new machine, ssh in manually and explore the disk layout as well as generating hardware-configuration.nix without file systems (`nixos-generate-config --no-filesystems`).
+- If this is a new machine, ssh in manually and explore the disk layout as well as generating hardware-configuration.nix without file systems (`nixos-generate-config --no-filesystems`). There should be a script on the install iso to easily generate the hardware-configuration.nix, and ideally write necessary disk info to a file.
 -   Customize nixos configuration to this new machine
 - Deploy desired config via nixos-anywhere.
-
-This would add an extra manual step to deployment, but it would still be fully remote, and would decouple the install image from the final system configuration, meaning less rebuilding of install images. For new systems, generating hardware config and disk layout would also have to be done manually, and without this approach, we'd have to do a lot more manual work on first setup.
 
 Ideally we can integrate nixos-anywhere and nixos-generator sufficiently that we can build install images with nixos-generator from any nixos-anywhere config. Then we could have one fixed new-install image for use with nixos-anywhere for initial setup, and then, if desired, build new install images for repeat deployment of the same or similar machines.
 
 This gives us further steps:
-6. Split the results of steps 1-5 into a base installer config and a final config; test that we can still deploy to previous targets.
-7. Test the workflow above for a new setup, verify.
-8. Create complete hands-off install images with nixos-generator from the nixos-anywhere based setup and test that they work.
+6. Remove the automatic install script from the nixos-generator config from steps 1-5, and instead make the install iso boot to an install environment that has my ssh key/tailscale auth already loaded, together with whatever tools are necessary for any manual spelunking I might do (git could be useful).
+7. Take the installed config from steps 1-5, and test that we can install that final config using the nixos-anywhere workflow.
+8. Test the workflow for a new setup.
+
+We're now at the point where installation should be about as hands-free as is reasonable. A possible next step would be to look into nix deployment tools like nixops or morph for managing everything together.
 
 ## Steps for tmpfs root, persistent data on ZFS
 
