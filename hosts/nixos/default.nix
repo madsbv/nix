@@ -49,10 +49,6 @@ in {
     nixPath =
       [ "nixos-config=/home/${user}/.local/share/src/nixos-config:/etc/nixos" ];
     settings.allowed-users = [ "${user}" ];
-    package = pkgs.nixUnstable;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
   };
 
   # Manages keys and such
@@ -280,20 +276,19 @@ in {
     }];
   };
 
+  # Enable fonts dir
+  fonts.fontDir.enable = true;
   fonts.packages = with pkgs; [
     dejavu_fonts
     emacs-all-the-icons-fonts
-    feather-font # from overlay
     jetbrains-mono
+    feather-font # from overlay
     font-awesome
+    hack-font
+    meslo-lgs-nf
+    nerdfonts
     noto-fonts
     noto-fonts-emoji
-  ];
-
-  environment.systemPackages = with pkgs; [
-    agenix.packages."${pkgs.system}".default # "x86_64-linux"
-    gitAndTools.gitFull
-    inetutils
   ];
 
   system.stateVersion = "23.11"; # Don't change this

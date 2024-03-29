@@ -8,34 +8,19 @@
     agenix.darwinModules.default
   ];
 
+  # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
+  # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
+
   services.nix-daemon.enable = true;
 
   nix = {
-    package = pkgs.nixUnstable;
     settings = {
       trusted-users = [ "@admin" "${user}" ];
-      auto-optimise-store = true;
       # sandbox = true has problems on Darwin (see https://github.com/NixOS/nix/issues/4119)
       # If you get trapped by this, manually edit /etc/nix/nix.conf to set sandbox = false, kill nix-daemon, then try again (optionally with `--option sandbox false' added as well).
       # sandbox = "relaxed" eventually also caused problems.
-      sandbox = false;
+      sandbox = lib.mkForce false;
     };
-
-    gc = {
-      user = "root";
-      automatic = true;
-      interval = {
-        Weekday = 0;
-        Hour = 2;
-        Minute = 0;
-      };
-      options = "--delete-older-than 30d";
-    };
-
-    # Turn this on to make command line easier
-    extraOptions = ''
-      experimental-features = nix-command flakes repl-flake
-    '';
   };
 
   networking = {
@@ -43,12 +28,6 @@
     hostName = "mbv-mba";
     localHostName = "mbv-mba";
     # dns = [ "1.1.1.1" "1.0.0.1" ];
-  };
-
-  # Load packages that are shared across systems
-  environment = {
-    systemPackages = [ agenix.packages."${pkgs.system}".default ]
-      ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
   };
 
   # IMPORTANT: Necessary for nix-darwin to set PATH correctly
@@ -60,8 +39,37 @@
     pam.enableSudoTouchIdAuth = true;
   };
 
-  # Enable fonts dir
-  fonts.fontDir.enable = true;
+  # TODO: Where to put config files? I'd like to keep them with other configs in home-manager modules, especially since these land in user config
+  # NOTE: The config and extraConfig options put the config files in the nix store via [[https://nixos.org/manual/nixpkgs/stable/#trivial-builder-writeText][nixpkgs.writeScript]], and pass that path to the service via command line argument. Hence this differs from putting the file in xdg.configHome/
+  services = {
+    yabai = {
+      enable = true;
+      enableScriptingAddition = true;
+      # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
+      # Could maybe use services.yabai.config to pass reference to skhd config dir?
+      extraConfig = (builtins.readFile ./config/yabai/yabairc);
+    };
+    skhd = {
+      # When home-manager creates launchd services on Darwin, it tries to use things like $HOME in the PATH set in EnvironmentVariables in the launchd service. However, according to LaunchControl, that field does not support variable expansion. Hence $HOME/.nix-profile/bin does not end up in the PATH for skhd.
+      # See https://github.com/LnL7/nix-darwin/issues/406
+      # Also, nix-based string replacement does not work when reading from separate file, so we have to do that here.
+      enable = true;
+      skhdConfig = (builtins.readFile ./config/skhd/skhdrc) + ''
+
+        lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
+    };
+    # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
+    # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
+    karabiner-elements.enable = true;
+    # The sketchybar service module has a config option, but it takes the contents of sketchybarrc as argument. My config is split across multiple arguments.
+    sketchybar = {
+      enable = true;
+      # Empty config string means nix won't manage the config.
+      config = "";
+      # Dependencies of config
+      extraPackages = [ pkgs.jq ];
+    };
+  };
 
   # Note: To correlate settings in System Settings with their names here, you can use `defaults read` to output (I think) all system settings. You can then save that to a file, change something in System Settings, and diff the new output of defaults read against the previous output. E.g.:
   # ```sh
@@ -143,37 +151,18 @@
     };
   };
 
-  # TODO: Where to put config files? I'd like to keep them with other configs in home-manager modules, especially since these land in user config
-  # NOTE: The config and extraConfig options put the config files in the nix store via [[https://nixos.org/manual/nixpkgs/stable/#trivial-builder-writeText][nixpkgs.writeScript]], and pass that path to the service via command line argument. Hence this differs from putting the file in xdg.configHome/
-  services = {
-    yabai = {
-      enable = true;
-      enableScriptingAddition = true;
-      # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
-      # Could maybe use services.yabai.config to pass reference to skhd config dir?
-      extraConfig = (builtins.readFile ./config/yabai/yabairc);
-    };
-    skhd = {
-      # When home-manager creates launchd services on Darwin, it tries to use things like $HOME in the PATH set in EnvironmentVariables in the launchd service. However, according to LaunchControl, that field does not support variable expansion. Hence $HOME/.nix-profile/bin does not end up in the PATH for skhd.
-      # See https://github.com/LnL7/nix-darwin/issues/406
-      # Also, nix-based string replacement does not work when reading from separate file, so we have to do that here.
-      enable = true;
-      skhdConfig = (builtins.readFile ./config/skhd/skhdrc) + ''
-
-        lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
-    };
-    # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
-    # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
-    karabiner-elements.enable = true;
-    # The sketchybar service module has a config option, but it takes the contents of sketchybarrc as argument. My config is split across multiple arguments.
-    sketchybar = {
-      enable = true;
-      # Empty config string means nix won't manage the config.
-      config = "";
-      # Dependencies of config
-      extraPackages = [ pkgs.jq ];
-    };
-  };
-  # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
-  # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
+  # Enable fonts dir
+  fonts.fontDir.enable = true;
+  fonts.fonts = with pkgs; [
+    dejavu_fonts
+    emacs-all-the-icons-fonts
+    jetbrains-mono
+    feather-font # from overlay
+    font-awesome
+    hack-font
+    meslo-lgs-nf
+    nerdfonts
+    noto-fonts
+    noto-fonts-emoji
+  ];
 }

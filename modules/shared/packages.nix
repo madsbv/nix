@@ -7,11 +7,13 @@ with pkgs; [
   eza
   btop
   coreutils
+  inetutils
   killall
   openssh
   sqlite
   perl
   wget
+  git
   zip
   zstd
   fd
@@ -35,15 +37,7 @@ with pkgs; [
   tailscale
 
   # Media-related packages
-  emacs-all-the-icons-fonts
-  nerdfonts
-  dejavu_fonts
   ffmpeg
-  font-awesome
-  hack-font
-  noto-fonts
-  noto-fonts-emoji
-  meslo-lgs-nf
   imagemagick
   graphviz
   portaudio

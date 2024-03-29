@@ -137,7 +137,7 @@
                 age-plugin-yubikey
               ];
               shellHook = with pkgs; ''
-                export EDITOR=vim
+                export EDITOR=${neovim}/bin/nvim
               '';
             };
         };
@@ -176,7 +176,10 @@
 
       darwinConfigurations.macos = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        specialArgs = inputs // { inherit user color-scheme; };
+        specialArgs = inputs // {
+          inherit user color-scheme;
+          flake-inputs = inputs;
+        };
         modules = [
           ./hosts/darwin
           home-manager.darwinModules.home-manager
@@ -200,41 +203,10 @@
             };
           }
 
-          # Make tools like `nix shell` use the local system's existing nixpkgs by overriding the nixpkgs entry in the system flake registry (see `nix registry`)
-          ({ ... }: {
-            nix.registry.nixpkgs = {
-              from = {
-                type = "indirect";
-                id = "nixpkgs";
-              };
-              flake = inputs.nixpkgs;
-            };
-          })
-          # Try to do the same for legacy tools like `nix-shell`.
-          # Since a flake input comes with an outPath attr, coercing it to a string as below gives the outPath.
-          {
-            nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
-          }
-
           # TODO: Move this
           # The nixOS module doesn't seem to use anything nixOS specific, and in fact the home manager module is identical, so this should work just fine for nix-darwin too
           inputs.base16.nixosModule
-          {
-            scheme = color-scheme;
-          }
-
-          # TODO: Move this somewhere else, probably a free-standing module imported in either individual hosts or just in shared
-          ({ pkgs, ... }: {
-            nixpkgs.overlays = [ fenix.overlays.default ];
-            environment.systemPackages = with pkgs;
-              [
-                # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
-                # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.
-                # Can also get toolchains for specified targets, e.g. targets.wasm32-unknown-unknown.latest.toolchain
-                fenix.packages.aarch64-darwin.latest.toolchain
-                # rust-analyzer-nightly
-              ];
-          })
+          { scheme = color-scheme; }
         ];
       };
 
@@ -242,7 +214,7 @@
       # nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system:
       #   nixpkgs.lib.nixosSystem {
       #     inherit system;
-      #     specialArgs = inputs // { inherit user; };
+      #     specialArgs = inputs // { inherit user; flake-inputs = inputs; };
       #     modules = [
       #       disko.nixosModules.disko
       #       home-manager.nixosModules.home-manager
