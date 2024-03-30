@@ -31,7 +31,7 @@ in {
   # Also look into home-managers accounts.email options
   programs.mbsync = {
     enable = true;
-    extraConfig = (builtins.readFile ./config/mbsyncrc);
+    extraConfig = builtins.readFile ./config/mbsyncrc;
   };
   programs.mu.enable = true;
 

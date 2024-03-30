@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   # https://github.com/nix-community/impermanence#module-usage

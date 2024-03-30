@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 let
   # SSH stuff

@@ -62,7 +62,7 @@
       enableScriptingAddition = true;
       # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
       # Could maybe use services.yabai.config to pass reference to skhd config dir?
-      extraConfig = (builtins.readFile ./config/yabai/yabairc);
+      extraConfig = builtins.readFile ./config/yabai/yabairc;
     };
     skhd = {
       # When home-manager creates launchd services on Darwin, it tries to use things like $HOME in the PATH set in EnvironmentVariables in the launchd service. However, according to LaunchControl, that field does not support variable expansion. Hence $HOME/.nix-profile/bin does not end up in the PATH for skhd.
