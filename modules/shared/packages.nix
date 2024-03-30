@@ -18,6 +18,7 @@ with pkgs; [
   zstd
   fd
   gdu
+  just
 
   # Encryption and security tools
   # agenix-rekey

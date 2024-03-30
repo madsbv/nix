@@ -28,6 +28,8 @@ in {
     shellAliases = {
       wget = "wget --hsts-file=$XDG_CACHE_HOME/.wget-hsts";
       ec = "emacsclient -c -n -a nvim";
+      j = "just";
+      gj = "just $XDG_CONFIG_HOME/nix/";
 
       grep = "grep -i --color=always";
       ls = "ls -A -B -F -G -h";

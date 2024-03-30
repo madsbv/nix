@@ -99,8 +99,8 @@
       flake = false;
     };
   };
-  outputs = { self, darwin, nix-homebrew, home-manager, nixpkgs, agenix, agenix-rekey
-    , ... }@inputs:
+  outputs = { self, darwin, nix-homebrew, home-manager, nixpkgs, agenix
+    , agenix-rekey, ... }@inputs:
     let
       user = "mvilladsen";
       # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
@@ -148,38 +148,8 @@
             '';
           };
         };
-      mkApp = scriptName: system: {
-        type = "app";
-        program = "${
-            (nixpkgs.legacyPackages.${system}.writeScriptBin scriptName ''
-              #!/usr/bin/env bash
-              PATH=${nixpkgs.legacyPackages.${system}.git}/bin:$PATH
-              echo "Running ${scriptName} for ${system}"
-              exec ${self}/apps/${system}/${scriptName}
-            '')
-          }/bin/${scriptName}";
-      };
-      mkLinuxApps = system: {
-        "apply" = mkApp "apply" system;
-        "build-switch" = mkApp "build-switch" system;
-        "copy-keys" = mkApp "copy-keys" system;
-        "create-keys" = mkApp "create-keys" system;
-        "check-keys" = mkApp "check-keys" system;
-        "install" = mkApp "install" system;
-        "install-with-secrets" = mkApp "install-with-secrets" system;
-      };
-      mkDarwinApps = system: {
-        "apply" = mkApp "apply" system;
-        "build" = mkApp "build" system;
-        "build-switch" = mkApp "build-switch" system;
-        "copy-keys" = mkApp "copy-keys" system;
-        "create-keys" = mkApp "create-keys" system;
-        "check-keys" = mkApp "check-keys" system;
-      };
     in {
       devShells = forAllSystems devShell;
-      apps = nixpkgs.lib.genAttrs linuxSystems mkLinuxApps
-        // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
 
       darwinConfigurations.macos = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
