@@ -1,10 +1,12 @@
 # This file is called from modules/{darwin,nixos}/home-manager.nix, and is merged into home-manager.programs attribute set.
-{ config, pkgs, lib, inputs, ... }:
+{ osConfig, config, pkgs, lib, inputs, ... }:
 
 let
   name = "Mads Bach Villadsen";
   user = "mvilladsen";
   email = "mvilladsen@pm.me";
+  ssh-identity-file =
+    osConfig.age.secrets."id_ed25519-${osConfig.networking.hostName}".path;
 
   additionalFiles = import ./files.nix { inherit user config pkgs; };
   gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
@@ -32,6 +34,17 @@ in {
     extraConfig = (builtins.readFile ./config/mbsyncrc);
   };
   programs.mu.enable = true;
+
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "github.com" = {
+        hostname = "github.com";
+        identitiesOnly = true;
+      };
+    };
+    extraOptionOverrides.IdentityFile = ssh-identity-file;
+  };
 
   # Shared shell configuration
   programs.zsh = {
@@ -296,56 +309,7 @@ in {
           bright = default;
           dim = default;
         };
-
-      # colors = {
-      #   primary = {
-      #     background = "0x1f2528";
-      #     foreground = "0xc0c5ce";
-      #   };
-
-      #   normal = {
-      #     black = "0x1f2528";
-      #     red = "0xec5f67";
-      #     green = "0x99c794";
-      #     yellow = "0xfac863";
-      #     blue = "0x6699cc";
-      #     magenta = "0xc594c5";
-      #     cyan = "0x5fb3b3";
-      #     white = "0xc0c5ce";
-      #   };
-
-      #   bright = {
-      #     black = "0x65737e";
-      #     red = "0xec5f67";
-      #     green = "0x99c794";
-      #     yellow = "0xfac863";
-      #     blue = "0x6699cc";
-      #     magenta = "0xc594c5";
-      #     cyan = "0x5fb3b3";
-      #     white = "0xd8dee9";
-      #   };
-      # };
     };
-  };
-
-  programs.ssh = {
-    enable = true;
-
-    # TODO: There should be a better way to access the users home directory
-    # Also, I'd prefer for this to be in xdg.configHome, which we should access directly anyway.
-    extraConfig = lib.mkMerge [
-      ''
-        Host github.com
-          Hostname github.com
-          IdentitiesOnly yes
-      ''
-      (lib.mkIf pkgs.stdenv.hostPlatform.isLinux ''
-        IdentityFile /home/${user}/.ssh/id_ed25519
-      '')
-      (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''
-        IdentityFile /Users/${user}/.ssh/id_ed25519
-      '')
-    ];
   };
 
   # mbv: Try this out for now

@@ -1,12 +1,10 @@
-{ user, agenix, config, pkgs, lib, ... }:
+{ user, pkgs, lib, homebrew-bundle, homebrew-core, homebrew-cask
+, homebrew-services, homebrew-cask-fonts, felixkratz-formulae, pirj-noclamshell
+, ... }:
 
 {
-  imports = [
-    ../../modules/darwin
-    ../../modules/shared
-    ../../modules/shared/cachix
-    agenix.darwinModules.default
-  ];
+  imports =
+    [ ../../modules/darwin ../../modules/shared ../../modules/shared/cachix ];
 
   # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
   # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
@@ -21,6 +19,23 @@
       # sandbox = "relaxed" eventually also caused problems.
       sandbox = lib.mkForce false;
     };
+  };
+
+  nix-homebrew = {
+    enable = true;
+    user = "${user}";
+    taps = {
+      "homebrew/homebrew-core" = homebrew-core;
+      "homebrew/homebrew-cask" = homebrew-cask;
+      "homebrew/homebrew-bundle" = homebrew-bundle;
+      "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
+      "homebrew/homebrew-services" = homebrew-services;
+      # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
+      "felixkratz/homebrew-formulae" = felixkratz-formulae;
+      "pirj/homebrew-noclamshell" = pirj-noclamshell;
+    };
+    mutableTaps = false;
+    autoMigrate = true;
   };
 
   networking = {

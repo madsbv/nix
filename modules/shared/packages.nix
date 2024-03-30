@@ -20,7 +20,8 @@ with pkgs; [
   gdu
 
   # Encryption and security tools
-  age
+  # agenix-rekey
+  rage
   age-plugin-yubikey
   gnupg
   libfido2

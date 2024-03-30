@@ -1,4 +1,4 @@
-{ agenix, flake-inputs, fenix, lib, config, pkgs, ... }:
+{ agenix, agenix-rekey, flake-inputs, fenix, lib, config, pkgs, ... }:
 
 let emacsOverlaySha256 = "06413w510jmld20i4lik9b36cfafm501864yq8k4vxl5r4hn0j0h";
 in {
@@ -48,6 +48,7 @@ in {
         match ".*\\.nix" n != null
         || pathExists (path + ("/" + n + "/default.nix")))
         (attrNames (readDir path))) ++ [ fenix.overlays.default ];
+    # ++ [ agenix-rekey.overlays.default ];
   };
 
   environment = {
@@ -56,7 +57,7 @@ in {
       value.source = value.flake;
     }) config.nix.registry;
     systemPackages = [
-      agenix.packages."${pkgs.system}".default
+      # agenix.packages."${pkgs.system}".default
       # TODO: Move this somewhere else, probably a free-standing module imported in either individual hosts or just in shared
       # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
       # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.

@@ -6,13 +6,18 @@
     # Local copy of fork of nixpkgs for development/testing package upgrades
     #nixpkgs.url = "github:madsbv/nixpkgs/emacs-no-titlebar-patch";
     # nixpkgs.url = "git+file:///Users/mvilladsen/workspace/github.com/madsbv/nixpkgs/";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Secrets management
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager = {
-      url = "github:nix-community/home-manager";
+    agenix-rekey = {
+      url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -50,6 +55,7 @@
       url = "github:pirj/homebrew-noclamshell";
       flake = false;
     };
+
     ### NixOS ###
     # Declarative disk partitioning in nixos
     disko = {
@@ -95,8 +101,8 @@
   };
   outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
     , homebrew-cask, homebrew-cask-fonts, homebrew-services, felixkratz-formulae
-    , pirj-noclamshell, home-manager, nixpkgs, disko, agenix, secrets
-    , my-doomemacs-config, doomemacs, fenix, ... }@inputs:
+    , pirj-noclamshell, home-manager, nixpkgs, disko, agenix, agenix-rekey
+    , secrets, my-doomemacs-config, doomemacs, fenix, ... }@inputs:
     let
       user = "mvilladsen";
       # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
@@ -126,20 +132,23 @@
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
       devShell = system:
-        let pkgs = nixpkgs.legacyPackages.${system};
+        let pkgs = import nixpkgs { inherit system; };
         in {
-          default = with pkgs;
-            mkShell {
-              nativeBuildInputs = with pkgs; [
-                bashInteractive
-                git
-                age
-                age-plugin-yubikey
-              ];
-              shellHook = with pkgs; ''
-                export EDITOR=${neovim}/bin/nvim
-              '';
-            };
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              zsh
+              git
+              age-plugin-yubikey
+              agenix-rekey.packages.${system}.default
+              statix
+              deadnix
+            ];
+
+            # nix develop enters a bash shell by default. This gets us back to zsh. The `exec` *replaces* the running bash instance with zsh; without it we'd have to exit twice to get back to original shell.
+            shellHook = ''
+              exec ${pkgs.zsh}/bin/zsh
+            '';
+          };
         };
       mkApp = scriptName: system: {
         type = "app";
@@ -179,42 +188,35 @@
         specialArgs = inputs // {
           inherit user color-scheme;
           flake-inputs = inputs;
+          flake-root = ./.;
         };
         modules = [
           ./hosts/darwin
           home-manager.darwinModules.home-manager
           nix-homebrew.darwinModules.nix-homebrew
-          {
-            nix-homebrew = {
-              enable = true;
-              user = "${user}";
-              taps = {
-                "homebrew/homebrew-core" = homebrew-core;
-                "homebrew/homebrew-cask" = homebrew-cask;
-                "homebrew/homebrew-bundle" = homebrew-bundle;
-                "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
-                "homebrew/homebrew-services" = homebrew-services;
-                # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
-                "felixkratz/homebrew-formulae" = felixkratz-formulae;
-                "pirj/homebrew-noclamshell" = pirj-noclamshell;
-              };
-              mutableTaps = false;
-              autoMigrate = true;
-            };
-          }
-
-          # TODO: Move this
-          # The nixOS module doesn't seem to use anything nixOS specific, and in fact the home manager module is identical, so this should work just fine for nix-darwin too
+          agenix.darwinModules.default
+          agenix-rekey.nixosModules.default
           inputs.base16.nixosModule
           { scheme = color-scheme; }
         ];
+      };
+
+      ## How to use
+      # See https://github.com/oddlama/agenix-rekey?tab=readme-ov-file#usage
+      # In short: To encrypt new secret, load into a shell with agenix-rekey with
+      # `nix shell github:oddlama/agenix-rekey`
+      # and run `agenix edit secret.age` to edit or create a secret, or `agenix edit -i plain.text secret.age` to encrypt an existing file. To rekey, run `agenix rekey -a`, where `-a` ensures the new files are added to git.
+      # Remember to add all keys and (ENCRYPTED) secrets to git!
+      agenix-rekey = agenix-rekey.configure {
+        userFlake = self;
+        nodes = self.darwinConfigurations;
       };
 
       ## NOTE: Commented out to avoid spurious errors from `nix flake check` until we actually start using NixOS
       # nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system:
       #   nixpkgs.lib.nixosSystem {
       #     inherit system;
-      #     specialArgs = inputs // { inherit user; flake-inputs = inputs; };
+      #     specialArgs = inputs // { inherit user; flake-inputs = inputs; flake-root = ./.; };
       #     modules = [
       #       disko.nixosModules.disko
       #       home-manager.nixosModules.home-manager

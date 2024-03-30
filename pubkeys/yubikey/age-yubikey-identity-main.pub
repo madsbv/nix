@@ -1,0 +1,7 @@
+#       Serial: 26706879, Slot: 1
+#         Name: main
+#      Created: Fri, 29 Mar 2024 21:40:42 +0000
+#   PIN policy: Once   (A PIN is required once per session, if set)
+# Touch policy: Cached (A physical touch is required for decryption, and is cached for 15 seconds)
+#    Recipient: age1yubikey1q0vk2ydjeshfrylfys954nyn2vwuy9h430skmwsn05ex9e0u6lzxvpw0yhm
+AGE-PLUGIN-YUBIKEY-1H7PEWQVZPVCQFRS6PPC49

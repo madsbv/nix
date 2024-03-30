@@ -1,0 +1,7 @@
+#       Serial: 27344565, Slot: 1
+#         Name: mba
+#      Created: Fri, 29 Mar 2024 21:33:13 +0000
+#   PIN policy: Once   (A PIN is required once per session, if set)
+# Touch policy: Cached (A physical touch is required for decryption, and is cached for 15 seconds)
+#    Recipient: age1yubikey1q2t85cf42wjjmdy7kph9vvle8llgmx2u6xq33g4draprw07ml50nj3jsamg
+AGE-PLUGIN-YUBIKEY-1K5L2ZQVZ7LGJNLQNUFKEM
