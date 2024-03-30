@@ -6,53 +6,50 @@
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  boot.initrd.availableKernelModules =
-    [ "xhci_pci" "virtio_pci" "usbhid" "usb_storage" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
-
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
+  boot = {
+    initrd.availableKernelModules =
+      [ "xhci_pci" "virtio_pci" "usbhid" "usb_storage" "sr_mod" ];
+    initrd.kernelModules = [ ];
+    kernelModules = [ ];
+    extraModulePackages = [ ];
   };
 
-  fileSystems."/nix" = {
-    device = "persistpool/nix";
-    fsType = "zfs";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-partlabel/EFI";
-    fsType = "vfat";
-  };
-
-  fileSystems."/nix/persist" = {
-    device = "persistpool/nix/persist";
-    fsType = "zfs";
-  };
-
-  fileSystems."/nix/persist/home" = {
-    device = "persistpool/nix/persist/home";
-    fsType = "zfs";
-  };
-
-  fileSystems."/etc/nixos" = {
-    device = "/nix/persist/etc/nixos";
-    fsType = "none";
-    options = [ "bind" ];
-  };
-
-  fileSystems."/var/log" = {
-    device = "/nix/persist/var/log";
-    fsType = "none";
-    options = [ "bind" ];
-  };
-
-  fileSystems."/nix/persist/var/log" = {
-    device = "/nix/persist/var/log";
-    fsType = "none";
-    options = [ "bind" ];
+  fileSystems = {
+    "/" = {
+      device = "none";
+      fsType = "tmpfs";
+    };
+    "/nix" = {
+      device = "persistpool/nix";
+      fsType = "zfs";
+    };
+    "/boot" = {
+      device = "/dev/disk/by-partlabel/EFI";
+      fsType = "vfat";
+    };
+    "/nix/persist" = {
+      device = "persistpool/nix/persist";
+      fsType = "zfs";
+    };
+    "/nix/persist/home" = {
+      device = "persistpool/nix/persist/home";
+      fsType = "zfs";
+    };
+    "/etc/nixos" = {
+      device = "/nix/persist/etc/nixos";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+    "/var/log" = {
+      device = "/nix/persist/var/log";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+    "/nix/persist/var/log" = {
+      device = "/nix/persist/var/log";
+      fsType = "none";
+      options = [ "bind" ];
+    };
   };
 
   swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];

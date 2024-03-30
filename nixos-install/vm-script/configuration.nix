@@ -10,26 +10,31 @@
     ./persist.nix
   ];
 
-  boot.initrd.network.ssh.authorizedKeys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICw4EOQ09b7tm06Ulct4Lm44SEEqmx8DcvgRX+ZXofX/"
-  ];
-  boot.initrd.network.ssh.enable = true;
+  boot = {
+    initrd.network.ssh.authorizedKeys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICw4EOQ09b7tm06Ulct4Lm44SEEqmx8DcvgRX+ZXofX/"
+    ];
+    initrd.network.ssh.enable = true;
+    # Use the systemd-boot EFI boot loader.
+    loader.systemd-enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    zfs.devNodes =
+      "/dev/disk/by-partlabel"; # But this might be: https://discourse.nixos.org/t/21-05-zfs-root-install-cant-import-pool-on-boot/13652/6
+  };
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  fileSystems."/".options = [ "defaults" "size=2G" "mode=755" ];
-  fileSystems."/nix".neededForBoot = true;
-  fileSystems."/nix/persist".neededForBoot = true;
-  fileSystems."/nix/persist/home".neededForBoot = true;
-  fileSystems."/boot".options = [ "umask=0077" ];
+  fileSystems = {
+    "/".options = [ "defaults" "size=2G" "mode=755" ];
+    "/nix".neededForBoot = true;
+    "/nix/persist".neededForBoot = true;
+    "/nix/persist/home".neededForBoot = true;
+    "/boot".options = [ "umask=0077" ];
+  };
 
-  boot.zfs.devNodes =
-    "/dev/disk/by-partlabel"; # But this might be: https://discourse.nixos.org/t/21-05-zfs-root-install-cant-import-pool-on-boot/13652/6
-
-  networking.hostId = "1f81d600";
-  networking.hostName = "nixos-guest"; # Define your hostname.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking = {
+    hostId = "1f81d600";
+    hostName = "nixos-guest"; # Define your hostname.
+    # networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
@@ -43,22 +48,22 @@
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; }))
-    ((lib.filterAttrs (_: lib.isType "flake")) inputs);
-
-  # This will additionally add your inputs to the system's legacy channels
-  # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = [ "/etc/nix/path" ];
+  nix = {
+    registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+      ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+    # This will additionally add your inputs to the system's legacy channels
+    # Making legacy nix commands consistent as well, awesome!
+    nixPath = [ "/etc/nix/path" ];
+    settings = {
+      experimental-features = "nix-command flakes";
+      auto-optimise-store = true;
+    };
+  };
 
   environment.etc = lib.mapAttrs' (name: value: {
     name = "nix/path/${name}";
     value.source = value.flake;
-  }) config.nix.registry;
-
-  nix.settings = {
-    experimental-features = "nix-command flakes";
-    auto-optimise-store = true;
-  };
+  }) config.registry;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   # users.users.alice = {
@@ -81,21 +86,16 @@
   #   wget
   # ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  programs.zsh.enable = true;
-  programs.git.enable = true;
-  programs.neovim = {
-    enable = true;
-    vimAlias = true;
-    viAlias = true;
-    defaultEditor = true;
+  programs = {
+    ssh.enable = true;
+    git.enable = true;
+    neovim = {
+      enable = true;
+      vimAlias = true;
+      viAlias = true;
+      defaultEditor = true;
+    };
   };
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   # List services that you want to enable:
 
@@ -104,12 +104,6 @@
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICw4EOQ09b7tm06Ulct4Lm44SEEqmx8DcvgRX+ZXofX/"
   ];
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
