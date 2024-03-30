@@ -90,10 +90,6 @@
     };
 
     ### Personal config ###
-    secrets = {
-      url = "git+ssh://git@github.com/madsbv/nix-secrets.git";
-      flake = false;
-    };
     my-doomemacs-config = {
       url = "git+ssh://git@github.com/madsbv/doom.d.git";
       flake = false;
@@ -151,7 +147,7 @@
     in {
       devShells = forAllSystems devShell;
 
-      darwinConfigurations.macos = darwin.lib.darwinSystem {
+      darwinConfigurations.mbv-mba = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs // {
           inherit user color-scheme;
@@ -169,12 +165,6 @@
         ];
       };
 
-      ## How to use
-      # See https://github.com/oddlama/agenix-rekey?tab=readme-ov-file#usage
-      # In short: To encrypt new secret, load into a shell with agenix-rekey with
-      # `nix shell github:oddlama/agenix-rekey`
-      # and run `agenix edit secret.age` to edit or create a secret, or `agenix edit -i plain.text secret.age` to encrypt an existing file. To rekey, run `agenix rekey -a`, where `-a` ensures the new files are added to git.
-      # Remember to add all keys and (ENCRYPTED) secrets to git!
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
         nodes = self.darwinConfigurations;
