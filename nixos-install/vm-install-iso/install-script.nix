@@ -1,4 +1,4 @@
-{ path, config, pkgs, lib, ... }:
+{ path, config, pkgs, ... }:
 # Script approach based on https://github.com/Xe/nixos-configs/blob/master/media/autoinstall-paranoid/iso.nix
 #
 # To build on Darwin we need a linux build vm, see https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder

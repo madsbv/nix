@@ -1,10 +1,7 @@
-{ user, config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
-  user = "mvilladsen";
-  xdg_configHome = "/Users/mvilladsen/.config";
   xdg_dataHome = "/Users/mvilladsen/.local/share";
-  xdg_stateHome = "/Users/mvilladsen/.local/state";
 in {
   # Raycast script so that "Run Emacs" is available and uses Emacs daemon
   "${xdg_dataHome}/bin/emacsclient" = {

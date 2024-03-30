@@ -99,10 +99,8 @@
       flake = false;
     };
   };
-  outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core
-    , homebrew-cask, homebrew-cask-fonts, homebrew-services, felixkratz-formulae
-    , pirj-noclamshell, home-manager, nixpkgs, disko, agenix, agenix-rekey
-    , secrets, my-doomemacs-config, doomemacs, fenix, ... }@inputs:
+  outputs = { self, darwin, nix-homebrew, home-manager, nixpkgs, agenix, agenix-rekey
+    , ... }@inputs:
     let
       user = "mvilladsen";
       # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";

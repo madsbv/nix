@@ -1,4 +1,4 @@
-{ flake-root, user, lib, config, pkgs, secrets, ... }: {
+{ flake-root, user, config, pkgs, secrets, ... }: {
   # Path to private key corresponding to the public key used to encrypt agenix secrets
   # See Bitwarden for information about backup of this
   # age.identityPaths = [ "/Users/${user}/.ssh/id_agenix" ];

@@ -1,4 +1,4 @@
-{ pkgs, config, lib, user, my-doomemacs-config, doomemacs, agenix, ... }:
+{ pkgs, config, lib, user, my-doomemacs-config, ... }:
 let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
   emacsDir = "${config.xdg.configHome}/emacs";

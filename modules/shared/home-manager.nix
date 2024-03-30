@@ -140,7 +140,7 @@ in {
       vim-startify
       vim-tmux-navigator
       molokai
-      (pkgs.vimPlugins.base16-vim.overrideAttrs (old:
+      (pkgs.vimPlugins.base16-vim.overrideAttrs (_old:
         let schemeFile = config.scheme inputs.base16-vim;
         in { patchPhase = "cp ${schemeFile} colors/base16-scheme.vim"; }))
     ];

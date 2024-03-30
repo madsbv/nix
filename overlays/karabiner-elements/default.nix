@@ -1,4 +1,4 @@
-self: super: with super; {
+_self: super: with super; {
 
   karabiner-elements = stdenv.mkDerivation rec {
     pname = "karabiner-elements";

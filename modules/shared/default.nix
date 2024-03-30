@@ -1,7 +1,6 @@
-{ agenix, agenix-rekey, flake-inputs, fenix, lib, config, pkgs, ... }:
+{ flake-inputs, fenix, lib, config, pkgs, ... }:
 
-let emacsOverlaySha256 = "06413w510jmld20i4lik9b36cfafm501864yq8k4vxl5r4hn0j0h";
-in {
+{
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
   nix = {

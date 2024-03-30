@@ -1,4 +1,4 @@
-{ user, config, pkgs, lib, home-manager, doomemacs, my-doomemacs-config, agenix
+{ user, config, pkgs, home-manager, doomemacs, my-doomemacs-config, agenix
 , color-scheme, ... }@inputs:
 
 {

@@ -1,4 +1,4 @@
-{ user, config, inputs, pkgs, agenix, ... }:
+{ user, pkgs, agenix, ... }:
 
 let
   # user = "mvilladsen";

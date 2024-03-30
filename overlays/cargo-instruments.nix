@@ -1,5 +1,5 @@
 # TODO: Turn into free-standing package and PR to nixpkgs?
-self: super:
+_self: super:
 with super; {
   cargo-instruments = rustPlatform.buildRustPackage rec {
     pname = "cargo-instruments";
