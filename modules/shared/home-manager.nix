@@ -3,18 +3,15 @@
 
 let
   name = "Mads Bach Villadsen";
-  user = "mvilladsen";
   email = "mvilladsen@pm.me";
   ssh-identity-file =
     osConfig.age.secrets."id_ed25519-${osConfig.networking.hostName}".path;
 
-  additionalFiles = import ./files.nix { inherit user config pkgs; };
   gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
 in {
   xdg.enable = true;
   home = {
-    packages = pkgs.callPackage ./packages.nix { };
-    file = additionalFiles;
+    packages = pkgs.callPackage ./home-packages.nix { };
     stateVersion = "23.11";
   };
   programs = {

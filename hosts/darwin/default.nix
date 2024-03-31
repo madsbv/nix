@@ -1,10 +1,9 @@
-{ user, pkgs, lib, homebrew-bundle, homebrew-core, homebrew-cask
+{ flake-root, user, pkgs, homebrew-bundle, homebrew-core, homebrew-cask
 , homebrew-services, homebrew-cask-fonts, felixkratz-formulae, pirj-noclamshell
 , ... }:
 
 {
-  imports =
-    [ ../../modules/darwin ../../modules/shared ../../modules/shared/cachix ];
+  imports = [ "${flake-root}/modules/darwin" "${flake-root}/modules/shared" ];
 
   # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
   # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
@@ -12,13 +11,9 @@
   services.nix-daemon.enable = true;
 
   nix = {
-    settings = {
-      trusted-users = [ "@admin" "${user}" ];
-      # sandbox = true has problems on Darwin (see https://github.com/NixOS/nix/issues/4119)
-      # If you get trapped by this, manually edit /etc/nix/nix.conf to set sandbox = false, kill nix-daemon, then try again (optionally with `--option sandbox false' added as well).
-      # sandbox = "relaxed" eventually also caused problems.
-      sandbox = lib.mkForce false;
-    };
+    # Enable linux builder VM.
+    linux-builder.enable = true;
+    settings.trusted-users = [ "@admin" "${user}" ];
   };
 
   nix-homebrew = {
@@ -42,7 +37,20 @@
     computerName = "mbv-mba";
     hostName = "mbv-mba";
     localHostName = "mbv-mba";
-    # dns = [ "1.1.1.1" "1.0.0.1" ];
+    knownNetworkServices =
+      [ "AX88179A" "Thunderbolt Bridge" "Wi-Fi" "iPhone USB" ];
+    dns = [
+      # Quad9 primary and secondary, including ipv6
+      "9.9.9.9"
+      "149.112.112.112"
+      "2620:fe::fe"
+      "2620:fe::9"
+      # Cloudflare 1.1.1.1 malware blocking, primary and secondary, including ipv6
+      "1.1.1.2"
+      "1.0.0.2"
+      "2606:4700:4700::1112"
+      "2606:4700:4700::1002"
+    ];
   };
 
   # IMPORTANT: Necessary for nix-darwin to set PATH correctly
@@ -165,19 +173,4 @@
       remapCapsLockToControl = true;
     };
   };
-
-  # Enable fonts dir
-  fonts.fontDir.enable = true;
-  fonts.fonts = with pkgs; [
-    dejavu_fonts
-    emacs-all-the-icons-fonts
-    jetbrains-mono
-    feather-font # from overlay
-    font-awesome
-    hack-font
-    meslo-lgs-nf
-    nerdfonts
-    noto-fonts
-    noto-fonts-emoji
-  ];
 }

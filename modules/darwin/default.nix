@@ -1,8 +1,13 @@
-{ user, config, pkgs, home-manager, doomemacs, my-doomemacs-config, agenix
+{ flake-root, user, config, pkgs, doomemacs, my-doomemacs-config, agenix
 , color-scheme, ... }@inputs:
 
 {
-  imports = [ ./dock ./homebrew ./secrets.nix ];
+  imports = [
+    ./dock
+    ./homebrew
+    "${flake-root}/modules/shared/secrets"
+    # ./linux-builder-vm
+  ];
 
   users.users.${user} = {
     name = "${user}";

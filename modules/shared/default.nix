@@ -1,6 +1,7 @@
 { flake-inputs, fenix, lib, config, pkgs, ... }:
 
 {
+  imports = [ ./cachix ];
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
   nix = {
@@ -11,19 +12,30 @@
     nixPath = [ "/etc/nix/path" ];
     package = pkgs.nixUnstable;
 
-    gc = {
-      user = "root";
-      automatic = true;
-      interval = {
-        Weekday = 0;
-        Hour = 2;
-        Minute = 0;
-      };
-      options = "--delete-older-than 30d";
-    };
+    gc = with lib;
+      mkMerge [
+        (if pkgs.stdenv.isDarwin then {
+          # Nix-darwin
+          user = "root";
+          interval = {
+            Weekday = 0;
+            Hour = 2;
+            Minute = 0;
+          };
+        } else {
+          # NixOS
+          dates = "weekly";
+        })
+        {
+          automatic = true;
+          options = "--delete-older-than 30d";
+        }
+      ];
     settings = {
       auto-optimise-store = true;
-      sandbox = lib.mkDefault true;
+      # sandbox = true or relaxed has problems on Darwin (see https://github.com/NixOS/nix/issues/4119)
+      # If you get trapped by this, manually edit /etc/nix/nix.conf to set sandbox = false, kill nix-daemon, then try again (optionally with `--option sandbox false' added as well).
+      sandbox = if pkgs.stdenv.isDarwin then false else true;
     };
 
     extraOptions = ''
@@ -48,7 +60,6 @@
         match ".*\\.nix" n != null
         || pathExists (path + ("/" + n + "/default.nix")))
         (attrNames (readDir path))) ++ [ fenix.overlays.default ];
-    # ++ [ agenix-rekey.overlays.default ];
   };
 
   environment = {
@@ -57,12 +68,31 @@
       value.source = value.flake;
     }) config.nix.registry;
     systemPackages = [
-      # agenix.packages."${pkgs.system}".default
       # TODO: Move this somewhere else, probably a free-standing module imported in either individual hosts or just in shared
       # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
       # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.
       # Can also get toolchains for specified targets, e.g. targets.wasm32-unknown-unknown.latest.toolchain
       fenix.packages."${pkgs.system}".latest.toolchain
-    ] ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
+    ] ++ (import ../../modules/shared/system-packages.nix { inherit pkgs; });
   };
+
+  # TODO: This should be moved into a file for gui client settings so it doesn't get loaded on all servers.
+  # Enable fonts dir
+  fonts =
+    let key = with lib; (if pkgs.stdenv.isDarwin then "fonts" else "packages");
+    in {
+      fontDir.enable = true;
+      ${key} = with pkgs; [
+        dejavu_fonts
+        emacs-all-the-icons-fonts
+        jetbrains-mono
+        feather-font # from overlay
+        font-awesome
+        hack-font
+        meslo-lgs-nf
+        nerdfonts
+        noto-fonts
+        noto-fonts-emoji
+      ];
+    };
 }

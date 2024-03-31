@@ -25,7 +25,7 @@ rekey:
 	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- rekey -a
 
 # Invoke the recipes `rekey` and `build`, in that order, before invoking the body of `switch`
-switch: rekey build
+switch: rekey
 	./result/sw/bin/darwin-rebuild switch --flake .#mbv-mba
 
 # Every recipe after && it invoked at the the end of this recipe

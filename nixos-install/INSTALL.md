@@ -26,6 +26,8 @@ We could then even build CI in with Github actions, and run autoUpgrade in the f
 
 ### Plan of attack
 
+Goals: Set up macos linux builder, installer images with ephemeral tailscale auth key and ssh access, and nixos-anywhere/morph/something remote deployment tool. Then use to set up laptop and desktop.
+
 1. ~~Get VM install script fully working, without any of the fancy tools above. Don't worry about automatically transferring configuration files or scripts, that will be solved by nixos-generators later.~~
      Step 1 results, workflow: 
      - As root in local terminal on vm: `mkdir -p /root/.ssh && curl https://github.com/madsbv.keys > /root/.ssh/authorized_keys`

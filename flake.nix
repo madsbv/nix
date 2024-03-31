@@ -62,6 +62,12 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    impermanence.url = "github:nix-community/impermanence";
+    # For building VMs and install ISOs
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ### Theming ###
     base16.url = "github:SenchoPens/base16.nix";
@@ -95,8 +101,8 @@
       flake = false;
     };
   };
-  outputs = { self, darwin, nix-homebrew, home-manager, nixpkgs, agenix
-    , agenix-rekey, ... }@inputs:
+  outputs = { self, disko, nixos-generators, impermanence, darwin, nix-homebrew
+    , home-manager, nixpkgs, agenix, agenix-rekey, ... }@inputs:
     let
       user = "mvilladsen";
       # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
@@ -171,15 +177,36 @@
       };
 
       ## NOTE: Commented out to avoid spurious errors from `nix flake check` until we actually start using NixOS
-      # nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system:
-      #   nixpkgs.lib.nixosSystem {
-      #     inherit system;
-      #     specialArgs = inputs // { inherit user; flake-inputs = inputs; flake-root = ./.; };
-      #     modules = [
-      #       disko.nixosModules.disko
-      #       home-manager.nixosModules.home-manager
-      #       ./hosts/nixos
-      #     ];
-      #   });
+      nixosConfigurations = {
+        build-vm = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = {
+            inherit inputs;
+            inherit user;
+            flake-inputs = inputs;
+            flake-root = ./.;
+          };
+          modules = [
+            impermanence.nixosModules.impermanence
+            agenix.nixosModules.default
+            agenix-rekey.nixosModules.default
+            ./nixos-install/configuration.nix
+          ];
+        };
+      };
+      packages.aarch64-linux = {
+        installer = nixos-generators.nixosGenerate {
+          system = "aarch64-linux";
+
+          format = "install-iso";
+
+          # Pass inputs into the NixOS module system
+          specialArgs = {
+            inherit inputs;
+            path = self.outPath;
+          };
+          modules = [ ./nixos-install/install-script.nix ];
+        };
+      };
     };
 }
