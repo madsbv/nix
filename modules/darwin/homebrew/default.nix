@@ -16,6 +16,9 @@
       "pirj/noclamshell/noclamshell"
       "felixkratz/formulae/borders"
       "felixkratz/formulae/svim"
+      "virt-manager"
+      # "qemu"
+      # "libvirt"
     ];
 
     # These app IDs are from using the mas CLI app
