@@ -5,7 +5,7 @@ let
   name = "Mads Bach Villadsen";
   email = "mvilladsen@pm.me";
   ssh-identity-file =
-    osConfig.age.secrets."id_ed25519-${osConfig.networking.hostName}".path;
+    osConfig.age.secrets."ssh-user-${osConfig.networking.hostName}".path;
 
   gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
 in {

@@ -2,10 +2,10 @@
 
 let
   client_keys =
-    [ (builtins.readFile (flake-root + "pubkeys/clients/mbv-mba.pub")) ];
+    [ (builtins.readFile "${flake-root}/pubkeys/clients/mbv-mba.pub") ];
 in {
   imports =
-    [ ./hardware-configuration.nix ./persist.nix ../modules/shared/secrets ];
+    [ ./hardware-configuration.nix "${flake-root}/modules/shared/secrets" ];
 
   boot = {
     initrd.network = {

@@ -1,4 +1,4 @@
-{ flake-root, config, pkgs, ... }: {
+{ hostname, flake-root, config, pkgs, ... }: {
   ## How to use agenix-rekey
   # See https://github.com/oddlama/agenix-rekey?tab=readme-ov-file#usage
   # In short: To encrypt new secret, load into a shell with agenix-rekey with
@@ -6,7 +6,7 @@
   # and run `agenix edit secret.age` to edit or create a secret, or `agenix edit -i plain.text secret.age` to encrypt an existing file. To rekey, run `agenix rekey -a`, where `-a` ensures the new files are added to git.
   # Remember to add all keys and (ENCRYPTED) secrets to git!
 
-  imports = [ ./secrets.nix ];
+  imports = [ ./${hostname}.nix ];
 
   # NOTE: Agenix does not error on build if decryption fails. See launchd service if weirdness occurs.
   age.rekey = {

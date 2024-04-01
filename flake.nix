@@ -159,6 +159,7 @@
           inherit user color-scheme;
           flake-inputs = inputs;
           flake-root = ./.;
+          hostname = "mbv-mba";
         };
         modules = [
           ./hosts/darwin
@@ -173,39 +174,37 @@
 
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
-        nodes = self.darwinConfigurations;
+        nodes = self.darwinConfigurations // self.nixosConfigurations;
       };
 
-      ## NOTE: Commented out to avoid spurious errors from `nix flake check` until we actually start using NixOS
       nixosConfigurations = {
-        build-vm = nixpkgs.lib.nixosSystem {
+        # A system configuration for ephemeral systems--either temporary VMs or for installers.
+        # Use nixos-generators to build a VM or ISO with
+        # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
+        # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
+        # Example formats: install-iso qcow-efi (for qemu vm)
+        ephemeral = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
+          # For VMs
+          # Specific formats can be configured with something like:
+          # formatConfigs.vmware = { config, ... }: {
+          #   services.openssh.enable = true;
+          # };
+          # nixpkgs.hostPlatform = "aarch64-darwin";
           specialArgs = {
             inherit inputs;
             inherit user;
             flake-inputs = inputs;
             flake-root = ./.;
+            hostname = "ephemeral";
           };
           modules = [
             impermanence.nixosModules.impermanence
             agenix.nixosModules.default
             agenix-rekey.nixosModules.default
+            nixos-generators.nixosModules.all-formats
             ./nixos-install/configuration.nix
           ];
-        };
-      };
-      packages.aarch64-linux = {
-        installer = nixos-generators.nixosGenerate {
-          system = "aarch64-linux";
-
-          format = "install-iso";
-
-          # Pass inputs into the NixOS module system
-          specialArgs = {
-            inherit inputs;
-            path = self.outPath;
-          };
-          modules = [ ./nixos-install/install-script.nix ];
         };
       };
     };
