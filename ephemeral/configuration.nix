@@ -4,8 +4,7 @@ let
   client_keys =
     [ (builtins.readFile "${flake-root}/pubkeys/clients/mbv-mba.pub") ];
 in {
-  imports =
-    [ ./hardware-configuration.nix "${flake-root}/modules/shared/secrets" ];
+  imports = [ ./hardware-configuration.nix ];
 
   boot = {
     initrd.network = {
@@ -71,12 +70,7 @@ in {
     };
   };
 
-  environment.etc = {
-    tailscale-auth.source =
-      config.age.secrets.tailscale-ephemeral-vms-authkey.path;
-    "ssh/ssh_host_ed25519_key".source =
-      config.age.secrets.ssh-host-ephemeral.path;
-  } // lib.mapAttrs' (name: value: {
+  environment.etc = lib.mapAttrs' (name: value: {
     name = "nix/path/${name}";
     value.source = value.flake;
   }) config.nix.registry;
@@ -96,13 +90,15 @@ in {
     };
   };
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
+  # NOTE: In the committed git history, the file ./tailscale-auth should always be empty.
+  # To inject the ephemeral tailscale authentication key at build time, we use a Just recipe to decrypt the key stored in secrets/tailscale, put it in ./tailscale-auth temporarily, build the image, and then clear ./tailscale-auth again.
+  # THIS HAS SECURITY IMPLICATIONS.
+  # If you try to go through this workflow manually and make a mistake, the tailscale authkey can end up in git. The authkey WILL be stored in the world-readable nix store.
+  # This is acceptable to me because an attacker with local storage access can read my host key anyway and decrypt the key directly; and if the authkey gets leaked in git, I can revoke it in the tailscale management console. Furthermore, my Tailscale ACLs are set up to allow machines authenticated with this key to receive connections, but never to establish connections to other machines on my tailnet, so this key does not grant access to any other machines.
   services = {
     tailscale = {
       enable = true;
-      authKeyFile = config.age.secrets.tailscale-ephemeral-vms-authkey.path;
+      authKeyFile = ./tailscale-auth;
       extraUpFlags = [ "--ssh" ];
     };
     openssh.enable = true;

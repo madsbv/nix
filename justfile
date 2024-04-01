@@ -36,7 +36,11 @@ switch: rekey
 
 alias be := build-ephemeral
 build-ephemeral format="install-iso": rekey
-	nix build .#nixosConfigurations.ephemeral.config.formats.{{format}}
+	rage -d -i pubkeys/yubikey/age-yubikey-identity-mba.pub secrets/tailscale/24-03-30-ephemeral-vms-authkey.age > ephemeral/tailscale-auth
+	# The '-' means that just ignores errors and continues
+	-nix build .#nixosConfigurations.ephemeral.config.formats.{{format}}
+	echo "" > ephemeral/tailscale-auth
+
 
 alias r := rekey
 rekey *flags:

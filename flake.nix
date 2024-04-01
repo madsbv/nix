@@ -196,17 +196,15 @@
           };
           modules = [
             impermanence.nixosModules.impermanence
-            agenix.nixosModules.default
-            agenix-rekey.nixosModules.default
             nixos-generators.nixosModules.all-formats
-            ./nixos-install/configuration.nix
+            ./ephemeral/configuration.nix
           ];
         };
       };
 
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
-        nodes = self.darwinConfigurations // self.nixosConfigurations;
+        nodes = self.darwinConfigurations;
       };
 
     };
