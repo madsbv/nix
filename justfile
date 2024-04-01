@@ -35,12 +35,16 @@ switch: rekey
 	darwin-rebuild switch --flake .#mbv-mba
 
 alias be := build-ephemeral
-build-ephemeral format="install-iso":
+build-ephemeral format="install-iso": rekey
 	nix build .#nixosConfigurations.ephemeral.config.formats.{{format}}
 
 alias r := rekey
 rekey *flags:
 	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- rekey -a {{flags}}
+
+alias e := agenix-edit
+agenix-edit *flags:
+	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- edit {{flags}}
 
 # Every recipe after && it invoked at the the end of this recipe
 alias u := update

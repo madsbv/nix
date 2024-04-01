@@ -101,7 +101,7 @@
       flake = false;
     };
   };
-  outputs = { self, disko, nixos-generators, impermanence, darwin, nix-homebrew
+  outputs = { self, nixos-generators, impermanence, darwin, nix-homebrew
     , home-manager, nixpkgs, agenix, agenix-rekey, ... }@inputs:
     let
       user = "mvilladsen";
@@ -172,11 +172,6 @@
         ];
       };
 
-      agenix-rekey = agenix-rekey.configure {
-        userFlake = self;
-        nodes = self.darwinConfigurations // self.nixosConfigurations;
-      };
-
       nixosConfigurations = {
         # A system configuration for ephemeral systems--either temporary VMs or for installers.
         # Use nixos-generators to build a VM or ISO with
@@ -185,6 +180,7 @@
         # Example formats: install-iso qcow-efi (for qemu vm)
         ephemeral = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
+
           # For VMs
           # Specific formats can be configured with something like:
           # formatConfigs.vmware = { config, ... }: {
@@ -192,8 +188,8 @@
           # };
           # nixpkgs.hostPlatform = "aarch64-darwin";
           specialArgs = {
-            inherit inputs;
-            inherit user;
+            inherit inputs user;
+            system = "aarch64-linux";
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "ephemeral";
@@ -207,5 +203,11 @@
           ];
         };
       };
+
+      agenix-rekey = agenix-rekey.configure {
+        userFlake = self;
+        nodes = self.darwinConfigurations // self.nixosConfigurations;
+      };
+
     };
 }
