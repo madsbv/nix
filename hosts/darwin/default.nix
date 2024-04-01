@@ -1,4 +1,4 @@
-{ flake-root, user, pkgs, homebrew-bundle, homebrew-core, homebrew-cask
+{ flake-root, user, config, pkgs, homebrew-bundle, homebrew-core, homebrew-cask
 , homebrew-services, homebrew-cask-fonts, felixkratz-formulae, pirj-noclamshell
 , ... }:
 
@@ -12,7 +12,21 @@
 
   nix = {
     # Enable linux builder VM.
-    linux-builder.enable = true;
+    linux-builder = {
+      enable = true;
+      systems = [ "aarch64-linux" ];
+      config = { boot.binfmt.emulatedSystems = [ "x86_64-linux" ]; };
+    };
+    distributedBuilds = true;
+    buildMachines = [{
+      sshKey = config.age.secrets.ssh-user-mbv-mba.path;
+      systems = [ "x86_64-linux" ];
+      sshUser = "root";
+      hostName = "192.168.0.27";
+      protocol = "ssh-ng";
+      supportedFeatures = [ "kvm" "big-parallel" "benchmark" ];
+      maxJobs = 4;
+    }];
     settings.trusted-users = [ "@admin" "${user}" ];
   };
 

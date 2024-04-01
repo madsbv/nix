@@ -2,12 +2,7 @@
 , color-scheme, ... }@inputs:
 
 {
-  imports = [
-    ./dock
-    ./homebrew
-    "${flake-root}/modules/shared/secrets"
-    # ./linux-builder-vm
-  ];
+  imports = [ ./dock ./homebrew "${flake-root}/modules/shared/secrets" ];
 
   users.users.${user} = {
     name = "${user}";

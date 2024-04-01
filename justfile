@@ -35,11 +35,13 @@ switch: rekey
 	darwin-rebuild switch --flake .#mbv-mba
 
 alias be := build-ephemeral
-build-ephemeral format="install-iso": rekey
+build-ephemeral type format="install-iso": rekey
 	rage -d -i pubkeys/yubikey/age-yubikey-identity-mba.pub secrets/tailscale/24-03-30-ephemeral-vms-authkey.age > ephemeral/tailscale-auth
-	# The '-' means that just ignores errors and continues
-	-nix build .#nixosConfigurations.ephemeral.config.formats.{{format}}
+	-nix build .#nixosConfigurations.{{type}}-linux.ephemeral.config.formats.{{format}}
 	echo "" > ephemeral/tailscale-auth
+	-rm ephemeral-{{format}}.iso
+	cp result ephemeral-{{format}}.iso
+	ln -s ephemeral-{{format}}.iso ~/ephemeral-{{format}}.iso
 
 
 alias r := rekey

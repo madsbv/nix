@@ -1,4 +1,4 @@
-{ flake-root, inputs, config, lib, ... }:
+{ system, flake-root, inputs, pkgs, config, lib, ... }:
 
 let
   client_keys =
@@ -6,6 +6,7 @@ let
 in {
   imports = [ ./hardware-configuration.nix ];
 
+  nixpkgs.hostPlatform = lib.mkForce system;
   boot = {
     initrd.network = {
       ssh.enable = true;
@@ -70,17 +71,37 @@ in {
     };
   };
 
-  environment.etc = lib.mapAttrs' (name: value: {
-    name = "nix/path/${name}";
-    value.source = value.flake;
-  }) config.nix.registry;
+  environment = {
+    etc = lib.mapAttrs' (name: value: {
+      name = "nix/path/${name}";
+      value.source = value.flake;
+    }) config.nix.registry;
+    systemPackages = with pkgs; [
+      coreutils
+      inetutils
+      killall
+      fd
+      gdu
+      ripgrep
+      tree
+      tmux
+      networkmanager
+    ];
+  };
 
   # To enable local login, set `users.users.root.initialHashedPassword`
   # You can get the hash of a given password with `mkpasswd -m SHA-512`
   users.mutableUsers = false;
 
   programs = {
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      syntaxHighlighting = {
+        enable = true;
+        highlighters = [ "main" "brackets" ];
+      };
+    };
     git.enable = true;
     neovim = {
       enable = true;

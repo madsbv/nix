@@ -131,6 +131,7 @@
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
+      forLinuxSystems = f: nixpkgs.lib.genAttrs linuxSystems f;
       devShell = system:
         let pkgs = import nixpkgs { inherit system; };
         in {
@@ -153,6 +154,11 @@
     in {
       devShells = forAllSystems devShell;
 
+      agenix-rekey = agenix-rekey.configure {
+        userFlake = self;
+        nodes = self.darwinConfigurations;
+      };
+
       darwinConfigurations.mbv-mba = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs // {
@@ -172,14 +178,14 @@
         ];
       };
 
-      nixosConfigurations = {
+      nixosConfigurations = forLinuxSystems (system: {
         # A system configuration for ephemeral systems--either temporary VMs or for installers.
         # Use nixos-generators to build a VM or ISO with
         # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
         # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
         # Example formats: install-iso qcow-efi (for qemu vm)
         ephemeral = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
+          inherit system;
 
           # For VMs
           # Specific formats can be configured with something like:
@@ -188,8 +194,7 @@
           # };
           # nixpkgs.hostPlatform = "aarch64-darwin";
           specialArgs = {
-            inherit inputs user;
-            system = "aarch64-linux";
+            inherit inputs user system;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "ephemeral";
@@ -200,12 +205,6 @@
             ./ephemeral/configuration.nix
           ];
         };
-      };
-
-      agenix-rekey = agenix-rekey.configure {
-        userFlake = self;
-        nodes = self.darwinConfigurations;
-      };
-
+      });
     };
 }

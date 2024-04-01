@@ -37,7 +37,7 @@ Goals: Set up macos linux builder, installer images with ephemeral tailscale aut
 2. ~~Convert to nixos-generators flake and get a working install iso/vm image that does everything from the script in step 1 hands off.~~
      - Find a way to include the final config in the iso without hard-coding, e.g. by pointing to a config folder in install-script.nix.
      - Probable solution: Follow the example of https://github.com/JustinLex/jlh-h5b/blob/main/nodes/flake.nix and define system config and nixos-generator config in the same flake, then in the install script, refer to self.outPath... in the nixos-install command. Can I also cp the result to /etc/nixos?
-3. Integrate tailscale and tailscale SSH in the above on VMs, including deploying with authkeys somehow (look into agenix-rekey).
+3. ~~Integrate tailscale and tailscale SSH in the above on VMs, including deploying with authkeys somehow (look into agenix-rekey).~~
 4. Get a working image on the xps.
 5. If supported, get PXE boot on xps working with pixiecore.
 
