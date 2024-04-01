@@ -20,7 +20,7 @@ in {
     sessionVariables = {
       LESSHISTFILE = "$XDG_CACHE_HOME/lesshst";
       WGETRC = "$XDG_CONFIG_HOME/wgetrc";
-      EDITOR = "ec";
+      EDITOR = "vim";
       ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
       ZSH_CACHE = "$XDG_CACHE_HOME/zsh";
     };

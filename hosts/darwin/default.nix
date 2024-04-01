@@ -53,6 +53,17 @@
     ];
   };
 
+  # Reimplementation of the launchd plist installed by tailscaled itself when invoked as `tailscaled install-system-daemonf (see https://github.com/tailscale/tailscale/wiki/Tailscaled-on-macOS)`
+  launchd.daemons = {
+    tailscaled = {
+      command = "${pkgs.tailscale}/bin/tailscaled";
+      serviceConfig = {
+        RunAtLoad = true;
+        Label = "com.tailscale.tailscaled";
+      };
+    };
+  };
+
   # IMPORTANT: Necessary for nix-darwin to set PATH correctly
   # NOTE: Can use programs.zsh.variables to set environment variables in the global environment.
   programs.zsh.enable = true;
@@ -73,7 +84,7 @@
       extraConfig = builtins.readFile ./config/yabai/yabairc;
     };
     skhd = {
-      # When home-manager creates launchd services on Darwin, it tries to use things like $HOME in the PATH set in EnvironmentVariables in the launchd service. However, according to LaunchControl, that field does not support variable expansion. Hence $HOME/.nix-profile/bin does not end up in the PATH for skhd.
+      # When home-manager or nix-darwin creates launchd services on Darwin, it tries to use things like $HOME in the PATH set in EnvironmentVariables in the launchd service. However, according to LaunchControl, that field does not support variable expansion. Hence $HOME/.nix-profile/bin does not end up in the PATH for skhd.
       # See https://github.com/LnL7/nix-darwin/issues/406
       # Also, nix-based string replacement does not work when reading from separate file, so we have to do that here.
       enable = true;
