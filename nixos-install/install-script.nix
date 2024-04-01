@@ -94,5 +94,4 @@
     };
     serviceConfig = { Type = "oneshot"; };
   };
-  system.stateVersion = "23.11";
 }

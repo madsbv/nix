@@ -18,21 +18,32 @@ in {
       efi.canTouchEfiVariables = true;
     };
     zfs.devNodes =
-      "/dev/disk/by-partlabel"; # But this might be: https://discourse.nixos.org/t/21-05-zfs-root-install-cant-import-pool-on-boot/13652/6
+      "/dev/disk/by-partlabel"; # https://discourse.nixos.org/t/21-05-zfs-root-install-cant-import-pool-on-boot/13652/6
   };
 
-  fileSystems = {
-    "/".options = [ "defaults" "size=2G" "mode=755" ];
-    "/nix".neededForBoot = true;
-    "/nix/persist".neededForBoot = true;
-    "/nix/persist/home".neededForBoot = true;
-    "/boot".options = [ "umask=0077" ];
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    autoResize = true;
+    fsType = "ext4";
   };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/ESP";
+    fsType = "vfat";
+  };
+
+  # fileSystems = lib.mkForce {
+  #   "/".options = [ "defaults" "size=2G" "mode=755" ];
+  #   "/nix".neededForBoot = true;
+  #   "/nix/persist".neededForBoot = true;
+  #   "/nix/persist/home".neededForBoot = true;
+  #   "/boot".options = [ "umask=0077" ];
+  # };
 
   networking = {
     hostId = "1f81d600";
-    hostName = "nixos-guest"; # Define your hostname.
-    # networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+    hostName = "ephemeral"; # Define your hostname.
+    # Easiest to use and most distros use this by default.
+    # networkmanager.enable = true;
   };
 
   # Set your time zone.
@@ -60,7 +71,12 @@ in {
     };
   };
 
-  environment.etc = lib.mapAttrs' (name: value: {
+  environment.etc = {
+    tailscale-auth.source =
+      config.age.secrets.tailscale-ephemeral-vms-authkey.path;
+    "ssh/ssh_host_ed25519_key".source =
+      config.age.secrets.ssh-host-ephemeral.path;
+  } // lib.mapAttrs' (name: value: {
     name = "nix/path/${name}";
     value.source = value.flake;
   }) config.nix.registry;
@@ -87,6 +103,7 @@ in {
     tailscale = {
       enable = true;
       authKeyFile = config.age.secrets.tailscale-ephemeral-vms-authkey.path;
+      extraUpFlags = [ "--ssh" ];
     };
     openssh.enable = true;
   };

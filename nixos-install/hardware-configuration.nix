@@ -14,45 +14,45 @@
     extraModulePackages = [ ];
   };
 
-  fileSystems = {
-    "/" = {
-      device = "none";
-      fsType = "tmpfs";
-    };
-    "/nix" = {
-      device = "persistpool/nix";
-      fsType = "zfs";
-    };
-    "/boot" = {
-      device = "/dev/disk/by-partlabel/EFI";
-      fsType = "vfat";
-    };
-    "/nix/persist" = {
-      device = "persistpool/nix/persist";
-      fsType = "zfs";
-    };
-    "/nix/persist/home" = {
-      device = "persistpool/nix/persist/home";
-      fsType = "zfs";
-    };
-    "/etc/nixos" = {
-      device = "/nix/persist/etc/nixos";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-    "/var/log" = {
-      device = "/nix/persist/var/log";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-    "/nix/persist/var/log" = {
-      device = "/nix/persist/var/log";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-  };
+  # fileSystems = {
+  #   "/" = {
+  #     device = "none";
+  #     fsType = "tmpfs";
+  #   };
+  #   "/nix" = {
+  #     device = "persistpool/nix";
+  #     fsType = "zfs";
+  #   };
+  #   "/boot" = {
+  #     device = "/dev/disk/by-partlabel/EFI";
+  #     fsType = "vfat";
+  #   };
+  #   "/nix/persist" = {
+  #     device = "persistpool/nix/persist";
+  #     fsType = "zfs";
+  #   };
+  #   "/nix/persist/home" = {
+  #     device = "persistpool/nix/persist/home";
+  #     fsType = "zfs";
+  #   };
+  #   "/etc/nixos" = {
+  #     device = "/nix/persist/etc/nixos";
+  #     fsType = "none";
+  #     options = [ "bind" ];
+  #   };
+  #   "/var/log" = {
+  #     device = "/nix/persist/var/log";
+  #     fsType = "none";
+  #     options = [ "bind" ];
+  #   };
+  #   "/nix/persist/var/log" = {
+  #     device = "/nix/persist/var/log";
+  #     fsType = "none";
+  #     options = [ "bind" ];
+  #   };
+  # };
 
-  swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
+  # swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
