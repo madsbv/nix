@@ -59,9 +59,6 @@ in {
       nix-daemon.serviceConfig.OOMScoreAdjust = lib.mkDefault 250;
     };
   };
-  # To enable local login, set `users.users.root.initialHashedPassword`
-  # You can get the hash of a given password with `mkpasswd -m SHA-512`
-  users.mutableUsers = false;
 
   programs = {
     zsh = {
@@ -105,7 +102,14 @@ in {
       # zfs enables periodic TRIM by default
     };
   };
-  users.users.root.openssh.authorizedKeys.keys = client_keys;
+
+  users = {
+    # To enable local login, set `users.users.root.initialHashedPassword`
+    # You can get the hash of a given password with `mkpasswd -m SHA-512`
+    mutableUsers = false;
+    users.root.openssh.authorizedKeys.keys = client_keys;
+    # TODO: Still missing some key management pieces, since Github apparently wants an authorized key for something.
+  };
   boot.initrd.network = {
     ssh.enable = true;
     ssh.authorizedKeys = client_keys;
