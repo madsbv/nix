@@ -82,24 +82,4 @@
       fenix.packages."${pkgs.system}".latest.toolchain
     ] ++ (import ../../modules/shared/system-packages.nix { inherit pkgs; });
   };
-
-  # TODO: This should be moved into a file for gui client settings so it doesn't get loaded on all servers.
-  # Enable fonts dir
-  fonts =
-    let key = with lib; (if pkgs.stdenv.isDarwin then "fonts" else "packages");
-    in {
-      fontDir.enable = true;
-      ${key} = with pkgs; [
-        dejavu_fonts
-        emacs-all-the-icons-fonts
-        jetbrains-mono
-        feather-font # from overlay
-        font-awesome
-        hack-font
-        meslo-lgs-nf
-        nerdfonts
-        noto-fonts
-        noto-fonts-emoji
-      ];
-    };
 }
