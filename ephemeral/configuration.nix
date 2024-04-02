@@ -2,7 +2,7 @@
 
 let
   client_keys =
-    [ (builtins.readFile "${flake-root}/pubkeys/clients/mbv-mba.pub") ];
+    [ (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.pub.mbv-mba") ];
 in {
   imports = [ ./hardware-configuration.nix ./disko.nix ];
 

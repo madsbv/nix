@@ -60,6 +60,9 @@ update: && switch
 nixos-anywhere host target: rekey
 	nix run github:nix-community/nixos-anywhere -- --copy-host-keys --build-on-remote --flake '.#{{host}}' root@{{target}}
 
+disko-install host disk:
+	nix run github:nix-community/disko#disko-installer -- --disk {{disk}} /dev/{{disk}} --extra-files /etc/ssh /etc/ssh --write-efi-boot-entries --show-trace -f .#{{host}}
+
 new-host hostname target:
 	ssh root@{{target}} "nixos-generate-config --no-filesystems --root /mnt"
 	ssh root@{{target}} 'NIX_CONFIG="experimental-features = nix-command flakes" nix run nixpkgs#tree /dev/disk > /mnt/etc/nixos/tree'
@@ -68,4 +71,5 @@ new-host hostname target:
 	ssh root@{{target}} 'cp /etc/ssh/ssh_host_ed25519_key.pub /mnt/etc/nixos/'
 	-rm -rf new-host-{{hostname}}
 	scp -r root@{{target}}:/mnt/etc/nixos new-host-{{hostname}}
-	cp new-host-{{hostname}}/ssh_host_ed25519_key.pub pubkeys/hosts/{{hostname}}.pub
+	-rm pubkeys/ssh/ssh_host_ed25519_key.pub.{{hostname}}
+	cp new-host-{{hostname}}/ssh_host_ed25519_key.pub pubkeys/ssh/ssh_host_ed25519_key.pub.{{hostname}}

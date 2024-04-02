@@ -1,4 +1,4 @@
-{ disko, ... }:
+_:
 
 {
   disko.devices = {

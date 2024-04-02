@@ -13,7 +13,7 @@
     # Hostkey from /etc/ssh/ssh_host_...
     # Generated with `sudo ssh-keygen -A`
     hostPubkey = flake-root
-      + "/pubkeys/hosts/${config.networking.hostName}.pub";
+      + "/pubkeys/ssh/ssh_host_ed25519_key.pub.${config.networking.hostName}";
     # NOTE: Yubikeys associated to identities specified in masterIdentities have to be present when editing or creating new secrets with `agenix edit`. However, those files also contain the recipient information for the Yubikey, which is all that's required for encryption. We put the recipient info in the separate file `recipients.pub` and use those as extraEncryptionKeys, which doesn't require the Yubikey to be present for encryption, but still allows for decryption via `age -d -i ${identityfile} secret.age`.
     masterIdentities =
       [ (flake-root + "/pubkeys/yubikey/age-yubikey-identity-mba.pub") ];

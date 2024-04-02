@@ -3,6 +3,7 @@ _:
 {
   environment.persistence."/nix/persist" = {
     hideMounts = true;
+    # TODO: We might want to persist some tailscale state
     directories = [ "/etc/nixos" "/var/log" "/var/lib" ];
     files = [
       "/etc/machine-id"

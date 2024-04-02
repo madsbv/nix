@@ -1,7 +1,7 @@
 { config, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ./disko.nix ];
+  imports = [ ./hardware-configuration.nix ./disko.nix ./persist.nix ];
 
   networking = {
     hostId = "8425e349";
