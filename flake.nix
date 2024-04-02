@@ -102,7 +102,7 @@
     };
   };
   outputs = { self, nixos-generators, impermanence, darwin, nix-homebrew
-    , home-manager, nixpkgs, agenix, agenix-rekey, ... }@inputs:
+    , home-manager, nixpkgs, agenix, agenix-rekey, disko, ... }@inputs:
     let
       user = "mvilladsen";
       # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
@@ -131,7 +131,8 @@
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
-      forLinuxSystems = f: nixpkgs.lib.genAttrs linuxSystems f;
+      forLinuxSystems = f: nixpkgs.lib.mergeAttrsList (map f linuxSystems);
+
       devShell = system:
         let pkgs = import nixpkgs { inherit system; };
         in {
@@ -156,35 +157,55 @@
 
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
-        nodes = self.darwinConfigurations;
-      };
-
-      darwinConfigurations.mbv-mba = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = inputs // {
-          inherit user color-scheme;
-          flake-inputs = inputs;
-          flake-root = ./.;
-          hostname = "mbv-mba";
+        nodes = self.darwinConfigurations // {
+          inherit (self.nixosConfigurations) mbv-xps13;
         };
-        modules = [
-          ./hosts/darwin
-          home-manager.darwinModules.home-manager
-          nix-homebrew.darwinModules.nix-homebrew
-          agenix.darwinModules.default
-          agenix-rekey.nixosModules.default
-          inputs.base16.nixosModule
-          { scheme = color-scheme; }
-        ];
       };
 
-      nixosConfigurations = forLinuxSystems (system: {
+      darwinConfigurations = {
+        mbv-mba = darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = inputs // {
+            inherit user color-scheme;
+            flake-inputs = inputs;
+            flake-root = ./.;
+            hostname = "mbv-mba";
+          };
+          modules = [
+            ./hosts/darwin
+            home-manager.darwinModules.home-manager
+            nix-homebrew.darwinModules.nix-homebrew
+            agenix.darwinModules.default
+            agenix-rekey.nixosModules.default
+            inputs.base16.nixosModule
+            { scheme = color-scheme; }
+          ];
+        };
+      };
+
+      nixosConfigurations = {
+        mbv-xps13 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs // {
+            flake-inputs = inputs;
+            flake-root = ./.;
+            hostname = "mbv-xps13";
+          };
+          modules = [
+            ./hosts/mbv-xps13
+            agenix.nixosModules.default
+            agenix-rekey.nixosModules.default
+            impermanence.nixosModules.impermanence
+            disko.nixosModules.disko
+          ];
+        };
+      } // forLinuxSystems (system: {
         # A system configuration for ephemeral systems--either temporary VMs or for installers.
         # Use nixos-generators to build a VM or ISO with
         # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
         # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
         # Example formats: install-iso qcow-efi (for qemu vm)
-        ephemeral = nixpkgs.lib.nixosSystem {
+        "ephemeral-${system}" = nixpkgs.lib.nixosSystem {
           inherit system;
 
           # For VMs
@@ -202,6 +223,7 @@
           modules = [
             impermanence.nixosModules.impermanence
             nixos-generators.nixosModules.all-formats
+            disko.nixosModules.disko
             ./ephemeral/configuration.nix
           ];
         };

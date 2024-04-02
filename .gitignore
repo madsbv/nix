@@ -3,6 +3,6 @@
 /config.bak/
 /home.bak/
 /ssh.bak/
-/nixos-install/vm-install-iso/keys/
-/nixos-install/vm-install-iso/nixos.qcow2
-/nixos-install/vm-install-iso/result
+*.qcow2
+*.iso
+/new-host-*

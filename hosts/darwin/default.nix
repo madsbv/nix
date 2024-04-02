@@ -17,7 +17,6 @@
       systems = [ "aarch64-linux" ];
       config = { boot.binfmt.emulatedSystems = [ "x86_64-linux" ]; };
     };
-    distributedBuilds = true;
     buildMachines = [{
       sshKey = config.age.secrets.ssh-user-mbv-mba.path;
       systems = [ "x86_64-linux" ];
@@ -25,7 +24,7 @@
       hostName = "192.168.0.27";
       protocol = "ssh-ng";
       supportedFeatures = [ "kvm" "big-parallel" "benchmark" ];
-      maxJobs = 4;
+      maxJobs = 8;
     }];
     settings.trusted-users = [ "@admin" "${user}" ];
   };

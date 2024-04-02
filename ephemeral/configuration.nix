@@ -4,7 +4,7 @@ let
   client_keys =
     [ (builtins.readFile "${flake-root}/pubkeys/clients/mbv-mba.pub") ];
 in {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ ./hardware-configuration.nix ./disko.nix ];
 
   nixpkgs.hostPlatform = lib.mkForce system;
   boot = {
@@ -17,27 +17,7 @@ in {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    zfs.devNodes =
-      "/dev/disk/by-partlabel"; # https://discourse.nixos.org/t/21-05-zfs-root-install-cant-import-pool-on-boot/13652/6
   };
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    autoResize = true;
-    fsType = "ext4";
-  };
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/ESP";
-    fsType = "vfat";
-  };
-
-  # fileSystems = lib.mkForce {
-  #   "/".options = [ "defaults" "size=2G" "mode=755" ];
-  #   "/nix".neededForBoot = true;
-  #   "/nix/persist".neededForBoot = true;
-  #   "/nix/persist/home".neededForBoot = true;
-  #   "/boot".options = [ "umask=0077" ];
-  # };
 
   networking = {
     hostId = "1f81d600";
@@ -116,6 +96,8 @@ in {
   # THIS HAS SECURITY IMPLICATIONS.
   # If you try to go through this workflow manually and make a mistake, the tailscale authkey can end up in git. The authkey WILL be stored in the world-readable nix store.
   # This is acceptable to me because an attacker with local storage access can read my host key anyway and decrypt the key directly; and if the authkey gets leaked in git, I can revoke it in the tailscale management console. Furthermore, my Tailscale ACLs are set up to allow machines authenticated with this key to receive connections, but never to establish connections to other machines on my tailnet, so this key does not grant access to any other machines.
+  # TODO: Can Disko be used to do this better? See https://github.com/nix-community/disko/blob/master/docs/reference.md
+  # There's options to copy files to the VM.
   services = {
     tailscale = {
       enable = true;

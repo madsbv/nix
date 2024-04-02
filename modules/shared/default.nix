@@ -1,7 +1,7 @@
 { flake-inputs, fenix, lib, config, pkgs, ... }:
 
 {
-  imports = [ ./cachix ];
+  imports = [ ./cachix ./srvos/symlink-flake.nix ./secrets ];
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
   nix = {
@@ -36,7 +36,14 @@
       # sandbox = true or relaxed has problems on Darwin (see https://github.com/NixOS/nix/issues/4119)
       # If you get trapped by this, manually edit /etc/nix/nix.conf to set sandbox = false, kill nix-daemon, then try again (optionally with `--option sandbox false' added as well).
       sandbox = if pkgs.stdenv.isDarwin then false else true;
+      log-lines = lib.mkDefault 25;
+
+      # Reduce copying over SSH
+      builders-use-substitutes = true;
+      # Fallback quickly if substituters are not available
+      connect-timeout = 5;
     };
+    distributedBuilds = true;
 
     extraOptions = ''
       experimental-features = nix-command flakes repl-flake
