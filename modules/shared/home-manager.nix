@@ -1,38 +1,15 @@
 # This file is called from modules/{darwin,nixos}/home-manager.nix, and is merged into home-manager.programs attribute set.
-{ osConfig, config, pkgs, lib, inputs, ... }:
+{ osConfig, config, pkgs, lib, ... }:
 
 let
   name = "Mads Bach Villadsen";
   email = "mvilladsen@pm.me";
-  ssh-identity-file =
-    osConfig.age.secrets."ssh-user-${osConfig.networking.hostName}".path;
 
   gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
 in {
+  home.stateVersion = "23.11";
   xdg.enable = true;
-  home = {
-    packages = pkgs.callPackage ./home-packages.nix { };
-    stateVersion = "23.11";
-  };
   programs = {
-    java.enable = true;
-    # pyenv = {
-    #   enable = true;
-    #   enableZshIntegration = true;
-    # };
-    bacon = {
-      enable = true;
-      settings = { };
-    };
-
-    # TODO: Move maildirs to XDG_DATA_HOME
-    # Also look into home-managers accounts.email options
-    mbsync = {
-      enable = true;
-      extraConfig = builtins.readFile ./config/mbsyncrc;
-    };
-    mu.enable = true;
-
     ssh = {
       enable = true;
       matchBlocks = {
@@ -41,7 +18,8 @@ in {
           identitiesOnly = true;
         };
       };
-      extraOptionOverrides.IdentityFile = ssh-identity-file;
+      extraOptionOverrides.IdentityFile =
+        osConfig.age.secrets."ssh-user-${osConfig.networking.hostName}".path;
     };
 
     # Shared shell configuration
@@ -56,7 +34,6 @@ in {
       # Not sure how this relates to zsh-vi-mode
       # defaultKeymap = "viins";
       autocd = false;
-      cdpath = [ "~/Dropbox/docs/" ];
       dotDir = ".config/zsh";
       history = {
         path = "${config.xdg.dataHome}/zsh/zsh_history";
@@ -103,10 +80,6 @@ in {
         [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
       '';
       # TODO: This is not machine agnostic, fix
-      envExtra = ''
-        export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
-        export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin:$HOME/.cargo/bin''${PATH+:$PATH}";
-      '';
     };
 
     gh = {
@@ -138,9 +111,6 @@ in {
         vim-startify
         vim-tmux-navigator
         molokai
-        (pkgs.vimPlugins.base16-vim.overrideAttrs (_old:
-          let schemeFile = config.scheme inputs.base16-vim;
-          in { patchPhase = "cp ${schemeFile} colors/base16-scheme.vim"; }))
       ];
       extraConfig = ''
         "" General
@@ -250,64 +220,6 @@ in {
       '';
       # NOTE: Molokai was originally a vim theme modified from Monokai, so just use the native one here.
       # Can we do this programmatically depending on color-scheme? Would be pretty convoluted
-    };
-
-    kitty = {
-      enable = true;
-      shellIntegration.enableZshIntegration = true;
-      # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
-      extraConfig = builtins.readFile ./config/kitty/kitty.conf
-        + builtins.readFile (config.scheme inputs.base16-kitty);
-      darwinLaunchOptions = [ "--single-instance" ];
-    };
-
-    # mbv: Let's just use this for now
-    alacritty = {
-      enable = true;
-      settings = {
-        cursor = { style = "Block"; };
-
-        window = {
-          opacity = 1.0;
-          padding = {
-            x = 24;
-            y = 24;
-          };
-        };
-
-        font = {
-          normal = {
-            family = "MesloLGS NF";
-            style = "Regular";
-          };
-          size = lib.mkMerge [
-            (lib.mkIf pkgs.stdenv.hostPlatform.isLinux 10)
-            (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin 14)
-          ];
-        };
-
-        # Base16 colors
-        colors = with config.scheme.withHashtag;
-          let
-            default = {
-              black = base00;
-              white = base07;
-              inherit red green yellow blue cyan magenta;
-            };
-          in {
-            primary = {
-              background = base00;
-              foreground = base07;
-            };
-            cursor = {
-              text = base02;
-              cursor = base07;
-            };
-            normal = default;
-            bright = default;
-            dim = default;
-          };
-      };
     };
 
     # mbv: Try this out for now

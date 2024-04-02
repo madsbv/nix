@@ -1,4 +1,5 @@
-{ pkgs, config, lib, user, my-doomemacs-config, ... }:
+{ flake-root, inputs, scheme, pkgs, config, lib, user, my-doomemacs-config, ...
+}:
 let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
   emacsDir = "${config.xdg.configHome}/emacs";
@@ -12,11 +13,13 @@ in {
     "sketchybar".source = ./config/sketchybar;
     "karabiner".source = ./config/karabiner;
   };
+
   home = {
-    packages = pkgs.callPackage ./packages.nix { };
+    packages = (pkgs.callPackage ./packages.nix { })
+      ++ (pkgs.callPackage (flake-root + "/modules/shared/home-packages.nix")
+        { });
     file = additionalFiles;
 
-    stateVersion = "23.11";
     sessionVariables = {
       LESSHISTFILE = "$XDG_CACHE_HOME/lesshst";
       WGETRC = "$XDG_CONFIG_HOME/wgetrc";
@@ -53,20 +56,108 @@ in {
 
   # NOTE: Trying to use `(pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages` and an override at the same time breaks things via weird nix double wrapping issues, so use extraPackages instead.
   # TODO: Define a launchd service for emacs daemon? Could be useful, could break tinkering. If yes, see ryan4yin-nix-config for an example.
-  programs.emacs = {
-    enable = true;
-    # TODO: Can I move this to shared/home-manager.nix by taking emacs.package as function input?
-    # Patched emacs-macport from overlay
-    package = pkgs.my-emacs-mac;
-    extraPackages = epkgs:
-      with epkgs; [
-        # Packages that pull in non-lisp stuff
-        # The mu4e epkg also pulls in the mu binary
-        mu4e
-        treesit-grammars.with-all-grammars
-        vterm
-        multi-vterm
-        pdf-tools
-      ];
+  programs = {
+    zsh.envExtra = ''
+      export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
+      export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin:$HOME/.cargo/bin''${PATH+:$PATH}";
+    '';
+
+    java.enable = true;
+    # pyenv = {
+    #   enable = true;
+    #   enableZshIntegration = true;
+    # };
+    bacon = {
+      enable = true;
+      settings = { };
+    };
+
+    # TODO: Move maildirs to XDG_DATA_HOME
+    # Also look into home-managers accounts.email options
+    mbsync = {
+      enable = true;
+      extraConfig = builtins.readFile ./config/mbsyncrc;
+    };
+    mu.enable = true;
+
+    neovim.plugins = [
+      (pkgs.vimPlugins.base16-vim.overrideAttrs (_old:
+        let schemeFile = config.scheme inputs.base16-vim;
+        in { patchPhase = "cp ${schemeFile} colors/base16-scheme.vim"; }))
+    ];
+
+    kitty = {
+      enable = true;
+      shellIntegration.enableZshIntegration = true;
+      # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
+      extraConfig = builtins.readFile ./config/kitty/kitty.conf
+        + builtins.readFile (config.scheme inputs.base16-kitty);
+      darwinLaunchOptions = [ "--single-instance" ];
+    };
+
+    # mbv: Let's just use this for now
+    alacritty = {
+      enable = true;
+      settings = {
+        cursor = { style = "Block"; };
+
+        window = {
+          opacity = 1.0;
+          padding = {
+            x = 24;
+            y = 24;
+          };
+        };
+
+        font = {
+          normal = {
+            family = "MesloLGS NF";
+            style = "Regular";
+          };
+          size = lib.mkMerge [
+            (lib.mkIf pkgs.stdenv.hostPlatform.isLinux 10)
+            (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin 14)
+          ];
+        };
+
+        # Base16 colors
+        colors = with config.scheme.withHashtag;
+          let
+            default = {
+              black = base00;
+              white = base07;
+              inherit red green yellow blue cyan magenta;
+            };
+          in {
+            primary = {
+              background = base00;
+              foreground = base07;
+            };
+            cursor = {
+              text = base02;
+              cursor = base07;
+            };
+            normal = default;
+            bright = default;
+            dim = default;
+          };
+      };
+    };
+    emacs = {
+      enable = true;
+      # TODO: Can I move this to shared/home-manager.nix by taking emacs.package as function input?
+      # Patched emacs-macport from overlay
+      package = pkgs.my-emacs-mac;
+      extraPackages = epkgs:
+        with epkgs; [
+          # Packages that pull in non-lisp stuff
+          # The mu4e epkg also pulls in the mu binary
+          mu4e
+          treesit-grammars.with-all-grammars
+          vterm
+          multi-vterm
+          pdf-tools
+        ];
+    };
   };
 }

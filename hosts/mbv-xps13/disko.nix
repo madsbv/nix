@@ -39,7 +39,7 @@
     };
     zpool.znix = {
       type = "zpool";
-      mode = "mirror"; # Single disk so this doesn't really matter
+      mode = ""; # Single disk so this doesn't really matter
       rootFsOptions = {
         compression = "zstd";
         "com.sun:auto-snapshot" = "false"; # Managed through nixos

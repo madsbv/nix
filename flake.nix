@@ -187,12 +187,14 @@
         mbv-xps13 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs // {
+            inherit user;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "mbv-xps13";
           };
           modules = [
             ./hosts/mbv-xps13
+            home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             agenix-rekey.nixosModules.default
             impermanence.nixosModules.impermanence

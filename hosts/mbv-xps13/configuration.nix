@@ -1,9 +1,30 @@
-{ ... }:
+{ config, ... }:
 
 {
   imports = [ ./hardware-configuration.nix ./disko.nix ];
 
-  networking.hostId = "8425e349";
+  networking = {
+    hostId = "8425e349";
+    networkmanager = {
+      enable = true; # Easiest to use and most
+      appendNameservers = [
+        # Quad9 primary and secondary, including ipv6
+        "9.9.9.9"
+        "149.112.112.112"
+        "2620:fe::fe"
+        "2620:fe::9"
+        # Cloudflare 1.1.1.1 malware blocking, primary and secondary, including ipv6
+        "1.1.1.2"
+        "1.0.0.2"
+        "2606:4700:4700::1112"
+        "2606:4700:4700::1002"
+      ];
+    };
+  };
+  # Networkmanager has the option ensureProfile which could handle this in a nicer way, but that would leak secrets.
+  # https://nixos.org/manual/nixos/stable/options#opt-networking.networkmanager.ensureProfiles.profiles
+  environment.etc."NetworkManager/system-connections/home-wifi.nmconnection".source =
+    config.age.secrets.home-wifi-nm.path;
 
   nixpkgs.hostPlatform = "x86_64-linux";
   # Use the systemd-boot EFI boot loader.
@@ -20,13 +41,6 @@
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
-  };
-
-  security.sudo = {
-    execWheelOnly = true;
-    extraConfig = ''
-      Defaults lecture = never
-    '';
   };
 
   # This option defines the first version of NixOS you have installed on this particular machine,

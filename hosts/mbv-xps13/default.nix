@@ -1,4 +1,4 @@
-{ flake-root, config, hostname, lib, ... }:
+{ user, flake-root, config, hostname, lib, ... }:
 
 let
   client_keys =
@@ -81,7 +81,6 @@ in {
   services = {
     tailscale = {
       enable = true;
-      # TODO: Add non-ephemeral tailscale auth key, or just log in manually?
       authKeyFile = config.age.secrets.tailscale-server-authkey.path;
       extraUpFlags = [ "--ssh" ];
     };
@@ -103,15 +102,37 @@ in {
     };
   };
 
+  # Mostly for SSH setup to satisfy Github, but might as well have a comfortable environment
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.${user} = { imports = [ (modules + "/home-manager.nix") ]; };
+  };
+
   users = {
     # To enable local login, set `users.users.root.initialHashedPassword`
     # You can get the hash of a given password with `mkpasswd -m SHA-512`
     mutableUsers = false;
-    users.root.openssh.authorizedKeys.keys = client_keys;
-    # TODO: Still missing some key management pieces, since Github apparently wants an authorized key for something.
+    users = {
+      # TODO: Still missing some key management pieces, since Github apparently wants an authorized key for something.
+      ${user} = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" "networkmanager" ];
+        openssh.authorizedKeys.keys = client_keys;
+        initialHashedPassword =
+          "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
+      };
+    };
   };
   boot.initrd.network = {
     ssh.enable = true;
     ssh.authorizedKeys = client_keys;
   };
+  security.sudo = {
+    execWheelOnly = true;
+    extraConfig = ''
+      Defaults lecture = never
+    '';
+  };
+
 }

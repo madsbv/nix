@@ -1,6 +1,6 @@
-{ flake-root, user, config, pkgs, homebrew-bundle, homebrew-core, homebrew-cask
-, homebrew-services, homebrew-cask-fonts, felixkratz-formulae, pirj-noclamshell
-, ... }:
+{ flake-root, user, lib, config, pkgs, homebrew-bundle, homebrew-core
+, homebrew-cask, homebrew-services, homebrew-cask-fonts, felixkratz-formulae
+, pirj-noclamshell, ... }:
 
 {
   imports = [ "${flake-root}/modules/darwin" "${flake-root}/modules/shared" ];
