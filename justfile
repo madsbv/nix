@@ -31,6 +31,7 @@ build:
 
 # Invoke the recipes `rekey` and `build`, in that order, before invoking the body of `switch`
 # Default command, so no need to define alias
+alias sd := switch-darwin
 switch-darwin: rekey
 	darwin-rebuild switch --flake .#mbv-mba
 

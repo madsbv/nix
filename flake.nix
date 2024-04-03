@@ -97,7 +97,7 @@
 
     ### Personal config ###
     my-doomemacs-config = {
-      url = "git+ssh://git@github.com/madsbv/doom.d";
+      url = "github:madsbv/doom.d";
       flake = false;
     };
   };
