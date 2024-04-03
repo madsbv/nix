@@ -1,6 +1,6 @@
 # TODO: Make this system agnostic (probably requires generating it from nix)
 
-default: switch
+default: switch-darwin
 
 alias l := lint
 lint:
@@ -31,8 +31,11 @@ build:
 
 # Invoke the recipes `rekey` and `build`, in that order, before invoking the body of `switch`
 # Default command, so no need to define alias
-switch: rekey
+switch-darwin: rekey
 	darwin-rebuild switch --flake .#mbv-mba
+
+switch-nixos:
+	nixos-rebuild switch --flake .#$(hostname)
 
 alias be := build-ephemeral
 build-ephemeral type format="install-iso": rekey
@@ -63,6 +66,8 @@ nixos-anywhere host target: rekey
 disko-install host disk:
 	nix run github:nix-community/disko#disko-installer -- --disk {{disk}} /dev/{{disk}} --extra-files /etc/ssh /etc/ssh --write-efi-boot-entries --show-trace -f .#{{host}}
 
+# TODO: Add a step to copy over github ssh key for temporary access for installation?
+# Could also do networkmanager wifi info
 new-host hostname target:
 	ssh root@{{target}} "nixos-generate-config --no-filesystems --root /mnt"
 	ssh root@{{target}} 'NIX_CONFIG="experimental-features = nix-command flakes" nix run nixpkgs#tree /dev/disk > /mnt/etc/nixos/tree'
