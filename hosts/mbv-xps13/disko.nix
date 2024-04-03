@@ -1,6 +1,12 @@
 _:
 
 {
+  fileSystems = {
+    "/".neededForBoot = true;
+    "/nix".neededForBoot = true;
+    "/nix/persist".neededForBoot = true;
+    "/nix/persist/home".neededForBoot = true;
+  };
   disko.devices = {
     disk = {
       nvme0n1 = {
