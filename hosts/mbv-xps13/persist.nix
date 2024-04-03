@@ -7,13 +7,18 @@ _:
     directories = [
       "/etc/nixos"
       "/etc/NetworkManager/system-connections"
+      "/etc/ssh" # We need the entire directory so we can set neededForBoot
       "/var/log"
       "/var/lib"
     ];
-    files = [
-      "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key"
-      "/etc/ssh/ssh_host_ed25519_key.pub"
-    ];
+    files = [ "/etc/machine-id" ];
+  };
+  fileSystems = {
+    # I don't know how many of these we actually need
+    # "/".neededForBoot = true;
+    # "/nix".neededForBoot = true;
+    "/nix/persist".neededForBoot = true;
+    # "/nix/persist/home".neededForBoot = true;
+    "/etc/ssh".neededForBoot = true;
   };
 }
