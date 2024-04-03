@@ -56,9 +56,12 @@ alias e := agenix-edit
 agenix-edit *flags:
 	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- edit {{flags}}
 
-# Every recipe after && it invoked at the the end of this recipe
-alias u := update
-update: && switch
+alias un := update-nixos
+update-nixos: && switch-nixos
+	nix flake update
+
+alias ud := update-darwin
+update-darwin: && switch-darwin
 	nix flake update
 
 nixos-anywhere host target: rekey
