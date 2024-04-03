@@ -48,6 +48,7 @@
     extraOptions = ''
       experimental-features = nix-command flakes repl-flake
       warn-dirty = false
+      !include ${config.age.secrets.github-api-key-minimal.path}
     '';
   };
 

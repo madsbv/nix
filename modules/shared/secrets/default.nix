@@ -25,4 +25,6 @@
     generatedSecretsDir = flake-root + "/secrets/generated";
     agePlugins = [ pkgs.age-plugin-yubikey ];
   };
+  age.secrets.github-api-key-minimal.rekeyFile = flake-root
+    + "/secrets/other/github-nix-api-access.age";
 }

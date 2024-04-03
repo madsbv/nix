@@ -496,17 +496,17 @@
     "my-doomemacs-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1709109865,
-        "narHash": "sha256-yWmJ//I5q3YGHddBA+iBLgrjKiDa62xZuE+BibWXK90=",
+        "lastModified": 1711810015,
+        "narHash": "sha256-f1nmYLVGaCdc+YL43HH6zdI7sBIh5+utNBjbjm3YWmk=",
         "ref": "refs/heads/main",
-        "rev": "4ebef104a2c9438f16389667e683a97e59c7e6bd",
-        "revCount": 34,
+        "rev": "8b6850157d20a391ba81a7d0f6a99066898127c1",
+        "revCount": 39,
         "type": "git",
-        "url": "ssh://git@github.com/madsbv/doom.d.git"
+        "url": "ssh://git@github.com/madsbv/doom.d"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@github.com/madsbv/doom.d.git"
+        "url": "ssh://git@github.com/madsbv/doom.d"
       }
     },
     "nix-darwin": {
