@@ -43,11 +43,9 @@ in {
   };
 
   config = lib.mkIf (cfg.flake != null) {
-    # https://github.com/NixOS/nixpkgs/blob/43f956227e7bbcb11aa54ce1294f6b5bdf6c8fad/nixos/modules/system/activation/top-level.nix#L40
-    # system.extraSystemBuilderCmds is a hidden NixOS option, which gets run as a script any time a configuration is build.
     system.activationScripts.symlinkFlake =
       lib.optionalString cfg.symlinkFlake ''
-        ln -s ${cfg.flake} $out/flake
+        ln -s ${cfg.flake} /etc/nixos/current-system
       '';
 
     # MIT Jörg Thalheim - https://github.com/Mic92/dotfiles/blob/c6cad4e57016945c4816c8ec6f0a94daaa0c3203/nixos/modules/upgrade-diff.nix
