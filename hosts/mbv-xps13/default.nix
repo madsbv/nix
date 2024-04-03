@@ -91,8 +91,6 @@ in {
         KbdInteractiveAuthentication = false;
         PasswordAuthentication = false;
       };
-      # Disable automatic generation of host keys so they don't get in the way of the persistent keys
-      hostKeys = [ ];
     };
 
     zfs = lib.mkIf config.boot.zfs.enabled {
