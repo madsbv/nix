@@ -3,6 +3,9 @@
 {
   imports = [ ./hardware-configuration.nix ./disko.nix ./persist.nix ];
 
+  # Don't suspend on lid close
+  services.logind.lidSwitch = "ignore";
+
   networking = {
     hostId = "8425e349";
     networkmanager = {
