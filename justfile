@@ -34,6 +34,7 @@ build:
 switch-darwin: rekey
 	darwin-rebuild switch --flake .#mbv-mba
 
+alias sn := switch-nixos
 switch-nixos:
 	nixos-rebuild switch --flake .#$(hostname)
 
