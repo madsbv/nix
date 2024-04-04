@@ -1,8 +1,20 @@
-{ flake-inputs, fenix, lib, config, pkgs, ... }:
+{
+  flake-inputs,
+  fenix,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
-  imports =
-    [ ./cachix ./srvos/symlink-flake.nix ./secrets ./keys.nix ./builder.nix ];
+  imports = [
+    ./cachix
+    ./srvos/symlink-flake.nix
+    ./secrets
+    ./keys.nix
+    ./builder.nix
+  ];
 
   programs = {
     zsh = {
@@ -18,27 +30,34 @@
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
   nix = {
-    registry = (lib.mapAttrs (_: flake: { inherit flake; }))
-      ((lib.filterAttrs (_: lib.isType "flake")) flake-inputs);
+    registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
+      (lib.filterAttrs (_: lib.isType "flake")) flake-inputs
+    );
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
     nixPath = [ "/etc/nix/path" ];
     package = pkgs.nixUnstable;
 
-    gc = with lib;
+    gc =
+      with lib;
       mkMerge [
-        (if pkgs.stdenv.isDarwin then {
-          # Nix-darwin
-          user = "root";
-          interval = {
-            Weekday = 0;
-            Hour = 2;
-            Minute = 0;
-          };
-        } else {
-          # NixOS
-          dates = "weekly";
-        })
+        (
+          if pkgs.stdenv.isDarwin then
+            {
+              # Nix-darwin
+              user = "root";
+              interval = {
+                Weekday = 0;
+                Hour = 2;
+                Minute = 0;
+              };
+            }
+          else
+            {
+              # NixOS
+              dates = "weekly";
+            }
+        )
         {
           automatic = true;
           options = "--delete-older-than 30d";
@@ -51,7 +70,11 @@
       sandbox = if pkgs.stdenv.isDarwin then false else true;
       log-lines = lib.mkDefault 25;
       # May need to add `builder` to this list.
-      trusted-users = [ "root" "@admin" "@wheel" ];
+      trusted-users = [
+        "root"
+        "@admin"
+        "@wheel"
+      ];
 
       # Reduce copying over SSH
       builders-use-substitutes = true;
@@ -77,12 +100,16 @@
     };
     overlays =
       # Apply each overlay found in the /overlays directory
-      let path = ../../overlays;
-      in with builtins;
-      map (n: import (path + ("/" + n))) (filter (n:
-        match ".*\\.nix" n != null
-        || pathExists (path + ("/" + n + "/default.nix")))
-        (attrNames (readDir path))) ++ [ fenix.overlays.default ];
+      let
+        path = ../../overlays;
+      in
+      with builtins;
+      map (n: import (path + ("/" + n))) (
+        filter (n: match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix"))) (
+          attrNames (readDir path)
+        )
+      )
+      ++ [ fenix.overlays.default ];
   };
 
   environment = {

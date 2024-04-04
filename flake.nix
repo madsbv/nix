@@ -26,7 +26,9 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-homebrew = { url = "github:zhaofengli-wip/nix-homebrew"; };
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+    };
     homebrew-bundle = {
       url = "github:homebrew/homebrew-bundle";
       flake = false;
@@ -101,8 +103,20 @@
       flake = false;
     };
   };
-  outputs = { self, nixos-generators, impermanence, darwin, nix-homebrew
-    , home-manager, nixpkgs, agenix, agenix-rekey, disko, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixos-generators,
+      impermanence,
+      darwin,
+      nix-homebrew,
+      home-manager,
+      nixpkgs,
+      agenix,
+      agenix-rekey,
+      disko,
+      ...
+    }@inputs:
     let
       # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
       molokai = {
@@ -127,14 +141,20 @@
         base0F = "#cc6633";
       };
       color-scheme = molokai;
-      linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
+      linuxSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
       forLinuxSystems = f: nixpkgs.lib.mergeAttrsList (map f linuxSystems);
 
-      devShell = system:
-        let pkgs = import nixpkgs { inherit system; };
-        in {
+      devShell =
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
           default = pkgs.mkShell {
             packages = with pkgs; [
               zsh
@@ -155,7 +175,8 @@
         clients = [ "mbv-mba" ];
         servers = [ "mbv-xps13" ];
       };
-    in {
+    in
+    {
       devShells = forAllSystems devShell;
 
       agenix-rekey = agenix-rekey.configure {
@@ -186,52 +207,54 @@
         };
       };
 
-      nixosConfigurations = {
-        mbv-xps13 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs // {
-            inherit nodes;
-            flake-inputs = inputs;
-            flake-root = ./.;
-            hostname = "mbv-xps13";
+      nixosConfigurations =
+        {
+          mbv-xps13 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs // {
+              inherit nodes;
+              flake-inputs = inputs;
+              flake-root = ./.;
+              hostname = "mbv-xps13";
+            };
+            modules = [
+              ./hosts/mbv-xps13
+              home-manager.nixosModules.home-manager
+              agenix.nixosModules.default
+              agenix-rekey.nixosModules.default
+              impermanence.nixosModules.impermanence
+              disko.nixosModules.disko
+            ];
           };
-          modules = [
-            ./hosts/mbv-xps13
-            home-manager.nixosModules.home-manager
-            agenix.nixosModules.default
-            agenix-rekey.nixosModules.default
-            impermanence.nixosModules.impermanence
-            disko.nixosModules.disko
-          ];
-        };
-      } // forLinuxSystems (system: {
-        # A system configuration for ephemeral systems--either temporary VMs or for installers.
-        # Use nixos-generators to build a VM or ISO with
-        # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
-        # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
-        # Example formats: install-iso qcow-efi (for qemu vm)
-        "ephemeral-${system}" = nixpkgs.lib.nixosSystem {
-          inherit system;
+        }
+        // forLinuxSystems (system: {
+          # A system configuration for ephemeral systems--either temporary VMs or for installers.
+          # Use nixos-generators to build a VM or ISO with
+          # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
+          # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
+          # Example formats: install-iso qcow-efi (for qemu vm)
+          "ephemeral-${system}" = nixpkgs.lib.nixosSystem {
+            inherit system;
 
-          # For VMs
-          # Specific formats can be configured with something like:
-          # formatConfigs.vmware = { config, ... }: {
-          #   services.openssh.enable = true;
-          # };
-          # nixpkgs.hostPlatform = "aarch64-darwin";
-          specialArgs = {
-            inherit inputs system nodes;
-            flake-inputs = inputs;
-            flake-root = ./.;
-            hostname = "ephemeral";
+            # For VMs
+            # Specific formats can be configured with something like:
+            # formatConfigs.vmware = { config, ... }: {
+            #   services.openssh.enable = true;
+            # };
+            # nixpkgs.hostPlatform = "aarch64-darwin";
+            specialArgs = {
+              inherit inputs system nodes;
+              flake-inputs = inputs;
+              flake-root = ./.;
+              hostname = "ephemeral";
+            };
+            modules = [
+              impermanence.nixosModules.impermanence
+              nixos-generators.nixosModules.all-formats
+              disko.nixosModules.disko
+              ./ephemeral/configuration.nix
+            ];
           };
-          modules = [
-            impermanence.nixosModules.impermanence
-            nixos-generators.nixosModules.all-formats
-            disko.nixosModules.disko
-            ./ephemeral/configuration.nix
-          ];
-        };
-      });
+        });
     };
 }

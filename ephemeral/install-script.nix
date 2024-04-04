@@ -1,4 +1,9 @@
-{ path, config, pkgs, ... }:
+{
+  path,
+  config,
+  pkgs,
+  ...
+}:
 # Script approach based on https://github.com/Xe/nixos-configs/blob/master/media/autoinstall-paranoid/iso.nix
 #
 # To build on Darwin we need a linux build vm, see https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder
@@ -6,7 +11,10 @@
   systemd.services.install = {
     description = "Bootstrap a NixOS installation";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" "polkit.service" ];
+    after = [
+      "network.target"
+      "polkit.service"
+    ];
     path = [ "/run/current-system/sw/" ];
     script = ''
       set -eux
@@ -92,6 +100,8 @@
       inherit (config.environment.sessionVariables) NIX_PATH;
       HOME = "/root";
     };
-    serviceConfig = { Type = "oneshot"; };
+    serviceConfig = {
+      Type = "oneshot";
+    };
   };
 }

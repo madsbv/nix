@@ -1,7 +1,15 @@
-{ hostname, flake-root, pkgs, ... }:
+{
+  hostname,
+  flake-root,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [ "${flake-root}/modules/darwin" "${flake-root}/modules/shared" ];
+  imports = [
+    "${flake-root}/modules/darwin"
+    "${flake-root}/modules/shared"
+  ];
 
   # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
   # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
@@ -20,8 +28,12 @@
     computerName = hostname;
     hostName = hostname;
     localHostName = hostname;
-    knownNetworkServices =
-      [ "AX88179A" "Thunderbolt Bridge" "Wi-Fi" "iPhone USB" ];
+    knownNetworkServices = [
+      "AX88179A"
+      "Thunderbolt Bridge"
+      "Wi-Fi"
+      "iPhone USB"
+    ];
     dns = [
       # Quad9 primary and secondary, including ipv6
       "9.9.9.9"
@@ -65,9 +77,11 @@
       # See https://github.com/LnL7/nix-darwin/issues/406
       # Also, nix-based string replacement does not work when reading from separate file, so we have to do that here.
       enable = true;
-      skhdConfig = (builtins.readFile (flake-root + "/config/skhd/skhdrc")) + ''
+      skhdConfig =
+        (builtins.readFile (flake-root + "/config/skhd/skhdrc"))
+        + ''
 
-        lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
+          lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
     };
     # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
     # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
@@ -86,22 +100,25 @@
 
   # TODO: This should be moved into a file for gui client settings so it doesn't get loaded on all servers.
   # Enable fonts dir
-  fonts = let key = if pkgs.stdenv.isDarwin then "fonts" else "packages";
-  in {
-    fontDir.enable = true;
-    ${key} = with pkgs; [
-      dejavu_fonts
-      emacs-all-the-icons-fonts
-      jetbrains-mono
-      feather-font # from overlay
-      font-awesome
-      hack-font
-      meslo-lgs-nf
-      nerdfonts
-      noto-fonts
-      noto-fonts-emoji
-    ];
-  };
+  fonts =
+    let
+      key = if pkgs.stdenv.isDarwin then "fonts" else "packages";
+    in
+    {
+      fontDir.enable = true;
+      ${key} = with pkgs; [
+        dejavu_fonts
+        emacs-all-the-icons-fonts
+        jetbrains-mono
+        feather-font # from overlay
+        font-awesome
+        hack-font
+        meslo-lgs-nf
+        nerdfonts
+        noto-fonts
+        noto-fonts-emoji
+      ];
+    };
 
   # Note: To correlate settings in System Settings with their names here, you can use `defaults read` to output (I think) all system settings. You can then save that to a file, change something in System Settings, and diff the new output of defaults read against the previous output. E.g.:
   # ```sh
@@ -180,7 +197,9 @@
         ActuationStrength = 0;
       };
       # Sounds like something I want, but it actually reduces motions related to trackpad movements which I want to keep.
-      universalaccess = { reduceMotion = false; };
+      universalaccess = {
+        reduceMotion = false;
+      };
     };
 
     keyboard = {

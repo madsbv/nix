@@ -1,9 +1,22 @@
-{ system, flake-root, inputs, pkgs, config, lib, ... }:
+{
+  system,
+  flake-root,
+  inputs,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
-let modules = flake-root + "/modules/shared";
-in {
-  imports =
-    [ ./hardware-configuration.nix ./disko.nix (modules + "/keys.nix") ];
+let
+  modules = flake-root + "/modules/shared";
+in
+{
+  imports = [
+    ./hardware-configuration.nix
+    ./disko.nix
+    (modules + "/keys.nix")
+  ];
 
   local.keys = {
     enable = true;
@@ -65,8 +78,9 @@ in {
   # To make nix3 commands consistent with your flake
 
   nix = {
-    registry = (lib.mapAttrs (_: flake: { inherit flake; }))
-      ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+    registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
+      (lib.filterAttrs (_: lib.isType "flake")) inputs
+    );
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
     nixPath = [ "/etc/nix/path" ];
@@ -103,7 +117,10 @@ in {
       enableCompletion = true;
       syntaxHighlighting = {
         enable = true;
-        highlighters = [ "main" "brackets" ];
+        highlighters = [
+          "main"
+          "brackets"
+        ];
       };
     };
     git.enable = true;
@@ -148,5 +165,4 @@ in {
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

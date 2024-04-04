@@ -4,7 +4,11 @@ _:
   # https://github.com/nix-community/impermanence#module-usage
   environment.persistence."/nix/persist" = {
     hideMounts = true;
-    directories = [ "/etc/nixos" "/var/log" "/var/lib" ];
+    directories = [
+      "/etc/nixos"
+      "/var/log"
+      "/var/lib"
+    ];
     files = [
       "/etc/machine-id"
       "/etc/ssh/ssh_host_rsa_key"

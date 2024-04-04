@@ -2,7 +2,8 @@
 
 let
   xdg_dataHome = "/Users/mvilladsen/.local/share";
-in {
+in
+{
   # Raycast script so that "Run Emacs" is available and uses Emacs daemon
   "${xdg_dataHome}/bin/emacsclient" = {
     executable = true;

@@ -1,11 +1,21 @@
-{ flake-root, inputs, scheme, pkgs, config, lib, user, my-doomemacs-config, ...
+{
+  flake-root,
+  inputs,
+  scheme,
+  pkgs,
+  config,
+  lib,
+  user,
+  my-doomemacs-config,
+  ...
 }:
 let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
   emacsDir = "${config.xdg.configHome}/emacs";
   doomDir = "${config.xdg.configHome}/doom";
   doomRepoUrl = "https://github.com/doomemacs/doomemacs";
-in {
+in
+{
   imports = [ ../shared/home-manager.nix ];
 
   xdg.configFile = {
@@ -15,9 +25,9 @@ in {
   };
 
   home = {
-    packages = (pkgs.callPackage ./packages.nix { })
-      ++ (pkgs.callPackage (flake-root + "/modules/shared/home-packages.nix")
-        { });
+    packages =
+      (pkgs.callPackage ./packages.nix { })
+      ++ (pkgs.callPackage (flake-root + "/modules/shared/home-packages.nix") { });
     file = additionalFiles;
 
     sessionVariables = {
@@ -81,16 +91,23 @@ in {
     mu.enable = true;
 
     neovim.plugins = [
-      (pkgs.vimPlugins.base16-vim.overrideAttrs (_old:
-        let schemeFile = config.scheme inputs.base16-vim;
-        in { patchPhase = "cp ${schemeFile} colors/base16-scheme.vim"; }))
+      (pkgs.vimPlugins.base16-vim.overrideAttrs (
+        _old:
+        let
+          schemeFile = config.scheme inputs.base16-vim;
+        in
+        {
+          patchPhase = "cp ${schemeFile} colors/base16-scheme.vim";
+        }
+      ))
     ];
 
     kitty = {
       enable = true;
       shellIntegration.enableZshIntegration = true;
       # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
-      extraConfig = builtins.readFile (flake-root + "/config/kitty/kitty.conf")
+      extraConfig =
+        builtins.readFile (flake-root + "/config/kitty/kitty.conf")
         + builtins.readFile (config.scheme inputs.base16-kitty);
       darwinLaunchOptions = [ "--single-instance" ];
     };
@@ -99,7 +116,9 @@ in {
     alacritty = {
       enable = true;
       settings = {
-        cursor = { style = "Block"; };
+        cursor = {
+          style = "Block";
+        };
 
         window = {
           opacity = 1.0;
@@ -121,14 +140,23 @@ in {
         };
 
         # Base16 colors
-        colors = with config.scheme.withHashtag;
+        colors =
+          with config.scheme.withHashtag;
           let
             default = {
               black = base00;
               white = base07;
-              inherit red green yellow blue cyan magenta;
+              inherit
+                red
+                green
+                yellow
+                blue
+                cyan
+                magenta
+                ;
             };
-          in {
+          in
+          {
             primary = {
               background = base00;
               foreground = base07;
@@ -148,8 +176,8 @@ in {
       # TODO: Can I move this to shared/home-manager.nix by taking emacs.package as function input?
       # Patched emacs-macport from overlay
       package = pkgs.my-emacs-mac;
-      extraPackages = epkgs:
-        with epkgs; [
+      extraPackages =
+        epkgs: with epkgs; [
           # Packages that pull in non-lisp stuff
           # The mu4e epkg also pulls in the mu binary
           mu4e

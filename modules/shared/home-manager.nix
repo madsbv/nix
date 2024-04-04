@@ -1,14 +1,23 @@
 # This file is called from modules/{darwin,nixos}/home-manager.nix, and is merged into home-manager.programs attribute set.
-{ user, hostname, flake-root, osConfig, config, pkgs, lib, ... }:
+{
+  user,
+  hostname,
+  flake-root,
+  osConfig,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   # Really just for git
   name = "Mads Bach Villadsen";
   email = "mvilladsen@pm.me";
 
-  gitignore_global =
-    [ (builtins.readFile (flake-root + "/config/gitignore_global")) ];
-in {
+  gitignore_global = [ (builtins.readFile (flake-root + "/config/gitignore_global")) ];
+in
+{
   home.stateVersion = "23.11";
   xdg.enable = true;
   programs = {
@@ -21,8 +30,7 @@ in {
           identitiesOnly = true;
         };
       };
-      extraOptionOverrides.IdentityFile =
-        osConfig.age.secrets."id.${hostname}.${user}".path;
+      extraOptionOverrides.IdentityFile = osConfig.age.secrets."id.${hostname}.${user}".path;
     };
 
     # Shared shell configuration
@@ -32,7 +40,10 @@ in {
       autosuggestion.enable = true;
       syntaxHighlighting = {
         enable = true;
-        highlighters = [ "main" "brackets" ];
+        highlighters = [
+          "main"
+          "brackets"
+        ];
       };
       # Not sure how this relates to zsh-vi-mode
       # defaultKeymap = "viins";
@@ -41,7 +52,6 @@ in {
       history = {
         path = "${config.xdg.dataHome}/zsh/zsh_history";
         ignoreAllDups = true;
-
       };
 
       zplug = {
@@ -49,14 +59,10 @@ in {
         zplugHome = "${config.xdg.configHome}/zplug";
         plugins = [
           { name = "ajeetdsouza/zoxide"; }
-          {
-            name = "jeffreytse/zsh-vi-mode";
-          }
+          { name = "jeffreytse/zsh-vi-mode"; }
           # May need to learn to use: https://github.com/marlonrichert/zsh-autocomplete/
           { name = "marlonrichert/zsh-autocomplete"; }
-          {
-            name = "wfxr/forgit";
-          }
+          { name = "wfxr/forgit"; }
           # { name = "romkatv/powerlevel10k, as:theme, depth:1"; }
         ];
       };

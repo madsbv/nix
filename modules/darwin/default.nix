@@ -1,13 +1,32 @@
-{ hostname, flake-root, config, pkgs, doomemacs, my-doomemacs-config
-, color-scheme, homebrew-bundle, homebrew-core, homebrew-cask, homebrew-services
-, homebrew-cask-fonts, felixkratz-formulae, pirj-noclamshell, ... }@inputs:
+{
+  hostname,
+  flake-root,
+  config,
+  pkgs,
+  doomemacs,
+  my-doomemacs-config,
+  color-scheme,
+  homebrew-bundle,
+  homebrew-core,
+  homebrew-cask,
+  homebrew-services,
+  homebrew-cask-fonts,
+  felixkratz-formulae,
+  pirj-noclamshell,
+  ...
+}@inputs:
 
 # Just a single user on this machine
 let
   user = "mvilladsen";
   modules = flake-root + "/modules/shared";
-in {
-  imports = [ ./dock ./homebrew (import (modules + "/secrets/user.nix") user) ];
+in
+{
+  imports = [
+    ./dock
+    ./homebrew
+    (import (modules + "/secrets/user.nix") user)
+  ];
 
   users.users.${user} = {
     home = "/Users/${user}";
@@ -52,7 +71,14 @@ in {
     };
     # Arguments exposed to every home-module
     extraSpecialArgs = {
-      inherit my-doomemacs-config doomemacs hostname user inputs flake-root;
+      inherit
+        my-doomemacs-config
+        doomemacs
+        hostname
+        user
+        inputs
+        flake-root
+        ;
     };
   };
 
@@ -62,9 +88,7 @@ in {
     dock = {
       enable = true;
       entries = [
-        {
-          path = "/System/Applications/Messages.app/";
-        }
+        { path = "/System/Applications/Messages.app/"; }
         # Kitty or Alacritty?
         { path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
         { path = "/System/Applications/Music.app/"; }

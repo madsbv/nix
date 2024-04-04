@@ -3,9 +3,12 @@
 #
 # We could have overridden emacs29-macport, but this way I get to just configure my emacs installation here and only do updates in one place (say to emacs30).
 _final: prev: {
-  my-emacs-mac = (prev.emacs29-macport.override {
-    withNativeCompilation = true;
-    withImageMagick = true;
-  }).overrideAttrs
-    (attrs: { patches = attrs.patches ++ [ ./no-titlebar.patch ]; });
+  my-emacs-mac =
+    (prev.emacs29-macport.override {
+      withNativeCompilation = true;
+      withImageMagick = true;
+    }).overrideAttrs
+      (attrs: {
+        patches = attrs.patches ++ [ ./no-titlebar.patch ];
+      });
 }

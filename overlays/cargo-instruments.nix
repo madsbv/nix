@@ -1,6 +1,5 @@
 # TODO: Turn into free-standing package and PR to nixpkgs?
-_self: super:
-with super; {
+_self: super: with super; {
   cargo-instruments = rustPlatform.buildRustPackage rec {
     pname = "cargo-instruments";
     version = "0.4.9";
@@ -14,7 +13,14 @@ with super; {
 
     nativeBuildInputs = [ pkg-config ];
 
-    buildInputs = [ libgit2 openssl sccache libiconv llvmPackages_13.libclang ]
+    buildInputs =
+      [
+        libgit2
+        openssl
+        sccache
+        libiconv
+        llvmPackages_13.libclang
+      ]
       ++ lib.optionals stdenv.isDarwin [
         darwin.apple_sdk.frameworks.SystemConfiguration
         darwin.apple_sdk.frameworks.CoreServices

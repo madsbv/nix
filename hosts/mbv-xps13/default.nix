@@ -1,10 +1,17 @@
-{ flake-root, config, hostname, lib, ... }:
+{
+  flake-root,
+  config,
+  hostname,
+  lib,
+  ...
+}:
 
 let
   modules = flake-root + "/modules/shared";
   # A user to use as manual SSH target. Can use sudo.
   user = "mvilladsen";
-in {
+in
+{
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     # TODO: Consider factoring a bunch of this out into a module
@@ -75,7 +82,10 @@ in {
     command-not-found.enable = false;
     zsh.syntaxHighlighting = {
       enable = true;
-      highlighters = [ "main" "brackets" ];
+      highlighters = [
+        "main"
+        "brackets"
+      ];
     };
 
     neovim = {
@@ -114,8 +124,12 @@ in {
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.${user} = { imports = [ (modules + "/home-manager.nix") ]; };
-    extraSpecialArgs = { inherit hostname user flake-root; };
+    users.${user} = {
+      imports = [ (modules + "/home-manager.nix") ];
+    };
+    extraSpecialArgs = {
+      inherit hostname user flake-root;
+    };
   };
 
   users = {
@@ -126,9 +140,11 @@ in {
       # TODO: Still missing some key management pieces, since Github apparently wants an authorized key for something.
       ${user} = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "networkmanager" ];
-        initialHashedPassword =
-          "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+        ];
+        initialHashedPassword = "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
       };
     };
   };

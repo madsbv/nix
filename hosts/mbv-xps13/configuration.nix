@@ -1,7 +1,11 @@
 { ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ./disko.nix ./persist.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./disko.nix
+    ./persist.nix
+  ];
 
   # Don't suspend on lid close
   services.logind = {
