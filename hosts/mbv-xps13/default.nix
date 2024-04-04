@@ -1,15 +1,20 @@
-{ user, flake-root, config, hostname, lib, ... }:
+{ flake-root, config, hostname, lib, ... }:
 
 let
   client_keys =
     [ (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.pub.mbv-mba") ];
   modules = flake-root + "/modules/shared";
+  # A user to use as manual SSH target. Can use sudo.
+  user = "mvilladsen";
 in {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     # TODO: Consider factoring a bunch of this out into a module
     ./configuration.nix
     (modules + "/") # modules/shared/default.nix
+    (modules + "/secrets/server.nix")
+    (modules + "/secrets/wifi.nix")
+    (import (modules + "/secrets/user.nix") user)
   ];
 
   srvos.flake = flake-root;
@@ -106,7 +111,7 @@ in {
     useGlobalPkgs = true;
     useUserPackages = true;
     users.${user} = { imports = [ (modules + "/home-manager.nix") ]; };
-    extraSpecialArgs = { inherit user flake-root; };
+    extraSpecialArgs = { inherit hostname user flake-root; };
   };
 
   users = {
@@ -124,15 +129,10 @@ in {
       };
     };
   };
-  boot.initrd.network = {
-    ssh.enable = true;
-    ssh.authorizedKeys = client_keys;
-  };
   security.sudo = {
     execWheelOnly = true;
     extraConfig = ''
       Defaults lecture = never
     '';
   };
-
 }

@@ -8,10 +8,6 @@ in {
 
   nixpkgs.hostPlatform = lib.mkForce system;
   boot = {
-    initrd.network = {
-      enable = true;
-      ssh.enable = true;
-    };
     # Use the systemd-boot EFI boot loader.
     loader = {
       systemd-boot.enable = true;

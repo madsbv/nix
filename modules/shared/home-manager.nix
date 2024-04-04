@@ -1,7 +1,8 @@
 # This file is called from modules/{darwin,nixos}/home-manager.nix, and is merged into home-manager.programs attribute set.
-{ flake-root, osConfig, config, pkgs, lib, ... }:
+{ user, hostname, flake-root, osConfig, config, pkgs, lib, ... }:
 
 let
+  # Really just for git
   name = "Mads Bach Villadsen";
   email = "mvilladsen@pm.me";
 
@@ -21,7 +22,7 @@ in {
         };
       };
       extraOptionOverrides.IdentityFile =
-        osConfig.age.secrets."ssh-user-${osConfig.networking.hostName}".path;
+        osConfig.age.secrets."id.${hostname}.${user}".path;
     };
 
     # Shared shell configuration

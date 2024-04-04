@@ -1,8 +1,12 @@
-{ user, flake-root, config, pkgs, doomemacs, my-doomemacs-config, color-scheme
-, ... }@inputs:
+{ hostname, flake-root, config, pkgs, doomemacs, my-doomemacs-config
+, color-scheme, ... }@inputs:
 
-{
-  imports = [ ./dock ./homebrew ];
+# Just a single user on this machine
+let
+  user = "mvilladsen";
+  modules = flake-root + "/modules/shared";
+in {
+  imports = [ ./dock ./homebrew (import (modules + "/secrets/user.nix") user) ];
 
   users.users.${user} = {
     name = "${user}";
@@ -23,7 +27,7 @@
     };
     # Arguments exposed to every home-module
     extraSpecialArgs = {
-      inherit my-doomemacs-config doomemacs user inputs flake-root;
+      inherit my-doomemacs-config doomemacs hostname user inputs flake-root;
     };
   };
 

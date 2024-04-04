@@ -104,7 +104,6 @@
   outputs = { self, nixos-generators, impermanence, darwin, nix-homebrew
     , home-manager, nixpkgs, agenix, agenix-rekey, disko, ... }@inputs:
     let
-      user = "mvilladsen";
       # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
       molokai = {
         slug = "molokai";
@@ -152,7 +151,10 @@
             '';
           };
         };
-      nodes = [ "mbv-mba" "mbv-xps13" ];
+      nodes = {
+        clients = [ "mbv-mba" ];
+        servers = [ "mbv-xps13" ];
+      };
     in {
       devShells = forAllSystems devShell;
 
@@ -167,7 +169,7 @@
         mbv-mba = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           specialArgs = inputs // {
-            inherit user color-scheme nodes;
+            inherit color-scheme nodes;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "mbv-mba";
@@ -188,7 +190,7 @@
         mbv-xps13 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs // {
-            inherit user nodes;
+            inherit nodes;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "mbv-xps13";
@@ -218,7 +220,7 @@
           # };
           # nixpkgs.hostPlatform = "aarch64-darwin";
           specialArgs = {
-            inherit inputs user system;
+            inherit inputs system;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "ephemeral";
