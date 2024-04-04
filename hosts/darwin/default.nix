@@ -12,16 +12,14 @@
 
   nix = {
     # Enable linux builder VM.
-    linux-builder = {
-      enable = true;
-      systems = [ "aarch64-linux" ];
-      config = { boot.binfmt.emulatedSystems = [ "x86_64-linux" ]; };
-    };
+    # This setting relies on having access to a cached version of the builder, since Darwin can't build it itself. The configuration options of the builder *can* be changed, but requires access to a (in this case) aarch64-linux builder to build. Hence on a new machine, or if there's any problems with the existing builder, the build fails.
+    # For this reason, avoid changing the configuration options of linux-builder if at all possible.
+    linux-builder.enable = true;
     buildMachines = [{
       sshKey = config.age.secrets.ssh-user-mbv-mba.path;
-      systems = [ "x86_64-linux" ];
+      system = "x86_64-linux";
       sshUser = "root";
-      hostName = "192.168.0.27";
+      hostName = "mbv-xps13"; # Tailscale
       protocol = "ssh-ng";
       supportedFeatures = [ "kvm" "big-parallel" "benchmark" ];
       maxJobs = 8;
@@ -67,15 +65,15 @@
   };
 
   # Reimplementation of the launchd plist installed by tailscaled itself when invoked as `tailscaled install-system-daemonf (see https://github.com/tailscale/tailscale/wiki/Tailscaled-on-macOS)`
-  launchd.daemons = {
-    tailscaled = {
-      command = "${pkgs.tailscale}/bin/tailscaled";
-      serviceConfig = {
-        RunAtLoad = true;
-        Label = "com.tailscale.tailscaled";
-      };
-    };
-  };
+  # launchd.daemons = {
+  #   tailscaled = {
+  #     command = "${pkgs.tailscale}/bin/tailscaled";
+  #     serviceConfig = {
+  #       RunAtLoad = true;
+  #       Label = "com.tailscale.tailscaled";
+  #     };
+  #   };
+  # };
 
   # IMPORTANT: Necessary for nix-darwin to set PATH correctly
   # NOTE: Can use programs.zsh.variables to set environment variables in the global environment.
@@ -89,19 +87,20 @@
   # TODO: Where to put config files? I'd like to keep them with other configs in home-manager modules, especially since these land in user config
   # NOTE: The config and extraConfig options put the config files in the nix store via [[https://nixos.org/manual/nixpkgs/stable/#trivial-builder-writeText][nixpkgs.writeScript]], and pass that path to the service via command line argument. Hence this differs from putting the file in xdg.configHome/
   services = {
+    tailscale.enable = true;
     yabai = {
       enable = true;
       enableScriptingAddition = true;
       # TODO: yabairc (and maybe skhdrc?) refer to sketchybarrc and related files. How should this be organized?
       # Could maybe use services.yabai.config to pass reference to skhd config dir?
-      extraConfig = builtins.readFile ./config/yabai/yabairc;
+      extraConfig = builtins.readFile (flake-root + "/config/yabai/yabairc");
     };
     skhd = {
       # When home-manager or nix-darwin creates launchd services on Darwin, it tries to use things like $HOME in the PATH set in EnvironmentVariables in the launchd service. However, according to LaunchControl, that field does not support variable expansion. Hence $HOME/.nix-profile/bin does not end up in the PATH for skhd.
       # See https://github.com/LnL7/nix-darwin/issues/406
       # Also, nix-based string replacement does not work when reading from separate file, so we have to do that here.
       enable = true;
-      skhdConfig = (builtins.readFile ./config/skhd/skhdrc) + ''
+      skhdConfig = (builtins.readFile (flake-root + "/config/skhd/skhdrc")) + ''
 
         lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
     };
@@ -112,6 +111,8 @@
     sketchybar = {
       enable = true;
       # Empty config string means nix won't manage the config.
+      # TODO: If we want to have the config managed by nix, we can set `config` here to a string that simply imports our usual sketchybarrc. We'd have to only use relative paths in any sketchybar config, and we'd have to point Yabai configuration at the nix-managed files as well.
+      # This would make config tinkering more annoying.
       config = "";
       # Dependencies of config
       extraPackages = [ pkgs.jq ];
@@ -202,11 +203,17 @@
         _FXShowPosixPathInTitle = true;
         CreateDesktop = false;
         ShowPathbar = true;
+        ShowStatusBar = true;
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
       };
 
       trackpad = {
         Clicking = true;
-        TrackpadThreeFingerDrag = true;
+        # If true, using the trackpad with three fingers lets you drag the mouse as if left click was held down on a mouse, e.g. to highlight text or move windows.
+        TrackpadThreeFingerDrag = false;
+        # Enable silent clicking
+        ActuationStrength = 0;
       };
       # Sounds like something I want, but it actually reduces motions related to trackpad movements which I want to keep.
       universalaccess = { reduceMotion = false; };

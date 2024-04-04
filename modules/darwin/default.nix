@@ -1,5 +1,5 @@
-{ user, config, pkgs, doomemacs, my-doomemacs-config, agenix
-, color-scheme, ... }@inputs:
+{ user, flake-root, config, pkgs, doomemacs, my-doomemacs-config, color-scheme
+, ... }@inputs:
 
 {
   imports = [ ./dock ./homebrew ];
@@ -23,7 +23,7 @@
     };
     # Arguments exposed to every home-module
     extraSpecialArgs = {
-      inherit my-doomemacs-config doomemacs user agenix inputs;
+      inherit my-doomemacs-config doomemacs user inputs flake-root;
     };
   };
 

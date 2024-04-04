@@ -52,9 +52,9 @@ with pkgs; [
   zsh-powerlevel10k
 
   # Virtualization
-  qemu
-  libvirt
-  edk2
+  # qemu
+  # libvirt
+  # edk2
   # virt-manager # Broken on Darwin
 
   # nix

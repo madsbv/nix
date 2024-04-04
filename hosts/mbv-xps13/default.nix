@@ -107,6 +107,7 @@ in {
     useGlobalPkgs = true;
     useUserPackages = true;
     users.${user} = { imports = [ (modules + "/home-manager.nix") ]; };
+    extraSpecialArgs = { inherit user flake-root; };
   };
 
   users = {

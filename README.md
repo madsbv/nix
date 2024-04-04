@@ -20,3 +20,8 @@ Next steps:
 5. Set up restic/autorestic as a reasonably portable module, set up on all systems.
 6. Set up home-assistant on xps13.
 7. Set up something like Ollama on desktop for LLM stuff.
+
+## Media server
+Want:
+- Play stuff on TV, remote controlled. Plex?
+- github.com/Spotifyd/spotifyd might be fun to have running?

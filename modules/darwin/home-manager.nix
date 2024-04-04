@@ -9,9 +9,9 @@ in {
   imports = [ ../shared/home-manager.nix ];
 
   xdg.configFile = {
-    "svim".source = ./config/svim;
-    "sketchybar".source = ./config/sketchybar;
-    "karabiner".source = ./config/karabiner;
+    "svim".source = flake-root + "/config/svim";
+    "sketchybar".source = flake-root + "/config/sketchybar";
+    "karabiner".source = flake-root + "/config/karabiner";
   };
 
   home = {
@@ -76,7 +76,7 @@ in {
     # Also look into home-managers accounts.email options
     mbsync = {
       enable = true;
-      extraConfig = builtins.readFile ./config/mbsyncrc;
+      extraConfig = builtins.readFile (flake-root + "/config/mbsyncrc");
     };
     mu.enable = true;
 
@@ -90,7 +90,7 @@ in {
       enable = true;
       shellIntegration.enableZshIntegration = true;
       # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
-      extraConfig = builtins.readFile ./config/kitty/kitty.conf
+      extraConfig = builtins.readFile (flake-root + "/config/kitty/kitty.conf")
         + builtins.readFile (config.scheme inputs.base16-kitty);
       darwinLaunchOptions = [ "--single-instance" ];
     };

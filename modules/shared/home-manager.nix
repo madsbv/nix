@@ -1,11 +1,12 @@
 # This file is called from modules/{darwin,nixos}/home-manager.nix, and is merged into home-manager.programs attribute set.
-{ osConfig, config, pkgs, lib, ... }:
+{ flake-root, osConfig, config, pkgs, lib, ... }:
 
 let
   name = "Mads Bach Villadsen";
   email = "mvilladsen@pm.me";
 
-  gitignore_global = [ (builtins.readFile ./config/gitignore_global) ];
+  gitignore_global =
+    [ (builtins.readFile (flake-root + "/config/gitignore_global")) ];
 in {
   home.stateVersion = "23.11";
   xdg.enable = true;
@@ -70,7 +71,7 @@ in {
         {
           name = "powerlevel10k-config";
           # TODO: Copy my P10k config over
-          src = lib.cleanSource ./config;
+          src = lib.cleanSource (flake-root + "/config");
           file = "p10k.zsh";
         }
       ];

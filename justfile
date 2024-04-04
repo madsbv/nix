@@ -14,11 +14,11 @@ fix:
 
 alias c := check
 check: lint
-	nix flake check
+	nix flake check --show-trace
 
 alias ca := check-all
 check-all *args: lint
-	nix flake check --all-systems {{args}}
+	nix flake check --all-systems --show-trace {{args}}
 
 alias y := fix-yabai
 fix-yabai:
@@ -26,18 +26,16 @@ fix-yabai:
 	launchctl kickstart -k gui/501/org.nixos.sketchybar
 
 alias b := build
-build:
-	nix --extra-experimental-features 'nix-command flakes' build .#darwinConfigurations.mbv-mba.system
+build *args:
+	nix --extra-experimental-features 'nix-command flakes' build --show-trace {{args}} .#darwinConfigurations.mbv-mba.system
 
-# Invoke the recipes `rekey` and `build`, in that order, before invoking the body of `switch`
-# Default command, so no need to define alias
 alias sd := switch-darwin
 switch-darwin: rekey
-	darwin-rebuild switch --flake .#mbv-mba
+	darwin-rebuild switch --show-trace --flake .#mbv-mba
 
 alias sn := switch-nixos
 switch-nixos:
-	nixos-rebuild switch --flake .#$(hostname)
+	nixos-rebuild switch --show-trace --flake .#$(hostname)
 
 alias be := build-ephemeral
 build-ephemeral type format="install-iso": rekey
@@ -50,12 +48,12 @@ build-ephemeral type format="install-iso": rekey
 	chmod +w ~/ephemeral/ephemeral-{{type}}-{{format}}.iso
 
 alias r := rekey
-rekey *flags:
-	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- rekey -a {{flags}}
+rekey *args:
+	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- rekey -a {{args}}
 
 alias e := agenix-edit
-agenix-edit *flags:
-	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- edit {{flags}}
+agenix-edit *args:
+	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- edit {{args}}
 
 alias un := update-nixos
 update-nixos: && switch-nixos
