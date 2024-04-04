@@ -19,7 +19,11 @@ let
 in
 {
   home.stateVersion = "23.11";
+
   xdg.enable = true;
+
+  home.packages = pkgs.callPackage ./packages.nix { };
+
   programs = {
     ssh = {
       enable = true;

@@ -12,6 +12,7 @@
   # and run `agenix edit secret.age` to edit or create a secret, or `agenix edit -i plain.text secret.age` to encrypt an existing file. To rekey, run `agenix rekey -a`, where `-a` ensures the new files are added to git.
   # Remember to add all keys and (ENCRYPTED) secrets to git!
 
+  imports = [ ./user.nix ];
   # NOTE: Agenix does not error on build if decryption fails. See launchd service if weirdness occurs.
   age.rekey = {
     # Hostkey from /etc/ssh/ssh_host_...

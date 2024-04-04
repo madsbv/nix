@@ -11,6 +11,7 @@
   imports = [
     ./cachix
     ./srvos/symlink-flake.nix
+    ./srvos/terminfo.nix
     ./secrets
     ./keys.nix
     ./builder.nix
@@ -119,6 +120,7 @@
     }) config.nix.registry;
     systemPackages = [
       # TODO: Move this somewhere else, probably a free-standing module imported in either individual hosts or just in shared
+      # Probably doesn't need to be a system-level package.
       # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
       # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.
       # Can also get toolchains for specified targets, e.g. targets.wasm32-unknown-unknown.latest.toolchain

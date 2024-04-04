@@ -1,22 +1,19 @@
 {
   flake-root,
   inputs,
-  scheme,
   pkgs,
   config,
   lib,
-  user,
   my-doomemacs-config,
   ...
 }:
 let
-  additionalFiles = import ./files.nix { inherit user config pkgs; };
   emacsDir = "${config.xdg.configHome}/emacs";
   doomDir = "${config.xdg.configHome}/doom";
   doomRepoUrl = "https://github.com/doomemacs/doomemacs";
 in
 {
-  imports = [ ../shared/home-manager.nix ];
+  imports = [ (flake-root + "/modules/home-manager") ];
 
   xdg.configFile = {
     "svim".source = flake-root + "/config/svim";
@@ -25,10 +22,7 @@ in
   };
 
   home = {
-    packages =
-      (pkgs.callPackage ./packages.nix { })
-      ++ (pkgs.callPackage (flake-root + "/modules/shared/home-packages.nix") { });
-    file = additionalFiles;
+    packages = pkgs.callPackage ./packages.nix { };
 
     sessionVariables = {
       LESSHISTFILE = "$XDG_CACHE_HOME/lesshst";

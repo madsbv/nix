@@ -7,7 +7,7 @@
 }:
 
 let
-  modules = flake-root + "/modules/shared";
+  modules = flake-root + "/modules";
   # A user to use as manual SSH target. Can use sudo.
   user = "mvilladsen";
 in
@@ -16,10 +16,9 @@ in
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     # TODO: Consider factoring a bunch of this out into a module
     ./configuration.nix
-    (modules + "/") # modules/shared/default.nix
-    (modules + "/secrets/server.nix")
-    (modules + "/secrets/wifi.nix")
-    (import (modules + "/secrets/user.nix") user)
+    (modules + "/shared") # modules/shared/default.nix
+    (modules + "/shared/secrets/server.nix")
+    (modules + "/shared/secrets/wifi.nix")
   ];
 
   local.keys = {
@@ -120,18 +119,6 @@ in
     };
   };
 
-  # TODO: This was originally set up to have access to a Github SSH key, but we only needed an API key. Consider restricting the setup accordingly.
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    users.${user} = {
-      imports = [ (modules + "/home-manager.nix") ];
-    };
-    extraSpecialArgs = {
-      inherit hostname user flake-root;
-    };
-  };
-
   users = {
     # To enable local login, set `users.users.root.initialHashedPassword`
     # You can get the hash of a given password with `mkpasswd -m SHA-512`
@@ -148,6 +135,7 @@ in
       };
     };
   };
+  local.ssh-clients.users = [ user ];
   security.sudo = {
     execWheelOnly = true;
     extraConfig = ''

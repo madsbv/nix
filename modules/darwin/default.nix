@@ -19,15 +19,14 @@
 # Just a single user on this machine
 let
   user = "mvilladsen";
-  modules = flake-root + "/modules/shared";
 in
 {
   imports = [
     ./dock
     ./homebrew
-    (import (modules + "/secrets/user.nix") user)
   ];
 
+  local.ssh-clients.users = [ user ];
   users.users.${user} = {
     home = "/Users/${user}";
     isHidden = false;
