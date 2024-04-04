@@ -58,7 +58,7 @@ with pkgs; [
   # virt-manager # Broken on Darwin
 
   # nix
-  nixfmt
+  nixfmt-rfc-style
   nil
 
   # rust
