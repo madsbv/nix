@@ -38,14 +38,14 @@ switch-nixos:
 	nixos-rebuild switch --show-trace --flake .#$(hostname)
 
 alias be := build-ephemeral
-build-ephemeral type format="install-iso": rekey
+build-ephemeral machine-type image-format="install-iso": rekey
 	rage -d -i pubkeys/yubikey/age-yubikey-identity-mba.pub secrets/tailscale/24-03-30-ephemeral-vms-authkey.age > ephemeral/tailscale-auth
-	-nix build .#nixosConfigurations.ephemeral-{{type}}-linux.config.formats.{{format}}
+	-nix build --fallback .#nixosConfigurations.ephemeral-{{machine-type}}-linux.config.formats.{{image-format}}
 	echo "" > ephemeral/tailscale-auth
 	mkdir -p ~/ephemeral
-	-rm -f ~/ephemeral/ephemeral-{{type}}-{{format}}.iso
-	cp result ~/ephemeral/ephemeral-{{type}}-{{format}}.iso
-	chmod +w ~/ephemeral/ephemeral-{{type}}-{{format}}.iso
+	-rm -f ~/ephemeral/ephemeral-{{machine-type}}-{{image-format}}.iso
+	cp result ~/ephemeral/ephemeral-{{machine-type}}-{{image-format}}.iso
+	chmod +w ~/ephemeral/ephemeral-{{machine-type}}-{{image-format}}.iso
 
 alias r := rekey
 rekey *args:

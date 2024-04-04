@@ -14,7 +14,7 @@
   networking = {
     hostId = "8425e349";
     networkmanager = {
-      enable = true; # Easiest to use and most
+      enable = true;
       appendNameservers = [
         # Quad9 primary and secondary, including ipv6
         "9.9.9.9"

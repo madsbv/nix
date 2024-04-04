@@ -18,7 +18,7 @@
     buildMachines = [{
       sshKey = config.age.secrets.ssh-user-mbv-mba.path;
       system = "x86_64-linux";
-      sshUser = "root";
+      sshUser = "mvilladsen";
       hostName = "mbv-xps13"; # Tailscale
       protocol = "ssh-ng";
       supportedFeatures = [ "kvm" "big-parallel" "benchmark" ];
@@ -31,14 +31,13 @@
     enable = true;
     user = "${user}";
     taps = {
-      "homebrew/homebrew-core" = homebrew-core;
-      "homebrew/homebrew-cask" = homebrew-cask;
-      "homebrew/homebrew-bundle" = homebrew-bundle;
-      "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
-      "homebrew/homebrew-services" = homebrew-services;
-      # "koekeishiya/homebrew-formulae" = koekeishiya-formulae;
-      "felixkratz/homebrew-formulae" = felixkratz-formulae;
-      "pirj/homebrew-noclamshell" = pirj-noclamshell;
+      "homebrew/core" = homebrew-core;
+      "homebrew/cask" = homebrew-cask;
+      "homebrew/bundle" = homebrew-bundle;
+      "homebrew/cask-fonts" = homebrew-cask-fonts;
+      "homebrew/services" = homebrew-services;
+      "felixkratz/formulae" = felixkratz-formulae;
+      "pirj/noclamshell" = pirj-noclamshell;
     };
     mutableTaps = false;
     autoMigrate = true;

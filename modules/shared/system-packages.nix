@@ -9,7 +9,6 @@ with pkgs; [
   coreutils
   inetutils
   killall
-  openssh
   sqlite
   perl
   wget
@@ -52,6 +51,7 @@ with pkgs; [
   zsh-powerlevel10k
 
   # Virtualization
+  # TODO: Sort this out
   # qemu
   # libvirt
   # edk2

@@ -22,9 +22,8 @@ in {
   };
 
   networking = {
+    # hostId is set in configuration.nix
     hostName = hostname; # Define your hostname.
-    # Easiest to use and most distros use this by default.
-    # networkmanager.enable = true;
     firewall = {
       # Allow PMTU / DHCP
       allowPing = true;

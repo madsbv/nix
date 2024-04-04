@@ -22,8 +22,32 @@ in {
   networking = {
     hostId = "1f81d600";
     hostName = "ephemeral"; # Define your hostname.
-    # Easiest to use and most distros use this by default.
-    # networkmanager.enable = true;
+    wireless.enable = false;
+    networkmanager = {
+      enable = true;
+      appendNameservers = [
+        # Quad9 primary and secondary, including ipv6
+        "9.9.9.9"
+        "149.112.112.112"
+        "2620:fe::fe"
+        "2620:fe::9"
+        # Cloudflare 1.1.1.1 malware blocking, primary and secondary, including ipv6
+        "1.1.1.2"
+        "1.0.0.2"
+        "2606:4700:4700::1112"
+        "2606:4700:4700::1002"
+      ];
+    };
+    firewall = {
+      # Allow PMTU / DHCP
+      allowPing = true;
+      # Keep dmesg/journalctl -k output readable by NOT logging
+      # each refused connection on the open internet.
+      logRefusedConnections = lib.mkDefault false;
+    };
+    # Use networkd instead of the pile of shell scripts
+    useNetworkd = true;
+    useDHCP = false;
   };
 
   # Set your time zone.
@@ -65,7 +89,6 @@ in {
       ripgrep
       tree
       tmux
-      networkmanager
     ];
   };
 

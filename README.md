@@ -13,7 +13,7 @@ Refactoring
 
 ## Plan of attack for servers
 Next steps:
-1. Set up remote builders, possibly over Tailscale.
+1. ~~Set up remote builders, possibly over Tailscale.~~~
 2. Use mbv-xps13 as deployer to desktop with nixos-anywhere, test and document that installation flow.
 3.  Consider keeping Gentoo installation around, or at least backing up stuff like game saves.
 4. Set up deploy-rs to manage deployments to every system at once.
