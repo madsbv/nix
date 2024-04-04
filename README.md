@@ -13,7 +13,6 @@ Refactoring
 
 ## Plan of attack for servers
 Next steps:
-1. ~~Set up remote builders, possibly over Tailscale.~~
 2. Use mbv-xps13 as deployer to desktop with nixos-anywhere, test and document that installation flow.
 3.  Consider keeping Gentoo installation around, or at least backing up stuff like game saves.
 4. Set up deploy-rs to manage deployments to every system at once.
@@ -31,8 +30,5 @@ There are by now many places where we need to specify keys to make everything wo
 The module should define lists of keys by role. It should have a "role" option, and depending on its value, various key fields across config should be set.
 
 Keys we need to manage:
-- SSH access from at least mbv-mba, possibly more clients. Needs to be key-based.
-- Remote build permissions from all root users, and to all builder users. Can probably be tailscale based.
 - Possibly for serving the store over SSH (i.e., binaries): https://nixos.org/manual/nix/stable/package-management/ssh-substituter.html
 -   This might require signing builds with hostkeys, also requires nix-ssh to be a trusted user for remote building.
-- We also need to set SSH keys in known_hosts for various users. 

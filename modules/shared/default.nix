@@ -1,7 +1,20 @@
 { flake-inputs, fenix, lib, config, pkgs, ... }:
 
 {
-  imports = [ ./cachix ./srvos/symlink-flake.nix ./secrets ];
+  imports =
+    [ ./cachix ./srvos/symlink-flake.nix ./secrets ./keys.nix ./builder.nix ];
+
+  programs = {
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+    };
+    # Conflicts with home-managers tmux on Darwin
+    tmux.enable = pkgs.stdenv.isLinux;
+    direnv.enable = true;
+    nix-index.enable = true;
+  };
+
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
   nix = {
@@ -37,6 +50,8 @@
       # If you get trapped by this, manually edit /etc/nix/nix.conf to set sandbox = false, kill nix-daemon, then try again (optionally with `--option sandbox false' added as well).
       sandbox = if pkgs.stdenv.isDarwin then false else true;
       log-lines = lib.mkDefault 25;
+      # May need to add `builder` to this list.
+      trusted-users = [ "root" "@admin" "@wheel" ];
 
       # Reduce copying over SSH
       builders-use-substitutes = true;

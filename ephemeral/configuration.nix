@@ -1,10 +1,15 @@
 { system, flake-root, inputs, pkgs, config, lib, ... }:
 
-let
-  client_keys =
-    [ (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.pub.mbv-mba") ];
+let modules = flake-root + "/modules/shared";
 in {
-  imports = [ ./hardware-configuration.nix ./disko.nix ];
+  imports =
+    [ ./hardware-configuration.nix ./disko.nix (modules + "/keys.nix") ];
+
+  local.keys = {
+    enable = true;
+    enable_authorized_access = true;
+    authorized_user = "root";
+  };
 
   nixpkgs.hostPlatform = lib.mkForce system;
   boot = {
@@ -125,7 +130,6 @@ in {
     };
     openssh.enable = true;
   };
-  users.users.root.openssh.authorizedKeys.keys = client_keys;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

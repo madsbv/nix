@@ -1,8 +1,6 @@
 { flake-root, config, hostname, lib, ... }:
 
 let
-  client_keys =
-    [ (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.pub.mbv-mba") ];
   modules = flake-root + "/modules/shared";
   # A user to use as manual SSH target. Can use sudo.
   user = "mvilladsen";
@@ -16,6 +14,12 @@ in {
     (modules + "/secrets/wifi.nix")
     (import (modules + "/secrets/user.nix") user)
   ];
+
+  local.keys = {
+    enable = true;
+    enable_authorized_access = true;
+    authorized_user = user;
+  };
 
   srvos.flake = flake-root;
 
@@ -65,15 +69,15 @@ in {
   };
 
   programs = {
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      syntaxHighlighting = {
-        enable = true;
-        highlighters = [ "main" "brackets" ];
-      };
-    };
     git.enable = true;
+
+    # Conflicts with nix-index
+    command-not-found.enable = false;
+    zsh.syntaxHighlighting = {
+      enable = true;
+      highlighters = [ "main" "brackets" ];
+    };
+
     neovim = {
       enable = true;
       vimAlias = true;
@@ -106,7 +110,7 @@ in {
     };
   };
 
-  # Mostly for SSH setup to satisfy Github, but might as well have a comfortable environment
+  # TODO: This was originally set up to have access to a Github SSH key, but we only needed an API key. Consider restricting the setup accordingly.
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -123,7 +127,6 @@ in {
       ${user} = {
         isNormalUser = true;
         extraGroups = [ "wheel" "networkmanager" ];
-        openssh.authorizedKeys.keys = client_keys;
         initialHashedPassword =
           "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
       };

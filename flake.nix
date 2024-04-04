@@ -220,7 +220,7 @@
           # };
           # nixpkgs.hostPlatform = "aarch64-darwin";
           specialArgs = {
-            inherit inputs system;
+            inherit inputs system nodes;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "ephemeral";

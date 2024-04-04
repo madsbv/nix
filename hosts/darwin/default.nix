@@ -1,6 +1,4 @@
-{ flake-root, user, lib, config, pkgs, homebrew-bundle, homebrew-core
-, homebrew-cask, homebrew-services, homebrew-cask-fonts, felixkratz-formulae
-, pirj-noclamshell, ... }:
+{ hostname, flake-root, pkgs, ... }:
 
 {
   imports = [ "${flake-root}/modules/darwin" "${flake-root}/modules/shared" ];
@@ -8,45 +6,20 @@
   # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
   # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
 
-  services.nix-daemon.enable = true;
-
-  nix = {
-    # Enable linux builder VM.
-    # This setting relies on having access to a cached version of the builder, since Darwin can't build it itself. The configuration options of the builder *can* be changed, but requires access to a (in this case) aarch64-linux builder to build. Hence on a new machine, or if there's any problems with the existing builder, the build fails.
-    # For this reason, avoid changing the configuration options of linux-builder if at all possible.
-    linux-builder.enable = true;
-    buildMachines = [{
-      sshKey = config.age.secrets.ssh-user-mbv-mba.path;
-      system = "x86_64-linux";
-      sshUser = "mvilladsen";
-      hostName = "mbv-xps13"; # Tailscale
-      protocol = "ssh-ng";
-      supportedFeatures = [ "kvm" "big-parallel" "benchmark" ];
-      maxJobs = 8;
-    }];
-    settings.trusted-users = [ "@admin" "${user}" ];
-  };
-
-  nix-homebrew = {
-    enable = true;
-    user = "${user}";
-    taps = {
-      "homebrew/core" = homebrew-core;
-      "homebrew/cask" = homebrew-cask;
-      "homebrew/bundle" = homebrew-bundle;
-      "homebrew/cask-fonts" = homebrew-cask-fonts;
-      "homebrew/services" = homebrew-services;
-      "felixkratz/formulae" = felixkratz-formulae;
-      "pirj/noclamshell" = pirj-noclamshell;
-    };
-    mutableTaps = false;
-    autoMigrate = true;
+  # Enable linux builder VM.
+  # This setting relies on having access to a cached version of the builder, since Darwin can't build it itself. The configuration options of the builder *can* be changed, but requires access to a (in this case) aarch64-linux builder to build. Hence on a new machine, or if there's any problems with the existing builder, the build fails.
+  # For this reason, avoid changing the configuration options of linux-builder if at all possible.
+  nix.linux-builder.enable = true;
+  # For some reason the mkMerge/mkIf combo in modules/shared doesn't want to play nice with this option.
+  programs = {
+    zsh.enableSyntaxHighlighting = true;
+    man.enable = true;
   };
 
   networking = {
-    computerName = "mbv-mba";
-    hostName = "mbv-mba";
-    localHostName = "mbv-mba";
+    computerName = hostname;
+    hostName = hostname;
+    localHostName = hostname;
     knownNetworkServices =
       [ "AX88179A" "Thunderbolt Bridge" "Wi-Fi" "iPhone USB" ];
     dns = [
@@ -74,18 +47,11 @@
   #   };
   # };
 
-  # IMPORTANT: Necessary for nix-darwin to set PATH correctly
-  # NOTE: Can use programs.zsh.variables to set environment variables in the global environment.
-  programs.zsh.enable = true;
+  # Enable sudo authentication with Touch ID
+  security.pam.enableSudoTouchIdAuth = true;
 
-  security = {
-    # Enable sudo authentication with Touch ID
-    pam.enableSudoTouchIdAuth = true;
-  };
-
-  # TODO: Where to put config files? I'd like to keep them with other configs in home-manager modules, especially since these land in user config
-  # NOTE: The config and extraConfig options put the config files in the nix store via [[https://nixos.org/manual/nixpkgs/stable/#trivial-builder-writeText][nixpkgs.writeScript]], and pass that path to the service via command line argument. Hence this differs from putting the file in xdg.configHome/
   services = {
+    nix-daemon.enable = true;
     tailscale.enable = true;
     yabai = {
       enable = true;
@@ -120,23 +86,22 @@
 
   # TODO: This should be moved into a file for gui client settings so it doesn't get loaded on all servers.
   # Enable fonts dir
-  fonts =
-    let key = with lib; (if pkgs.stdenv.isDarwin then "fonts" else "packages");
-    in {
-      fontDir.enable = true;
-      ${key} = with pkgs; [
-        dejavu_fonts
-        emacs-all-the-icons-fonts
-        jetbrains-mono
-        feather-font # from overlay
-        font-awesome
-        hack-font
-        meslo-lgs-nf
-        nerdfonts
-        noto-fonts
-        noto-fonts-emoji
-      ];
-    };
+  fonts = let key = if pkgs.stdenv.isDarwin then "fonts" else "packages";
+  in {
+    fontDir.enable = true;
+    ${key} = with pkgs; [
+      dejavu_fonts
+      emacs-all-the-icons-fonts
+      jetbrains-mono
+      feather-font # from overlay
+      font-awesome
+      hack-font
+      meslo-lgs-nf
+      nerdfonts
+      noto-fonts
+      noto-fonts-emoji
+    ];
+  };
 
   # Note: To correlate settings in System Settings with their names here, you can use `defaults read` to output (I think) all system settings. You can then save that to a file, change something in System Settings, and diff the new output of defaults read against the previous output. E.g.:
   # ```sh
@@ -178,7 +143,7 @@
         # Smooth scrolling
         NSScrollAnimationEnabled = true;
 
-        # Autohide menu bar to make space for sketchybar
+        # Autohide menu bar to make space for sketchyba
         _HIHideMenuBar = true;
       };
 

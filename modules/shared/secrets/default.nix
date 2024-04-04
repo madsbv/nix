@@ -1,4 +1,4 @@
-{ hostname, flake-root, config, pkgs, ... }: {
+{ hostname, flake-root, pkgs, ... }: {
   ## How to use agenix-rekey
   # See https://github.com/oddlama/agenix-rekey?tab=readme-ov-file#usage
   # In short: To encrypt new secret, load into a shell with agenix-rekey with
