@@ -152,6 +152,7 @@
             '';
           };
         };
+      nodes = [ "mbv-mba" "mbv-xps13" ];
     in {
       devShells = forAllSystems devShell;
 
@@ -166,7 +167,7 @@
         mbv-mba = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           specialArgs = inputs // {
-            inherit user color-scheme;
+            inherit user color-scheme nodes;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "mbv-mba";
@@ -187,7 +188,7 @@
         mbv-xps13 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs // {
-            inherit user;
+            inherit user nodes;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "mbv-xps13";
