@@ -19,6 +19,7 @@ in
     (modules + "/shared") # modules/shared/default.nix
     (modules + "/shared/secrets/server.nix")
     (modules + "/shared/secrets/wifi.nix")
+    (modules + "/nixos/restic.nix")
   ];
 
   local.keys = {

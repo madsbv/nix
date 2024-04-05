@@ -6,3 +6,4 @@
 *.qcow2
 *.iso
 /new-host-*
+/autorestic.yml

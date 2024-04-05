@@ -24,9 +24,17 @@ in
   imports = [
     ./dock
     ./homebrew
+    ./autorestic.nix
   ];
 
-  local.ssh-clients.users = [ user ];
+  age.secrets."mbv-mba.autorestic.yml".rekeyFile =
+    flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";
+
+  local = {
+    autorestic.ymlFile = config.age.secrets."mbv-mba.autorestic.yml".path;
+    ssh-clients.users = [ user ];
+  };
+
   users.users.${user} = {
     home = "/Users/${user}";
     isHidden = false;
