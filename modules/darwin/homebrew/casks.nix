@@ -22,6 +22,7 @@ _:
   "zoom"
   "signal"
   "protonmail-bridge"
+  "proton-mail"
 
   # Entertainment Tools
   "vlc"
