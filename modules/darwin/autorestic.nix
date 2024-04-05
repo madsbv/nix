@@ -35,8 +35,6 @@ in
       StandardOutPath = "/tmp/${label}.log";
       # Autorestic handles job scheduling by itself, we just need to trigger it to do its check.
       # Runs every hour.
-      StartCalendarInterval = {
-        Minute = 0;
-      };
+      StartCalendarInterval = [ { Minute = 0; } ];
     };
 }

@@ -97,11 +97,12 @@ in
   };
 
   services = {
+    # TODO: Configure
     home-assistant = {
-      enable = true;
-      configWritable = true;
+      enable = false;
     };
 
+    # TODO: How to use?
     plex.enable = true;
 
     tailscale = {
