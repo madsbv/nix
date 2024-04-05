@@ -25,18 +25,18 @@ in
     packages = pkgs.callPackage ./packages.nix { };
 
     sessionVariables = {
-      LESSHISTFILE = "$XDG_CACHE_HOME/lesshst";
-      WGETRC = "$XDG_CONFIG_HOME/wgetrc";
+      LESSHISTFILE = "${config.xdg.cacheHome}/lesshst";
+      WGETRC = "${config.xdg.configHome}/wgetrc";
       EDITOR = "vim";
-      ZDOTDIR = "$XDG_CONFIG_HOME/zsh";
-      ZSH_CACHE = "$XDG_CACHE_HOME/zsh";
+      ZDOTDIR = "${config.xdg.configHome}/zsh";
+      ZSH_CACHE = "${config.xdg.cacheHome}/zsh";
     };
 
     shellAliases = {
-      wget = "wget --hsts-file=$XDG_CACHE_HOME/.wget-hsts";
+      wget = "wget --hsts-file=${config.xdg.cacheHome}/.wget-hsts";
       ec = "emacsclient -c -n -a nvim";
       j = "just";
-      gj = "just $XDG_CONFIG_HOME/nix/";
+      gj = "just ${config.xdg.configHome}/nix/";
 
       grep = "grep -i --color=always";
       ls = "ls -A -B -F -G -h";
