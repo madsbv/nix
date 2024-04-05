@@ -97,6 +97,13 @@ in
   };
 
   services = {
+    home-assistant = {
+      enable = true;
+      configWritable = true;
+    };
+
+    plex.enable = true;
+
     tailscale = {
       enable = true;
       authKeyFile = config.age.secrets.tailscale-server-authkey.path;
