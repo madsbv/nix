@@ -101,7 +101,8 @@ in
     };
 
     # TODO: How to use?
-    plex.enable = true;
+    # Temporarily turned off.
+    plex.enable = false;
 
     tailscale = {
       enable = true;
