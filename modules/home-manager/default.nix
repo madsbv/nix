@@ -18,11 +18,21 @@ let
   gitignore_global = [ (builtins.readFile (flake-root + "/config/gitignore_global")) ];
 in
 {
-  home.stateVersion = "23.11";
 
   xdg.enable = true;
 
-  home.packages = pkgs.callPackage ./packages.nix { };
+  home = {
+    stateVersion = "23.11";
+    packages = pkgs.callPackage ./packages.nix { };
+    preferXdgDirectories = true;
+
+    sessionVariables = {
+      LESSHISTFILE = "${config.xdg.cacheHome}/lesshst";
+      WGETRC = "${config.xdg.configHome}/wgetrc";
+      ZDOTDIR = "${config.xdg.configHome}/zsh";
+      ZSH_CACHE = "${config.xdg.cacheHome}/zsh";
+    };
+  };
 
   programs = {
     ssh = {
@@ -116,8 +126,9 @@ in
 
     neovim = {
       enable = true;
-      # Symlink vim to nvim
       vimAlias = true;
+      viAlias = true;
+      defaultEditor = true;
       plugins = with pkgs.vimPlugins; [
         vim-airline
         vim-airline-themes

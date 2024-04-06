@@ -5,6 +5,7 @@
   config,
   lib,
   my-doomemacs-config,
+  osConfig,
   ...
 }:
 let
@@ -13,7 +14,18 @@ let
   doomRepoUrl = "https://github.com/doomemacs/doomemacs";
 in
 {
-  imports = [ (flake-root + "/modules/home-manager") ];
+  imports = [
+    (flake-root + "/modules/home-manager")
+    ./email.nix
+  ];
+
+  local.email = {
+    enable = true;
+    maildir = "${config.xdg.dataHome}/Mail";
+    mbsyncrc = osConfig.age.secrets.mbsyncrc.path;
+    muhome = "${config.xdg.cacheHome}/mu";
+    muAddressArgs = osConfig.age.secrets.mu-init-addresses.path;
+  };
 
   xdg.configFile = {
     "svim".source = flake-root + "/config/svim";
@@ -23,14 +35,6 @@ in
 
   home = {
     packages = pkgs.callPackage ./packages.nix { };
-
-    sessionVariables = {
-      LESSHISTFILE = "${config.xdg.cacheHome}/lesshst";
-      WGETRC = "${config.xdg.configHome}/wgetrc";
-      EDITOR = "vim";
-      ZDOTDIR = "${config.xdg.configHome}/zsh";
-      ZSH_CACHE = "${config.xdg.cacheHome}/zsh";
-    };
 
     shellAliases = {
       wget = "wget --hsts-file=${config.xdg.cacheHome}/.wget-hsts";
@@ -75,14 +79,6 @@ in
       enable = true;
       settings = { };
     };
-
-    # TODO: Move maildirs to XDG_DATA_HOME
-    # Also look into home-managers accounts.email options
-    mbsync = {
-      enable = true;
-      extraConfig = builtins.readFile (flake-root + "/config/mbsyncrc");
-    };
-    mu.enable = true;
 
     neovim.plugins = [
       (pkgs.vimPlugins.base16-vim.overrideAttrs (

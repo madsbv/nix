@@ -25,11 +25,11 @@ in
     ./dock
     ./homebrew
     ./autorestic.nix
+    (flake-root + "/modules/shared/secrets/email.nix")
   ];
 
   age.secrets."mbv-mba.autorestic.yml".rekeyFile =
     flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";
-
   local = {
     autorestic.ymlFile = config.age.secrets."mbv-mba.autorestic.yml".path;
     ssh-clients.users = [ user ];
