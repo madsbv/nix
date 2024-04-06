@@ -28,8 +28,6 @@ in
     authorized_user = user;
   };
 
-  srvos.flake = flake-root;
-
   system.autoUpgrade = {
     enable = true;
     flake = "github:madsbv/nix";

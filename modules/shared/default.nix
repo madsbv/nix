@@ -1,5 +1,6 @@
 {
   flake-inputs,
+  flake-root,
   fenix,
   lib,
   config,
@@ -10,12 +11,14 @@
 {
   imports = [
     ./cachix
-    ./srvos/symlink-flake.nix
+    ./srvos/upgrade-diff.nix
     ./srvos/terminfo.nix
     ./secrets
     ./keys.nix
     ./builder.nix
   ];
+
+  srvos.flake = flake-root;
 
   programs = {
     zsh = {

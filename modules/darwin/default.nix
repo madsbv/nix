@@ -47,7 +47,7 @@ in
     taps = {
       # I really don't understand the format for these options.
       "homebrew/homebrew-core" = homebrew-core;
-      "homebrew/homebrew-cask" = homebrew-cask;
+      # "homebrew/homebrew-cask" = homebrew-cask;
       "homebrew/homebrew-bundle" = homebrew-bundle;
       "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
       "homebrew/homebrew-services" = homebrew-services;
@@ -55,7 +55,7 @@ in
       "pirj/homebrew-noclamshell" = pirj-noclamshell;
 
       # "homebrew/core" = homebrew-core;
-      # "homebrew/cask" = homebrew-cask;
+      "homebrew/cask" = homebrew-cask;
       # "homebrew/bundle" = homebrew-bundle;
       # "homebrew/cask-fonts" = homebrew-cask-fonts;
       # "homebrew/services" = homebrew-services;
