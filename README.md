@@ -16,6 +16,14 @@ Next steps:
 6. Set up home-assistant on xps13.
 7. Set up something like Ollama on desktop for LLM stuff.
 
+### Note on DNS and Tailscale
+https://github.com/tailscale/tailscale/issues/1543
+The issue above tracks implementation of user-configurable DNS records on the tailnet. This plus a reverse proxy would make it possible to host multiple services on a single machine, with appropriate hostnames.
+
+I see two alternatives until this gets implemented:
+- Run a local DNS server on the tailnet. Requires some kind of forwarding/split-dns type stuff probably.
+- Run services in VMs/microvms each with a Tailscale client and hostname set as appropriate for the service.
+
 ### TODO: Fix currently broken restic backup on mbv-xps13
 
 ## Media server
