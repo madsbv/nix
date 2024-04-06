@@ -16,6 +16,8 @@ Next steps:
 6. Set up home-assistant on xps13.
 7. Set up something like Ollama on desktop for LLM stuff.
 
+### TODO: Fix currently broken restic backup on mbv-xps13
+
 ## Media server
 Want:
 - Play stuff on TV, remote controlled. Plex?
