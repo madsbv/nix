@@ -50,12 +50,15 @@ in
         MAILDIR = cfg.maildir;
       };
 
-      # NOTE: This may cause issues depending on how `mu init` works when there's already an existing index.
       activation.muInit = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         if [ ! -d "${cfg.maildir}" ]; then
           mkdir -p "${cfg.maildir}"
         fi
-        cat ${cfg.muAddressArgs} | xargs -I % sh -c '${pkgs.mu}/bin/mu init --maildir "${cfg.maildir}" %'
+
+        # NOTE: mu init clobbers any existing databases, so we have to guard against that manually.
+        if [ ! -d "${cfg.muhome}" ]; then
+          cat ${cfg.muAddressArgs} | xargs -I % sh -c '${pkgs.mu}/bin/mu init --maildir "${cfg.maildir}" %'
+        fi
       '';
     };
   };
