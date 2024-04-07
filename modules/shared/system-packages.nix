@@ -19,6 +19,7 @@ with pkgs;
   fd
   gdu
   just
+  watchexec
 
   # Encryption and security tools
   # agenix-rekey
