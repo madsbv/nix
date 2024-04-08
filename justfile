@@ -11,6 +11,8 @@ alias f := fix
 fix:
 	nix run --inputs-from . nixpkgs#deadnix -- -e
 	nix run --inputs-from . nixpkgs#statix -- fix
+	# We could flakeify this but it would be gross
+	fd .nix$ | xargs -I % sh -c 'nixfmt %'
 
 alias c := check
 check: lint
