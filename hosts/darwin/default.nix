@@ -87,7 +87,7 @@
   # Fix for skhd not hot-reloading changes to config files on nix-darwin activation.
   # https://github.com/LnL7/nix-darwin/issues/333#issuecomment-1981495455
   system.activationScripts.postActivation.text = ''
-    ${pkgs.skhd} -r
+    ${pkgs.skhd}/bin/skhd -r
   '';
 
   # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
