@@ -74,7 +74,8 @@ _:
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
-        "size=4G"
+        # Restic operations like to use a bunch of temp files. Besides, we have plenty of swap space to work with.
+        "size=20G"
         "defaults"
         "mode=755"
       ];
