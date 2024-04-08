@@ -83,8 +83,16 @@
 
           lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
     };
-    # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
-    # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
+  };
+  # Fix for skhd not hot-reloading changes to config files on nix-darwin activation.
+  # https://github.com/LnL7/nix-darwin/issues/333#issuecomment-1981495455
+  system.activationScripts.postActivation.text = ''
+    ${pkgs.skhd} -r
+  '';
+
+  # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
+  # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
+  services = {
     karabiner-elements.enable = true;
     # The sketchybar service module has a config option, but it takes the contents of sketchybarrc as argument. My config is split across multiple arguments.
     sketchybar = {
