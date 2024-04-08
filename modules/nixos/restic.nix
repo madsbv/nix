@@ -17,7 +17,9 @@ in
   };
 
   config.services.restic.backups.persist = lib.mkIf cfg.enable {
-    inherit (cfg) exclude paths;
+    # inherit (cfg) exclude paths;
+    paths = cfg.paths;
+    exclude = cfg.exclude;
 
     createWrapper = true;
 
