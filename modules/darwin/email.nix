@@ -1,9 +1,7 @@
 {
-  flake-root,
   config,
   lib,
   pkgs,
-  osConfig,
   ...
 }:
 # 5. (OPTIONAL) Set up protonmail-bridge with split addresses and set up the addresses we want here.
