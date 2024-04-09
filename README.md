@@ -38,3 +38,13 @@ The module should define lists of keys by role. It should have a "role" option, 
 Keys we need to manage:
 - Possibly for serving the store over SSH (i.e., binaries): https://nixos.org/manual/nix/stable/package-management/ssh-substituter.html
 -   This might require signing builds with hostkeys, also requires nix-ssh to be a trusted user for remote building.
+
+# Keyboard layouts
+
+Problem: With HRMs, distinguishing between left and rignt cmd becomes difficult, and that was kind of arbitrary in the first place. Let's replace the window management/yabai stuff on lcmd with alt and use cmd for application specific things.
+
+Along the way we can switch lalt and lcmd on internal keyboard in karabiner. Eventually we can go to HRM using kmonad and use the cmd keys for layers, e.g. symbol layer.
+
+1. ~~Switch skhd and karabiner settings as above (optionally remove a bunch of unused vim-mode stuff)~~
+2. Add hrm to glove
+3. Switch to kmonad on internal keyboard with hrm. At this point we should probably switch to HRM entirely and have a navigation layer. This means that there's no reason to spend time cleaning up Karabiner config.
