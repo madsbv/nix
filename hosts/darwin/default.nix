@@ -65,6 +65,8 @@
   services = {
     nix-daemon.enable = true;
     tailscale.enable = true;
+    # NOTE: On permissions: The MacOS System Settings menus for giving various accessibility permissions to things like Yabai and SKHD fill up with duplicates over time after upgrading each app multiple times. One can get rid of this by running `tccutil reset All`, which resets permissions for everything, and clears up the duplicates.
+    # Note that this is a pretty brute-force method. It will require reenabling permissions on everything, and will possibly lock up the system until a restart.
     yabai = {
       enable = true;
       enableScriptingAddition = true;
@@ -81,13 +83,13 @@
         (builtins.readFile (flake-root + "/config/skhd/skhdrc"))
         + ''
 
-          lctrl + lcmd - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
+          ctrl + alt - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
     };
   };
   # Fix for skhd not hot-reloading changes to config files on nix-darwin activation.
   # https://github.com/LnL7/nix-darwin/issues/333#issuecomment-1981495455
   system.activationScripts.postActivation.text = ''
-    ${pkgs.skhd}/bin/skhd -r
+    su - $(logname) -c '${pkgs.skhd}/bin/skhd -r'
   '';
 
   # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.

@@ -1,9 +1,10 @@
 # TODO
-- [ ] Add $HOME/.authinfo to agenix-rekey setup. Store in plaintext on disk.
 - [ ] Just recipe for config tinkering: https://nixos-and-flakes.thiscute.world/best-practices/accelerating-dotfiles-debugging
 - [ ] Add nix-options-search to nixpkgs
 - [ ] Can we install cargo packages directly from nix?
 - [ ] Disk encryption on nixos machines?
+- [ ] Can we do multi-key shortcuts with skhd, e.g., 'alt-1 alt-2' for switching to space 12? Else consider adding some function key shortcuts for use with Glove80, like F10-F18 or whatever, or even duplicating the 1-9 bindings on function keys.
+        - We can also do 1-0 for one screen and F1-F10 for the other.
 
 Refactoring
 - [ ] Split modules into individual apps, using imports/options/config syntax
@@ -46,5 +47,12 @@ Problem: With HRMs, distinguishing between left and rignt cmd becomes difficult,
 Along the way we can switch lalt and lcmd on internal keyboard in karabiner. Eventually we can go to HRM using kmonad and use the cmd keys for layers, e.g. symbol layer.
 
 1. ~~Switch skhd and karabiner settings as above (optionally remove a bunch of unused vim-mode stuff)~~
-2. Add hrm to glove
+2. ~~Add hrm to glove~~
 3. Switch to kmonad on internal keyboard with hrm. At this point we should probably switch to HRM entirely and have a navigation layer. This means that there's no reason to spend time cleaning up Karabiner config.
+
+# Yabai/SKHD/Sketchybar
+
+- [ ] Have Sketchybar display different colors for active and inactive display
+- [ ] Figure out how to make Yabai behave better with multiple monitors, e.g. be able to move to `other monitor` instead of `recent monitor`.
+- [ ] Tame Yabai/darwin's weird behaviour regarding moving between spaces erratically when trying to do stuff on empty spaces.
+- [ ]   If we can't change the existing behaviour, we could try to adopt a workflow that includes closing, reopening and moving spaces a lot more
