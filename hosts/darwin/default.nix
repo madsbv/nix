@@ -88,7 +88,7 @@
   };
   # Fix for skhd not hot-reloading changes to config files on nix-darwin activation.
   # https://github.com/LnL7/nix-darwin/issues/333#issuecomment-1981495455
-  system.activationScripts.postActivation.text = ''
+  system.activationScripts.hotloadSKHD.text = ''
     su - $(logname) -c '${pkgs.skhd}/bin/skhd -r'
   '';
 
