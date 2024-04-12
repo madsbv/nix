@@ -97,7 +97,16 @@ in
   services = {
     # TODO: Configure
     home-assistant = {
-      enable = false;
+      enable = true;
+      configWritable = true;
+      config.homeassistant = {
+        name = "Goltzstrasse";
+        latitude = 0.0;
+        longitude = 0.0;
+        time_zone = "Europe/Amsterdam";
+        unit_system = "metric";
+        temperature_unit = "C";
+      };
     };
 
     # TODO: How to use?
