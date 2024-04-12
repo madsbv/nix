@@ -58,6 +58,8 @@ Along the way we can switch lalt and lcmd on internal keyboard in karabiner. Eve
 - Change arrow keys on cursor layer to match Vim better
 - Consider changing RH of symbol layer to give better bracket/brace access
 - Change shift keys on base layer to something more useful, e.g. try one-shot shift, shift-word,...
+- Definitely change left pinky caps word to shift word; For programming purposes, I basically always need shifted symbols as well, e.g. `CONSTANT_VALUES` or `TODO:` items
+- Consider changing the timing on left shift hrm specifically, I keep typing fi instead of I.
 
 # Yabai/SKHD/Sketchybar
 
