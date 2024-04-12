@@ -50,6 +50,15 @@ Along the way we can switch lalt and lcmd on internal keyboard in karabiner. Eve
 2. ~~Add hrm to glove~~
 3. Switch to kmonad on internal keyboard with hrm. At this point we should probably switch to HRM entirely and have a navigation layer. This means that there's no reason to spend time cleaning up Karabiner config.
 
+# Glove80 layout changes
+
+- Add a Notarise layout layer: https://sites.google.com/alanreiser.com/handsdown/home/more-variations?authuser=0
+- Add a Handsdown Vibranium layer
+- Try to add a repeat key somewhere
+- Change arrow keys on cursor layer to match Vim better
+- Consider changing RH of symbol layer to give better bracket/brace access
+- Change shift keys on base layer to something more useful, e.g. try one-shot shift, shift-word,...
+
 # Yabai/SKHD/Sketchybar
 
 - [ ] Have Sketchybar display different colors for active and inactive display
