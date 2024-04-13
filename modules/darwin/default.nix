@@ -45,25 +45,15 @@ in
     enable = true;
     user = "${user}";
     taps = {
-      # I really don't understand the format for these options.
       "homebrew/homebrew-core" = homebrew-core;
-      # "homebrew/homebrew-cask" = homebrew-cask;
+      "homebrew/homebrew-cask" = homebrew-cask;
       "homebrew/homebrew-bundle" = homebrew-bundle;
       "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
       "homebrew/homebrew-services" = homebrew-services;
       "felixkratz/homebrew-formulae" = felixkratz-formulae;
       "pirj/homebrew-noclamshell" = pirj-noclamshell;
-
-      # "homebrew/core" = homebrew-core;
-      "homebrew/cask" = homebrew-cask;
-      # "homebrew/bundle" = homebrew-bundle;
-      # "homebrew/cask-fonts" = homebrew-cask-fonts;
-      # "homebrew/services" = homebrew-services;
-      # "felixkratz/formulae" = felixkratz-formulae;
-      # "pirj/noclamshell" = pirj-noclamshell;
     };
     mutableTaps = false;
-    autoMigrate = true;
   };
 
   home-manager = {
