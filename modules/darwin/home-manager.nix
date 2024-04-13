@@ -22,9 +22,9 @@ in
   local.email = {
     enable = true;
     maildir = "${config.xdg.dataHome}/Mail";
-    mbsyncrc = osConfig.age.secrets.mbsyncrc.path;
     muhome = "${config.xdg.cacheHome}/mu";
     muAddressArgs = osConfig.age.secrets.mu-init-addresses.path;
+    pmbridge-password = osConfig.age.secrets.pmbridge-password.path;
   };
 
   xdg.configFile = {
