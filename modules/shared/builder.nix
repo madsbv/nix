@@ -19,6 +19,7 @@ in
       description = "Enable the use of other nodes as remote builders over Tailscale";
       default = true;
     };
+    remoteBuilders_x86-64 = lib.mkOption { default = [ ]; };
   };
 
   config = {
@@ -37,12 +38,12 @@ in
     # TODO: Somehow make this a map over all nodes with enableLocalBuilder set. Not sure how automated we can make this? Maybe deploy-rs will help?
     # We could of course declare this on the top level
     # TODO: Can we add mbv-mba to this list easily?
-    nix.buildMachines = lib.mkIf cfg.enableRemoteBuilders [
-      {
+    nix.buildMachines = lib.mkIf cfg.enableRemoteBuilders (
+      map (hostname: {
         # sshKey = config.age.secrets.ssh-user-mbv-mba.path; # I'm pretty sure we don't need this with Tailscale
         system = "x86_64-linux";
-        sshUser = "mvilladsen";
-        hostName = "mbv-desktop"; # Tailscale
+        sshUser = "builder";
+        hostName = hostname; # Tailscale
         protocol = "ssh-ng";
         supportedFeatures = [
           "kvm"
@@ -50,20 +51,7 @@ in
           "benchmark"
         ];
         maxJobs = 8;
-      }
-      {
-        # sshKey = config.age.secrets.ssh-user-mbv-mba.path; # I'm pretty sure we don't need this with Tailscale
-        system = "x86_64-linux";
-        sshUser = "mvilladsen";
-        hostName = "mbv-xps13"; # Tailscale
-        protocol = "ssh-ng";
-        supportedFeatures = [
-          "kvm"
-          "big-parallel"
-          "benchmark"
-        ];
-        maxJobs = 8;
-      }
-    ];
+      }) cfg.remoteBuilders_x86-64
+    );
   };
 }

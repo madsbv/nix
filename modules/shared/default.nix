@@ -1,6 +1,8 @@
 {
   flake-inputs,
   flake-root,
+  hostname,
+  nodes,
   fenix,
   lib,
   config,
@@ -17,6 +19,13 @@
     ./keys.nix
     ./builder.nix
   ];
+
+  local.builder = {
+    enableLocalBuilder = true;
+    enableRemoteBuilders = true;
+    # Enable all servers other than this one as remote builders
+    remoteBuilders_x86-64 = builtins.filter (host: host != hostname) nodes.servers;
+  };
 
   srvos.flake = flake-root;
 
