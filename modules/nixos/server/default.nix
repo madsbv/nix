@@ -52,6 +52,7 @@ in
         # each refused connection on the open internet.
         logRefusedConnections = lib.mkDefault false;
       };
+      networkmanager.enable = true;
       # Use networkd instead of the pile of shell scripts
       useNetworkd = true;
       useDHCP = false;
