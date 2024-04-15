@@ -65,7 +65,7 @@ alias ud := update-darwin
 update-darwin: && switch-darwin
 	nix flake update
 
-nixos-anywhere host target: rekey
+nixos-anywhere host target="ephemeral": rekey
 	nix run github:nix-community/nixos-anywhere -- --copy-host-keys --build-on-remote --flake '.#{{host}}' root@{{target}}
 
 disko-install host disk:
