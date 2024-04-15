@@ -20,6 +20,7 @@ in
     # The default, repeated for documentation
     listenAddress = "127.0.0.1:11434";
     models = "/var/lib/ollama/models";
+    home = "/var/lib/ollama";
   };
   local.restic.exclude = [ "/var/lib/ollama/models" ];
 }
