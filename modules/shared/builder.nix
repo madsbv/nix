@@ -42,6 +42,19 @@ in
         # sshKey = config.age.secrets.ssh-user-mbv-mba.path; # I'm pretty sure we don't need this with Tailscale
         system = "x86_64-linux";
         sshUser = "mvilladsen";
+        hostName = "mbv-desktop"; # Tailscale
+        protocol = "ssh-ng";
+        supportedFeatures = [
+          "kvm"
+          "big-parallel"
+          "benchmark"
+        ];
+        maxJobs = 8;
+      }
+      {
+        # sshKey = config.age.secrets.ssh-user-mbv-mba.path; # I'm pretty sure we don't need this with Tailscale
+        system = "x86_64-linux";
+        sshUser = "mvilladsen";
         hostName = "mbv-xps13"; # Tailscale
         protocol = "ssh-ng";
         supportedFeatures = [
