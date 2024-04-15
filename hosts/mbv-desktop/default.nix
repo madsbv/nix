@@ -13,4 +13,13 @@ in
   local.server = {
     inherit hostname;
   };
+
+  services.ollama = {
+    enable = true;
+    acceleration = "cuda";
+    # The default, repeated for documentation
+    listenAddress = "127.0.0.1:11434";
+    models = "/var/lib/ollama/models";
+  };
+  local.restic.exclude = [ "/var/lib/ollama/models" ];
 }
