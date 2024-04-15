@@ -27,7 +27,7 @@ in
     };
     authorized_user_key = lib.mkOption {
       description = "The public key for the authorized user.";
-      default = builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.pub.mbv-mba.mvilladsen";
+      default = builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-mba.mvilladsen.pub";
     };
   };
 

@@ -173,7 +173,10 @@
         };
       nodes = {
         clients = [ "mbv-mba" ];
-        servers = [ "mbv-xps13" ];
+        servers = [
+          "mbv-desktop"
+          "mbv-xps13"
+        ];
       };
     in
     {
@@ -182,7 +185,7 @@
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
         nodes = self.darwinConfigurations // {
-          inherit (self.nixosConfigurations) mbv-xps13;
+          inherit (self.nixosConfigurations) mbv-xps13 mbv-desktop;
         };
       };
 
@@ -209,6 +212,16 @@
 
       nixosConfigurations =
         {
+          mbv-desktop = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs // {
+              inherit nodes;
+              flake-inputs = inputs;
+              flake-root = ./.;
+              hostname = "mbv-desktop";
+            };
+            modules = [ ./hosts/mbv-desktop ];
+          };
           mbv-xps13 = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             specialArgs = inputs // {
@@ -217,14 +230,7 @@
               flake-root = ./.;
               hostname = "mbv-xps13";
             };
-            modules = [
-              ./hosts/mbv-xps13
-              home-manager.nixosModules.home-manager
-              agenix.nixosModules.default
-              agenix-rekey.nixosModules.default
-              impermanence.nixosModules.impermanence
-              disko.nixosModules.disko
-            ];
+            modules = [ ./hosts/mbv-xps13 ];
           };
         }
         // forLinuxSystems (system: {

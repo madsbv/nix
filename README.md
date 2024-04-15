@@ -52,14 +52,14 @@ Along the way we can switch lalt and lcmd on internal keyboard in karabiner. Eve
 
 # Glove80 layout changes
 
-- Add a Notarise layout layer: https://sites.google.com/alanreiser.com/handsdown/home/more-variations?authuser=0
-- Add a Handsdown Vibranium layer
-- Try to add a repeat key somewhere
-- Change arrow keys on cursor layer to match Vim better
-- Consider changing RH of symbol layer to give better bracket/brace access
-- Change shift keys on base layer to something more useful, e.g. try one-shot shift, shift-word,...
-- Definitely change left pinky caps word to shift word; For programming purposes, I basically always need shifted symbols as well, e.g. `CONSTANT_VALUES` or `TODO:` items
-- Consider changing the timing on left shift hrm specifically, I keep typing fi instead of I.
+- [x] Add a Notarise layout layer: https://sites.google.com/alanreiser.com/handsdown/home/more-variations?authuser=0
+- [x] Added Handsdown Neu; Vibranium requires a bunch of complex shit like combos
+- Consider what to add to RH of symbol layer
+  - [x] Added & to index
+  - [x] Added ! to RH middle finger on symbol layer
+- Add alt-tab and alt-shift-tab to skhd/yabai instead of/in addition to alt-n and alt-p? Although shift-tab causes some modifier issues with moving windows/spaces
+
+Glove/SKHD idea: Move/copy hjkl/s/np bindings to arrows/page up/down/home/end like that which are on the cursor layer, and more space options on function keys; then our window management is all on LH alt+thumb and right hand.
 
 # Yabai/SKHD/Sketchybar
 
