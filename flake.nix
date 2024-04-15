@@ -93,7 +93,8 @@
       flake = false;
     };
     fenix = {
-      url = "github:nix-community/fenix";
+      # Nightly branch, but only updated once a month to reduce churn
+      url = "github:nix-community/fenix/monthly";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
