@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
+    ./persist.nix
   ];
 
   # Don't suspend on lid close
@@ -16,7 +17,21 @@
 
   networking = {
     hostId = "8425e349";
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      appendNameservers = [
+        # Quad9 primary and secondary, including ipv6
+        "9.9.9.9"
+        "149.112.112.112"
+        "2620:fe::fe"
+        "2620:fe::9"
+        # Cloudflare 1.1.1.1 malware blocking, primary and secondary, including ipv6
+        "1.1.1.2"
+        "1.0.0.2"
+        "2606:4700:4700::1112"
+        "2606:4700:4700::1002"
+      ];
+    };
   };
   nixpkgs.hostPlatform = "x86_64-linux";
   # Use the systemd-boot EFI boot loader.
@@ -25,8 +40,17 @@
     efi.canTouchEfiVariables = true;
   };
 
-  # Additions to generic server definitions
-  environment.persistence."/nix/persist".directories = [ "/etc/NetworkManager/system-connections" ];
+  # Set your time zone.
+  time.timeZone = "Europe/Amsterdam";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
+
+  hardware.enableRedistributableFirmware = true;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

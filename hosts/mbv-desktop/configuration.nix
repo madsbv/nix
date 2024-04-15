@@ -15,8 +15,7 @@
   };
 
   networking = {
-    hostId = "8425e349";
-    networkmanager.enable = true;
+    hostId = "dcb6c4ed";
   };
   nixpkgs.hostPlatform = "x86_64-linux";
   # Use the systemd-boot EFI boot loader.
@@ -24,9 +23,6 @@
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   };
-
-  # Additions to generic server definitions
-  environment.persistence."/nix/persist".directories = [ "/etc/NetworkManager/system-connections" ];
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
@@ -44,5 +40,5 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 }

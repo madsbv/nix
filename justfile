@@ -73,7 +73,7 @@ disko-install host disk:
 
 # TODO: Add a step to copy over github ssh key for temporary access for installation?
 # Could also do networkmanager wifi info
-new-host hostname target:
+new-host hostname target="ephemeral":
 	ssh root@{{target}} "nixos-generate-config --no-filesystems --root /mnt"
 	ssh root@{{target}} 'NIX_CONFIG="experimental-features = nix-command flakes" nix run nixpkgs#tree /dev/disk > /mnt/etc/nixos/tree'
 	ssh root@{{target}} 'lsblk > /mnt/etc/nixos/lsblk'
