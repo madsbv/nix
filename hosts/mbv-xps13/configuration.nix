@@ -14,10 +14,7 @@
     suspendKey = "ignore";
   };
 
-  networking = {
-    hostId = "8425e349";
-    networkmanager.enable = true;
-  };
+  networking.hostId = "8425e349";
   nixpkgs.hostPlatform = "x86_64-linux";
   # Use the systemd-boot EFI boot loader.
   boot.loader = {
