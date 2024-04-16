@@ -23,7 +23,7 @@ in
     };
     authorized_user = lib.mkOption {
       description = "User to allow key-authenticated access for.";
-      default = null;
+      default = "mvilladsen";
     };
     authorized_user_key = lib.mkOption {
       description = "The public key for the authorized user.";

@@ -11,8 +11,7 @@
     "${flake-root}/modules/shared"
   ];
 
-  # TODO: Set up restic/autorestic backups on the system level. See e.g. https://www.arthurkoziel.com/restic-backups-b2-nixos/
-  # See also https://nixos.wiki/wiki/Restic for a way to run restic as a separate user.
+  local.keys.enable_authorized_access = true;
 
   # Enable linux builder VM.
   # This setting relies on having access to a cached version of the builder, since Darwin can't build it itself. The configuration options of the builder *can* be changed, but requires access to a (in this case) aarch64-linux builder to build. Hence on a new machine, or if there's any problems with the existing builder, the build fails.
@@ -60,7 +59,10 @@
   # };
 
   # Enable sudo authentication with Touch ID
-  security.pam.enableSudoTouchIdAuth = true;
+  security = {
+    pam.enableSudoTouchIdAuth = true;
+    sudo.extraConfig = "%admin ALL = (ALL) NOPASSWD: ALL";
+  };
 
   services = {
     nix-daemon.enable = true;
