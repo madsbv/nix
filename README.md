@@ -11,8 +11,8 @@ Refactoring
 
 ## Plan of attack for servers
 Next steps:
-2. Use mbv-xps13 as deployer to desktop with nixos-anywhere, test and document that installation flow.
-3.  Consider keeping Gentoo installation around, or at least backing up stuff like game saves.
+2. ~~Use mbv-xps13 as deployer to desktop with nixos-anywhere, test and document that installation flow.~~
+3.  ~~Consider keeping Gentoo installation around, or at least backing up stuff like game saves.~~
 4. Set up deploy-rs to manage deployments to every system at once.
 6. Set up home-assistant on xps13.
 7. Set up something like Ollama on desktop for LLM stuff.
@@ -32,13 +32,21 @@ Want:
 - Play stuff on TV, remote controlled. Plex?
 - github.com/Spotifyd/spotifyd might be fun to have running?
 
-## Remote build/substituter/general ssh key management thoughts
-There are by now many places where we need to specify keys to make everything work. We should write a module that centralizes this in one place.
-The module should define lists of keys by role. It should have a "role" option, and depending on its value, various key fields across config should be set.
+# NixOS-anywhere issue
 
-Keys we need to manage:
-- Possibly for serving the store over SSH (i.e., binaries): https://nixos.org/manual/nix/stable/package-management/ssh-substituter.html
--   This might require signing builds with hostkeys, also requires nix-ssh to be a trusted user for remote building.
+I tested deploying to desktop with nixos-anywhere. I ran into two issues.
+
+1. The nixos-anywhere function to copy ssh host keys to the installation didn't work, presumably because of the tmpfs root wiping stuff out? I think we can fix this by halting nixos-anywhere before rebooting into new system and copying stuff over ourselves, with a script.
+2. Desktop didn't have any DHCP resolution on boot. I fixed this by adding a file to /etc/systemd/network/ with the contents
+
+``` toml
+[Match]
+Name=eno1
+
+[Network]
+dhcp=yes
+```
+(The last line might not be quite right). I think this can be fixed by either enabling networkmanager even for non-wifi systems (my chosen solution for now), or by adding a [Network] section to systemd.network.config enabling DHCP globally.
 
 # Keyboard layouts
 

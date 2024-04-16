@@ -10,6 +10,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Secrets management
     agenix = {
@@ -116,6 +120,7 @@
       agenix,
       agenix-rekey,
       disko,
+      deploy-rs,
       ...
     }@inputs:
     let
@@ -172,6 +177,7 @@
             '';
           };
         };
+      # NOTE: When adding new nodes, update this, agenix-rekey, and deploy-rs node lists
       nodes = {
         clients = [ "mbv-mba" ];
         servers = [
@@ -187,6 +193,41 @@
         userFlake = self;
         nodes = self.darwinConfigurations // {
           inherit (self.nixosConfigurations) mbv-xps13 mbv-desktop;
+        };
+      };
+
+      deploy = {
+        remoteBuild = true;
+        sshUser = "mvilladsen";
+        user = "root";
+        interactiveSudo = true;
+        # The defaults, set for clarity
+        autoRollback = true;
+        magicRollback = true;
+
+        # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+        nodes = {
+          mbv-mba = {
+            # The machine we're deploying from
+            hostname = "localhost";
+            user = "mvilladsen";
+            remoteBuild = false;
+            profiles.system = {
+              path = deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.mbv-mba;
+            };
+          };
+          mbv-desktop = {
+            hostname = "mbv-desktop";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
+            };
+          };
+          mbv-xps13 = {
+            hostname = "mbv-xps13";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-xps13;
+            };
+          };
         };
       };
 
