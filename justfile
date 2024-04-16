@@ -1,18 +1,38 @@
 # TODO: Make this system agnostic (probably requires generating it from nix)
+# TODO: Set up nix shell and nix-direnv, then use something like this in justfile to make sure we're actually in nix shell when necessary: https://notes.abhinavsarkar.net/2022/just-nix-podman-combo
+# Moving to this setup would simplify dev a lot
+#
+# Dependencies:
+# - parallel
+# - fd
+# - nixfmt-rfc-style
+# - deadnix
+# - statix
+# - deploy-rs
+# - agenix-rekey
+#
+# Rarely used dependencies (should probably remain as `nix run` calls):
+# - disko#disko-installer
+# - nixos-anywhere
 
-default: switch-darwin
+default: deploy
+
+run *args:
+	nix run --inputs-from . --show-trace {{args}}
+
+build *args:
+	nix --extra-experimental-features 'nix-command flakes' build --show-trace {{args}}
 
 alias l := lint
 lint:
-	nix run --inputs-from . nixpkgs#deadnix
-	nix run --inputs-from . nixpkgs#statix -- check
+	just run nixpkgs#deadnix
+	just run nixpkgs#statix -- check
 
 alias f := fix
 fix:
-	nix run --inputs-from . nixpkgs#deadnix -- -e
-	nix run --inputs-from . nixpkgs#statix -- fix
-	# We could flakeify this but it would be gross
-	fd .nix$ | xargs -I % sh -c 'nixfmt %'
+	just run nixpkgs#deadnix -- -e
+	just run nixpkgs#statix -- fix
+	fd .nix$ | parallel 'just run nixpkgs#nixfmt-rfc-style -- {}'
 
 alias c := check
 check: lint
@@ -27,9 +47,9 @@ fix-yabai:
 	launchctl kickstart -k gui/501/org.nixos.yabai
 	launchctl kickstart -k gui/501/org.nixos.sketchybar
 
-alias b := build
-build *args:
-	nix --extra-experimental-features 'nix-command flakes' build --show-trace {{args}} .#darwinConfigurations.mbv-mba.system
+alias bd := build-darwin
+build-darwin:
+	just build ".#darwinConfigurations.mbv-mba.system"
 
 alias sd := switch-darwin
 switch-darwin: rekey
@@ -38,6 +58,28 @@ switch-darwin: rekey
 alias sn := switch-nixos
 switch-nixos:
 	nixos-rebuild switch --show-trace --flake .#$(hostname)
+
+alias d := deploy
+deploy: rekey
+	just run github:serokell/deploy-rs .
+
+alias dh := deploy-host
+deploy-host hostname:
+	just run github:serokell/deploy-rs ".#{{hostname}}"
+
+alias dd := deploy-dry
+deploy-dry:
+	just run github:serokell/deploy-rs -- --dry-activate --debug-logs .
+
+alias u := update
+update:
+	nix flake update
+
+alias un := update-nixos
+update-nixos: update switch-nixos
+
+alias ud := update-darwin
+update-darwin: update switch-darwin
 
 alias be := build-ephemeral
 build-ephemeral machine-type image-format="install-iso": rekey
@@ -51,25 +93,17 @@ build-ephemeral machine-type image-format="install-iso": rekey
 
 alias r := rekey
 rekey *args:
-	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- rekey -a {{args}}
+	just run "agenix-rekey#packages.aarch64-darwin.default" -- rekey -a {{args}}
 
 alias e := agenix-edit
 agenix-edit *args:
-	nix run --inputs-from . agenix-rekey\#packages.aarch64-darwin.default -- edit {{args}}
-
-alias un := update-nixos
-update-nixos: && switch-nixos
-	nix flake update
-
-alias ud := update-darwin
-update-darwin: && switch-darwin
-	nix flake update
+	just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
 
 nixos-anywhere host target="ephemeral": rekey
-	nix run github:nix-community/nixos-anywhere -- --copy-host-keys --build-on-remote --flake '.#{{host}}' root@{{target}}
+	just run github:nix-community/nixos-anywhere -- --copy-host-keys --build-on-remote --flake '.#{{host}}' root@{{target}}
 
 disko-install host disk:
-	nix run github:nix-community/disko#disko-installer -- --disk {{disk}} /dev/{{disk}} --extra-files /etc/ssh /etc/ssh --write-efi-boot-entries --show-trace -f .#{{host}}
+	just run github:nix-community/disko#disko-installer -- --disk {{disk}} /dev/{{disk}} --extra-files /etc/ssh /etc/ssh --write-efi-boot-entries --show-trace -f .#{{host}}
 
 # TODO: Add a step to copy over github ssh key for temporary access for installation?
 # Could also do networkmanager wifi info

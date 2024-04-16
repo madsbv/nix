@@ -10,6 +10,7 @@ with pkgs;
   zoxide
   btop
   coreutils
+  parallel-full
   inetutils
   killall
   sqlite
