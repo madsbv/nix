@@ -37,6 +37,6 @@ in
 
     # TODO: How to use?
     # Temporarily turned off.
-    plex.enable = false;
+    plex.enable = true;
   };
 }

@@ -15,7 +15,7 @@
 # - disko#disko-installer
 # - nixos-anywhere
 
-default: deploy
+default: check-all
 
 run *args:
 	nix run --inputs-from . --show-trace {{args}}

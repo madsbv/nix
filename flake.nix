@@ -198,19 +198,22 @@
 
       deploy = {
         remoteBuild = true;
-        sshUser = "mvilladsen";
+        sshUser = "root";
         user = "root";
-        interactiveSudo = true;
         # The defaults, set for clarity
         autoRollback = true;
         magicRollback = true;
 
         # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
         nodes = {
+          # NOTE: In order for a macos system to receive SSH connections, you need to go to System Settings -> General, and turn 'Remote Login' on, and then under the options for remote login, turn on full disk access.
           mbv-mba = {
             # The machine we're deploying from
-            hostname = "localhost";
+            hostname = "mbv-mba";
+            sshUser = "mvilladsen";
             user = "mvilladsen";
+            # NOTE: In principle this should not be necessary since we have turned off password for sudo, but in practice it still seems necessary, even if we can just pass in an empty password
+            interactiveSudo = true;
             remoteBuild = false;
             profiles.system = {
               path = deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.mbv-mba;
