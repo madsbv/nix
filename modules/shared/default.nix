@@ -97,7 +97,7 @@
     distributedBuilds = true;
 
     extraOptions = ''
-      experimental-features = nix-command flakes repl-flake
+      experimental-features = nix-command flakes repl-flake ca-derivations
       warn-dirty = false
       !include ${config.age.secrets.github-api-key-minimal.path}
     '';
@@ -110,6 +110,9 @@
       allowBroken = false;
       allowInsecure = false;
       allowUnsupportedSystem = false;
+      warnUndeclaredOptions = true;
+      # TODO: Try this out
+      # contentAddressedByDefault = true;
     };
     overlays =
       # Apply each overlay found in the /overlays directory
