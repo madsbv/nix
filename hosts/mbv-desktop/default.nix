@@ -14,9 +14,13 @@ in
     inherit hostname;
   };
 
+  nixpkgs.config = {
+    cudaSupport = true;
+  };
+
   services.ollama = {
     enable = true;
-    acceleration = "cuda";
+    # acceleration = "cuda";
     # The default, repeated for documentation
     listenAddress = "127.0.0.1:11434";
     models = "/var/lib/ollama/models";
