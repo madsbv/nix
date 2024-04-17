@@ -27,7 +27,9 @@
 
     ### Darwin ###
     darwin = {
-      url = "github:LnL7/nix-darwin/master";
+      # url = "github:LnL7/nix-darwin/master";
+      # TODO: Switch back to master once https://github.com/LnL7/nix-darwin/pull/932 gets merged
+      url = "github:wegank/nix-darwin/mddoc-remove";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew = {
