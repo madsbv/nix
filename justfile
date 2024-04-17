@@ -60,8 +60,8 @@ switch-nixos:
 	nixos-rebuild switch --show-trace --flake .#$(hostname)
 
 alias d := deploy
-deploy: rekey
-	just run github:serokell/deploy-rs .
+deploy:
+	just run github:serokell/deploy-rs -- --skip-checks .
 
 alias dh := deploy-host
 deploy-host hostname:
