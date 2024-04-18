@@ -108,7 +108,7 @@
       # Required for Zoom
       allowUnfree = true;
       allowBroken = false;
-      allowInsecure = false;
+      # allowInsecure = false;
       allowUnsupportedSystem = false;
       warnUndeclaredOptions = true;
       # TODO: Try this out

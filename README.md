@@ -1,6 +1,5 @@
 # TODO
 - [ ] Just recipe for config tinkering: https://nixos-and-flakes.thiscute.world/best-practices/accelerating-dotfiles-debugging
-- [ ] Add nix-options-search to nixpkgs
 - [ ] Can we install cargo packages directly from nix?
 - [ ] Disk encryption on nixos machines?
 - [ ] Can we do multi-key shortcuts with skhd, e.g., 'alt-1 alt-2' for switching to space 12? Else consider adding some function key shortcuts for use with Glove80, like F10-F18 or whatever, or even duplicating the 1-9 bindings on function keys.
@@ -13,9 +12,10 @@ Refactoring
 Next steps:
 2. ~~Use mbv-xps13 as deployer to desktop with nixos-anywhere, test and document that installation flow.~~
 3.  ~~Consider keeping Gentoo installation around, or at least backing up stuff like game saves.~~
-4. Set up deploy-rs to manage deployments to every system at once.
+4. ~~Set up deploy-rs to manage deployments to every system at once.~~
 6. Set up home-assistant on xps13.
 7. Set up something like Ollama on desktop for LLM stuff.
+  - Ollama as server is up and running on mbv-desktop:11434 (I think, double check the port). Figure out how to set up clients to use it, e.g. emacs and raycast
 
 ### Note on DNS and Tailscale
 https://github.com/tailscale/tailscale/issues/1543
@@ -25,7 +25,6 @@ I see two alternatives until this gets implemented:
 - Run a local DNS server on the tailnet. Requires some kind of forwarding/split-dns type stuff probably.
 - Run services in VMs/microvms each with a Tailscale client and hostname set as appropriate for the service.
 
-### TODO: Fix currently broken restic backup on mbv-xps13
 
 ## Media server
 Want:
@@ -36,7 +35,7 @@ Want:
 
 I tested deploying to desktop with nixos-anywhere. I ran into two issues.
 
-1. The nixos-anywhere function to copy ssh host keys to the installation didn't work, presumably because of the tmpfs root wiping stuff out? I think we can fix this by halting nixos-anywhere before rebooting into new system and copying stuff over ourselves, with a script.
+1. The nixos-anywhere function to copy ssh host keys to the installation didn't work, presumably because of the tmpfs root wiping stuff out? I think we can fix this by halting nixos-anywhere before rebooting into new system and copying stuff over ourselves, maybe with a script.
 2. Desktop didn't have any DHCP resolution on boot. I fixed this by adding a file to /etc/systemd/network/ with the contents
 
 ``` toml
@@ -62,7 +61,7 @@ Along the way we can switch lalt and lcmd on internal keyboard in karabiner. Eve
 
 - [x] Add a Notarise layout layer: https://sites.google.com/alanreiser.com/handsdown/home/more-variations?authuser=0
 - [x] Added Handsdown Neu; Vibranium requires a bunch of complex shit like combos
-- Consider what to add to RH of symbol layer
+- [x] Consider what to add to RH of symbol layer
   - [x] Added & to index
   - [x] Added ! to RH middle finger on symbol layer
 - Add alt-tab and alt-shift-tab to skhd/yabai instead of/in addition to alt-n and alt-p? Although shift-tab causes some modifier issues with moving windows/spaces
