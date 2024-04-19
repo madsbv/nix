@@ -34,6 +34,11 @@ fix:
 	just run nixpkgs#statix -- fix
 	fd .nix$ | parallel 'just run nixpkgs#nixfmt-rfc-style -- {}'
 
+# https://github.com/DeterminateSystems/flake-checker
+# Health check for flake.lock
+nfc:
+	just run github:DeterminateSystems/flake-checker
+
 alias c := check
 check: lint
 	nix flake check --show-trace
