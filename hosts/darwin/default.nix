@@ -1,15 +1,16 @@
 {
   hostname,
   flake-root,
+  mod,
   pkgs,
   ...
 }:
 
 {
   imports = [
-    "${flake-root}/modules/darwin"
-    "${flake-root}/modules/shared"
-    "${flake-root}/modules/dev"
+    (mod "darwin")
+    (mod "shared")
+    (mod "dev")
   ];
 
   local = {

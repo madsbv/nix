@@ -1,17 +1,15 @@
 {
   flake-root,
-  inputs,
+  base16-kitty,
   pkgs,
   config,
   lib,
   osConfig,
+  mod,
   ...
 }:
 {
-  imports = [
-    (flake-root + "/modules/home-manager")
-    ./email.nix
-  ];
+  imports = [ (mod "home-manager") ];
 
   local = {
     doomemacs.enable = true;
@@ -56,7 +54,7 @@
       # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
       extraConfig =
         builtins.readFile (flake-root + "/config/kitty/kitty.conf")
-        + builtins.readFile (config.scheme inputs.base16-kitty);
+        + builtins.readFile (config.scheme base16-kitty);
       darwinLaunchOptions = [ "--single-instance" ];
     };
 

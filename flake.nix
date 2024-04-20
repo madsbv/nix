@@ -125,8 +125,6 @@
       agenix-rekey,
       disko,
       deploy-rs,
-      doomemacs,
-      my-doomemacs-config,
       ...
     }@inputs:
     let
@@ -152,7 +150,6 @@
         base0E = "#9c91e4";
         base0F = "#cc6633";
       };
-      color-scheme = molokai;
       linuxSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -160,32 +157,6 @@
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
       forLinuxSystems = f: nixpkgs.lib.mergeAttrsList (map f linuxSystems);
-
-      common-modules = [
-        inputs.base16.nixosModule
-        { scheme = color-scheme; }
-      ];
-      darwin-modules = [
-        home-manager.darwinModules.home-manager
-        nix-homebrew.darwinModules.nix-homebrew
-        agenix.darwinModules.default
-        agenix-rekey.nixosModules.default
-      ] ++ common-modules;
-      nixos-modules = [
-        home-manager.nixosModules.home-manager
-        agenix.nixosModules.default
-        agenix-rekey.nixosModules.default
-        impermanence.nixosModules.impermanence
-        disko.nixosModules.disko
-      ] ++ common-modules;
-
-      common-args = inputs // {
-        inherit nodes color-scheme;
-        flake-inputs = inputs;
-        flake-root = ./.;
-      };
-      darwin-args = common-args;
-      nixos-args = common-args;
 
       devShell =
         system:
@@ -209,6 +180,36 @@
             '';
           };
         };
+
+      color-scheme = molokai;
+
+      common-modules = [
+        inputs.base16.nixosModule
+        { scheme = color-scheme; }
+      ];
+      darwin-modules = [
+        home-manager.darwinModules.home-manager
+        nix-homebrew.darwinModules.nix-homebrew
+        agenix.darwinModules.default
+        agenix-rekey.nixosModules.default
+      ] ++ common-modules;
+      nixos-modules = [
+        home-manager.nixosModules.home-manager
+        agenix.nixosModules.default
+        agenix-rekey.nixosModules.default
+        impermanence.nixosModules.impermanence
+        disko.nixosModules.disko
+      ] ++ common-modules;
+
+      common-args = inputs // {
+        inherit nodes color-scheme;
+        flake-inputs = inputs;
+        flake-root = ./.;
+        mod = m: ./. + "/modules/${m}";
+      };
+      darwin-args = common-args;
+      nixos-args = common-args;
+
       # NOTE: When adding new nodes, update this, agenix-rekey, and deploy-rs node lists
       nodes = {
         clients = [ "mbv-mba" ];
@@ -308,10 +309,8 @@
             #   services.openssh.enable = true;
             # };
             # nixpkgs.hostPlatform = "aarch64-darwin";
-            specialArgs = {
-              inherit inputs system nodes;
-              flake-inputs = inputs;
-              flake-root = ./.;
+            specialArgs = nixos-args // {
+              inherit system;
               hostname = "ephemeral";
             };
             modules = [
