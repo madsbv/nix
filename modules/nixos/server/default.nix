@@ -22,13 +22,14 @@ in
     (modules + "/shared/secrets/server.nix")
     (modules + "/nixos/restic.nix")
   ];
+
   options.local.server = {
     user = lib.mkOption { default = "mvilladsen"; };
     hostname = lib.mkOption { default = ""; };
     timezone = lib.mkOption { default = "Europe/Amsterdam"; };
   };
-  config = {
 
+  config = {
     local.keys = {
       enable = true;
       enable_authorized_access = true;
@@ -151,17 +152,23 @@ in
     };
 
     # Generic impermanence definitions for servers
-    environment.persistence."/nix/persist" = {
-      hideMounts = true;
-      directories = [
-        "/etc/nixos"
-        "/etc/ssh" # We need the entire directory so we can set neededForBoot
-        "/var/log"
-        "/var/lib"
-        # Restic basically needs its cache to be able to run in a reasonable amount of time
-        "/var/cache/restic-backups-persist"
-      ];
-      files = [ "/etc/machine-id" ];
+    environment = {
+      sessionVariables = {
+        NIX_INDEX_DATABASE = "/var/cache/nix-index/";
+      };
+      persistence."/nix/persist" = {
+        hideMounts = true;
+        directories = [
+          "/etc/nixos"
+          "/etc/ssh" # We need the entire directory so we can set neededForBoot
+          "/var/log"
+          "/var/lib"
+          # Restic basically needs its cache to be able to run in a reasonable amount of time
+          "/var/cache/restic-backups-persist"
+          "/var/cache/nix-index"
+        ];
+        files = [ "/etc/machine-id" ];
+      };
     };
     fileSystems = {
       # I don't know how many of these we actually need

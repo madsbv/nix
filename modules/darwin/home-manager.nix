@@ -4,20 +4,16 @@
   pkgs,
   config,
   lib,
-  my-doomemacs-config,
   osConfig,
   ...
 }:
-let
-  emacsDir = "${config.xdg.configHome}/emacs";
-  doomDir = "${config.xdg.configHome}/doom";
-  doomRepoUrl = "https://github.com/doomemacs/doomemacs";
-in
 {
   imports = [
     (flake-root + "/modules/home-manager")
     ./email.nix
   ];
+
+  local.doomemacs.enable = true;
 
   local.email = {
     enable = true;
@@ -39,7 +35,6 @@ in
     shellAliases = {
       wget = "wget --hsts-file=${config.xdg.cacheHome}/.wget-hsts";
       ec = "emacsclient -c -n -a nvim";
-      j = "just";
       gj = "just ${config.xdg.configHome}/nix/";
 
       grep = "grep -i --color=always";
@@ -49,17 +44,6 @@ in
       watch = "watch -cd ";
       sudo = "sudo ";
     };
-    # TODO: Replace this with the module type structure from hlissner's dotfiles
-    # TODO: Replace the rsync stuff with git clone, take the URLs for doom and doom-config as input from flake.nix.inputs
-    activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if [ ! -d "${doomDir}" ]; then
-         ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
-      fi
-      if [ ! -d "${emacsDir}" ]; then
-         ${pkgs.git}/bin/git clone --depth=1 --single-branch "${doomRepoUrl}" "${emacsDir}"
-         ${emacsDir}/bin/doom install
-      fi
-    '';
   };
 
   # NOTE: Trying to use `(pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages` and an override at the same time breaks things via weird nix double wrapping issues, so use extraPackages instead.
@@ -69,16 +53,6 @@ in
       export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
       export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin:$HOME/.cargo/bin''${PATH+:$PATH}";
     '';
-
-    java.enable = true;
-    # pyenv = {
-    #   enable = true;
-    #   enableZshIntegration = true;
-    # };
-    bacon = {
-      enable = true;
-      settings = { };
-    };
 
     neovim.plugins = [
       (pkgs.vimPlugins.base16-vim.overrideAttrs (
@@ -160,22 +134,6 @@ in
             dim = default;
           };
       };
-    };
-    emacs = {
-      enable = true;
-      # TODO: Can I move this to shared/home-manager.nix by taking emacs.package as function input?
-      # Patched emacs-macport from overlay
-      package = pkgs.my-emacs-mac;
-      extraPackages =
-        epkgs: with epkgs; [
-          # Packages that pull in non-lisp stuff
-          # The mu4e epkg also pulls in the mu binary
-          mu4e
-          treesit-grammars.with-all-grammars
-          vterm
-          multi-vterm
-          pdf-tools
-        ];
     };
   };
 }

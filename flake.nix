@@ -125,6 +125,8 @@
       agenix-rekey,
       disko,
       deploy-rs,
+      doomemacs,
+      my-doomemacs-config,
       ...
     }@inputs:
     let
@@ -242,7 +244,12 @@
         mbv-mba = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           specialArgs = inputs // {
-            inherit color-scheme nodes;
+            inherit
+              color-scheme
+              nodes
+              doomemacs
+              my-doomemacs-config
+              ;
             flake-inputs = inputs;
             flake-root = ./.;
             hostname = "mbv-mba";
