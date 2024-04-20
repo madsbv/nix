@@ -69,8 +69,6 @@ in
     # Arguments exposed to every home-module
     extraSpecialArgs = {
       inherit
-        my-doomemacs-config
-        doomemacs
         hostname
         user
         inputs

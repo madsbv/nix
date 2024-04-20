@@ -18,7 +18,7 @@
 default: check-all
 
 run *args:
-	nix run --inputs-from . --show-trace {{args}}
+	nix run --show-trace --inputs-from . {{args}}
 
 build *args:
 	nix --extra-experimental-features 'nix-command flakes' build --show-trace {{args}}
