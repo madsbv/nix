@@ -10,13 +10,14 @@
     "${flake-root}/modules/darwin"
     "${flake-root}/modules/shared"
     "${flake-root}/modules/dev"
-    "${flake-root}/modules/editor"
   ];
 
-  local.keys.enable_authorized_access = true;
-  local.emacs = {
-    enable = true;
-    package = pkgs.my-emacs-mac;
+  local = {
+    keys.enable_authorized_access = true;
+    emacs = {
+      enable = true;
+      package = pkgs.my-emacs-mac;
+    };
   };
 
   # Enable linux builder VM.

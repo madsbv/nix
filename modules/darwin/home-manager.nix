@@ -13,14 +13,15 @@
     ./email.nix
   ];
 
-  local.doomemacs.enable = true;
-
-  local.email = {
-    enable = true;
-    maildir = "${config.xdg.dataHome}/Mail";
-    muhome = "${config.xdg.cacheHome}/mu";
-    muAddressArgs = osConfig.age.secrets.mu-init-addresses.path;
-    pmbridge-password = osConfig.age.secrets.pmbridge-password.path;
+  local = {
+    doomemacs.enable = true;
+    email = {
+      enable = true;
+      maildir = "${config.xdg.dataHome}/Mail";
+      muhome = "${config.xdg.cacheHome}/mu";
+      muAddressArgs = osConfig.age.secrets.mu-init-addresses.path;
+      pmbridge-password = osConfig.age.secrets.pmbridge-password.path;
+    };
   };
 
   xdg.configFile = {
@@ -49,23 +50,6 @@
   # NOTE: Trying to use `(pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages` and an override at the same time breaks things via weird nix double wrapping issues, so use extraPackages instead.
   # TODO: Define a launchd service for emacs daemon? Could be useful, could break tinkering. If yes, see ryan4yin-nix-config for an example.
   programs = {
-    zsh.envExtra = ''
-      export RESTIC_CACHE_DIR="/Users/mvilladsen/Library/Caches/restic"
-      export PATH="$XDG_CONFIG_HOME/emacs/bin:$HOME/.local/bin:$HOME/.cargo/bin''${PATH+:$PATH}";
-    '';
-
-    neovim.plugins = [
-      (pkgs.vimPlugins.base16-vim.overrideAttrs (
-        _old:
-        let
-          schemeFile = config.scheme inputs.base16-vim;
-        in
-        {
-          patchPhase = "cp ${schemeFile} colors/base16-scheme.vim";
-        }
-      ))
-    ];
-
     kitty = {
       enable = true;
       shellIntegration.enableZshIntegration = true;

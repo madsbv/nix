@@ -13,12 +13,7 @@ let
 in
 {
   imports = [
-    flake-inputs.home-manager.nixosModules.home-manager
-    flake-inputs.agenix.nixosModules.default
-    flake-inputs.agenix-rekey.nixosModules.default
-    flake-inputs.impermanence.nixosModules.impermanence
-    flake-inputs.disko.nixosModules.disko
-    (modules + "/shared") # modules/shared/default.nix
+    (modules + "/shared")
     (modules + "/shared/secrets/server.nix")
     (modules + "/nixos/restic.nix")
   ];
@@ -107,6 +102,12 @@ in
     };
 
     programs = {
+      neovim = {
+        enable = true;
+        vimAlias = true;
+        viAlias = true;
+        defaultEditor = true;
+      };
       git.enable = true;
 
       # Conflicts with nix-index
@@ -117,13 +118,6 @@ in
           "main"
           "brackets"
         ];
-      };
-
-      neovim = {
-        enable = true;
-        vimAlias = true;
-        viAlias = true;
-        defaultEditor = true;
       };
     };
 

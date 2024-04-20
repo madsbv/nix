@@ -9,6 +9,9 @@
   ...
 }:
 
+let
+  modules = flake-root + "/modules";
+in
 {
   imports = [
     ./cachix
@@ -17,6 +20,7 @@
     ./secrets
     ./keys.nix
     ./builder.nix
+    (modules + "/editor")
   ];
 
   options.local.hm.enable = lib.mkOption {
@@ -29,11 +33,14 @@
       j = "just";
     };
 
-    local.builder = {
-      enableLocalBuilder = true;
-      enableRemoteBuilders = true;
-      # Enable all servers other than this one as remote builders
-      remoteBuilders_x86-64 = builtins.filter (host: host != hostname) nodes.servers;
+    local = {
+      builder = {
+        enableLocalBuilder = true;
+        enableRemoteBuilders = true;
+        # Enable all servers other than this one as remote builders
+        remoteBuilders_x86-64 = builtins.filter (host: host != hostname) nodes.servers;
+      };
+      neovim.enable = true;
     };
 
     srvos.flake = flake-root;

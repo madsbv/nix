@@ -3,8 +3,6 @@
   flake-root,
   config,
   pkgs,
-  doomemacs,
-  my-doomemacs-config,
   color-scheme,
   homebrew-bundle,
   homebrew-core,
