@@ -12,7 +12,7 @@ let
 in
 {
   options.local.email = {
-    enable = lib.mkOption { default = true; };
+    enable = lib.mkEnableOption "Email";
     maildir = lib.mkOption { default = "~/Maildir"; };
     muhome = lib.mkOption { default = "${config.xdg.cacheHome}/mu"; };
     muAddressArgs = lib.mkOption { default = ""; };

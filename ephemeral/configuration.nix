@@ -1,21 +1,18 @@
 {
   system,
-  flake-root,
-  inputs,
+  flake-inputs,
   pkgs,
   config,
   lib,
+  mod,
   ...
 }:
 
-let
-  modules = flake-root + "/modules/shared";
-in
 {
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
-    (modules + "/keys.nix")
+    (mod "shared/keys.nix")
   ];
 
   local.keys = {
@@ -79,7 +76,7 @@ in
 
   nix = {
     registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
-      (lib.filterAttrs (_: lib.isType "flake")) inputs
+      (lib.filterAttrs (_: lib.isType "flake")) flake-inputs
     );
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!

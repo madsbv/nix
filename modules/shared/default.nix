@@ -6,12 +6,12 @@
   lib,
   config,
   pkgs,
+  base16,
+  color-scheme,
+  mod,
   ...
 }:
 
-let
-  modules = flake-root + "/modules";
-in
 {
   imports = [
     ./cachix
@@ -20,7 +20,8 @@ in
     ./secrets
     ./keys.nix
     ./builder.nix
-    (modules + "/editor")
+    (mod "editor")
+    (mod "shell")
   ];
 
   options.local.hm.enable = lib.mkOption {
@@ -43,18 +44,28 @@ in
       neovim.enable = true;
     };
 
-    srvos.flake = flake-root;
-
-    programs = {
-      zsh = {
-        enable = true;
-        enableCompletion = true;
+    home-manager = lib.mkIf config.local.hm.enable {
+      extraSpecialArgs = flake-inputs // {
+        inherit hostname flake-root mod;
       };
-      # Conflicts with home-managers tmux on Darwin
-      tmux.enable = pkgs.stdenv.isLinux;
-      direnv.enable = true;
-      nix-index.enable = true;
+      sharedModules = [
+        (
+          { ... }:
+          {
+            # Currently used for Kitty and Alacritty only
+            imports = [ base16.homeManagerModule ];
+            scheme = color-scheme;
+            xdg.enable = true;
+            home = {
+              stateVersion = "23.11";
+              preferXdgDirectories = true;
+            };
+          }
+        )
+      ];
     };
+
+    srvos.flake = flake-root;
 
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
@@ -133,7 +144,7 @@ in
       overlays =
         # Apply each overlay found in the /overlays directory
         let
-          path = ../../overlays;
+          path = flake-root + "/overlays";
         in
         with builtins;
         map (n: import (path + ("/" + n))) (

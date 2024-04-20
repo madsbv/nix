@@ -6,12 +6,13 @@
         - We can also do 1-0 for one screen and F1-F10 for the other.
 
 Refactoring
-- [ ] Split modules into individual apps, using imports/options/config syntax
+- [x] Split modules into individual apps, using imports/options/config syntax
 
 ## Servers
 6. Set up home-assistant on xps13.
-7. Set up something like Ollama on desktop for LLM stuff.
+7. [x] Set up something like Ollama on desktop for LLM stuff.
   - Ollama as server is up and running on mbv-desktop:11434 (I think, double check the port). Figure out how to set up clients to use it, e.g. emacs and raycast
+8. [ ] Set up one of the servers as substituter for everything else--No reason to build everything twice.
 
 ### Note on DNS and Tailscale
 https://github.com/tailscale/tailscale/issues/1543

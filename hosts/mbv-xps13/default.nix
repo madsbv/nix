@@ -1,19 +1,11 @@
-{
-  flake-root,
-  config,
-  hostname,
-  ...
-}:
+{ hostname, mod, ... }:
 
-let
-  modules = flake-root + "/modules";
-in
 {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (modules + "/nixos/server")
-    (modules + "/shared/secrets/wifi.nix")
+    (mod "nixos/server")
+    (mod "shared/secrets/wifi.nix")
   ];
 
   local.server = {

@@ -1,9 +1,7 @@
 {
-  hostname,
   flake-root,
   config,
   pkgs,
-  color-scheme,
   homebrew-bundle,
   homebrew-core,
   homebrew-cask,
@@ -11,8 +9,9 @@
   homebrew-cask-fonts,
   felixkratz-formulae,
   pirj-noclamshell,
+  mod,
   ...
-}@inputs:
+}:
 
 # Just a single user on this machine
 let
@@ -23,7 +22,7 @@ in
     ./dock
     ./homebrew
     ./autorestic.nix
-    (flake-root + "/modules/shared/secrets/email.nix")
+    (mod "shared/secrets/email.nix")
   ];
 
   age.secrets."mbv-mba.autorestic.yml".rekeyFile =
@@ -36,6 +35,7 @@ in
   users.users.${user} = {
     home = "/Users/${user}";
     isHidden = false;
+    # Is there a good way to set this universally for all users? Either a nixos/nix-darwin option, or a way to map over users.users?
     shell = pkgs.zsh;
   };
 
@@ -58,20 +58,11 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     users.${user} = {
-      imports = [
-        ./home-manager.nix
-        inputs.base16.homeManagerModule
-        { scheme = color-scheme; }
-      ];
+      imports = [ ./home-manager.nix ];
     };
     # Arguments exposed to every home-module
     extraSpecialArgs = {
-      inherit
-        hostname
-        user
-        inputs
-        flake-root
-        ;
+      inherit user;
     };
   };
 

@@ -1,21 +1,19 @@
 {
-  flake-root,
   config,
   lib,
-  flake-inputs,
+  mod,
   ...
 }:
 
 let
-  modules = flake-root + "/modules";
   # A user to use as manual SSH target. Can use sudo.
   cfg = config.local.server;
 in
 {
   imports = [
-    (modules + "/shared")
-    (modules + "/shared/secrets/server.nix")
-    (modules + "/nixos/restic.nix")
+    (mod "shared")
+    (mod "shared/secrets/server.nix")
+    (mod "nixos/restic.nix")
   ];
 
   options.local.server = {
@@ -102,6 +100,7 @@ in
     };
 
     programs = {
+      # NixOS-only options
       neovim = {
         enable = true;
         vimAlias = true;
@@ -112,6 +111,7 @@ in
 
       # Conflicts with nix-index
       command-not-found.enable = false;
+      # NixOS-only options
       zsh.syntaxHighlighting = {
         enable = true;
         highlighters = [
