@@ -161,6 +161,32 @@
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
       forLinuxSystems = f: nixpkgs.lib.mergeAttrsList (map f linuxSystems);
 
+      common-modules = [
+        inputs.base16.nixosModule
+        { scheme = color-scheme; }
+      ];
+      darwin-modules = [
+        home-manager.darwinModules.home-manager
+        nix-homebrew.darwinModules.nix-homebrew
+        agenix.darwinModules.default
+        agenix-rekey.nixosModules.default
+      ] ++ common-modules;
+      nixos-modules = [
+        home-manager.nixosModules.home-manager
+        agenix.nixosModules.default
+        agenix-rekey.nixosModules.default
+        impermanence.nixosModules.impermanence
+        disko.nixosModules.disko
+      ] ++ common-modules;
+
+      common-args = inputs // {
+        inherit nodes color-scheme;
+        flake-inputs = inputs;
+        flake-root = ./.;
+      };
+      darwin-args = common-args;
+      nixos-args = common-args;
+
       devShell =
         system:
         let
@@ -243,26 +269,10 @@
       darwinConfigurations = {
         mbv-mba = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          specialArgs = inputs // {
-            inherit
-              color-scheme
-              nodes
-              doomemacs
-              my-doomemacs-config
-              ;
-            flake-inputs = inputs;
-            flake-root = ./.;
+          specialArgs = darwin-args // {
             hostname = "mbv-mba";
           };
-          modules = [
-            ./hosts/darwin
-            home-manager.darwinModules.home-manager
-            nix-homebrew.darwinModules.nix-homebrew
-            agenix.darwinModules.default
-            agenix-rekey.nixosModules.default
-            inputs.base16.nixosModule
-            { scheme = color-scheme; }
-          ];
+          modules = [ ./hosts/darwin ] ++ darwin-modules;
         };
       };
 
@@ -270,23 +280,17 @@
         {
           mbv-desktop = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
-            specialArgs = inputs // {
-              inherit nodes;
-              flake-inputs = inputs;
-              flake-root = ./.;
+            specialArgs = nixos-args // {
               hostname = "mbv-desktop";
             };
-            modules = [ ./hosts/mbv-desktop ];
+            modules = [ ./hosts/mbv-desktop ] ++ nixos-modules;
           };
           mbv-xps13 = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
-            specialArgs = inputs // {
-              inherit nodes;
-              flake-inputs = inputs;
-              flake-root = ./.;
+            specialArgs = nixos-args // {
               hostname = "mbv-xps13";
             };
-            modules = [ ./hosts/mbv-xps13 ];
+            modules = [ ./hosts/mbv-xps13 ] ++ nixos-modules;
           };
         }
         // forLinuxSystems (system: {
