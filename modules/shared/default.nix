@@ -32,6 +32,10 @@
   config = {
     environment.shellAliases = {
       j = "just";
+      ls = "eza --binary --header --git --git-repos --all";
+      # TODO: Themeing?
+      cat = "bat";
+      cd = "z";
     };
 
     local = {
