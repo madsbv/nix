@@ -33,11 +33,10 @@
 
     shellAliases = {
       wget = "wget --hsts-file=${config.xdg.cacheHome}/.wget-hsts";
-      ec = "emacsclient -c -n -a nvim";
+      # ec = "emacsclient -c -n -a nvim";
       gj = "just ${config.xdg.configHome}/nix/";
 
       grep = "grep -i --color=always";
-      ls = "ls -A -B -F -G -h";
       # Supposedly the space at the end of these aliases should make these commands
       # work with other aliases as input.
       watch = "watch -cd ";
@@ -45,8 +44,6 @@
     };
   };
 
-  # NOTE: Trying to use `(pkgs.emacsPackagesFor my-emacs-mac).emacsWithPackages` and an override at the same time breaks things via weird nix double wrapping issues, so use extraPackages instead.
-  # TODO: Define a launchd service for emacs daemon? Could be useful, could break tinkering. If yes, see ryan4yin-nix-config for an example.
   programs = {
     kitty = {
       enable = true;
