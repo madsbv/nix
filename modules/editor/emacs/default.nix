@@ -59,7 +59,8 @@ in
                   fi
                 ''
               );
-              sessionVariables.PATH = "${emacsDir}/bin:$HOME/.local/bin:$HOME/.cargo/bin''${"PATH+:$PATH"}";
+              # To make doom binary available
+              sessionPath = [ "${emacsDir}/bin" ];
             };
           };
         }

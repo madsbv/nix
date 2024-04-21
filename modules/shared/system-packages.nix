@@ -4,7 +4,6 @@ with pkgs;
 [
   # General packages for development and system management
   bash-completion
-  # TODO: Alias these to cat, ls, cd?
   bat
   eza
   zoxide
