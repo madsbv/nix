@@ -37,7 +37,10 @@ in
       '';
     };
 
-    programs.mbsync.enable = true;
+    programs = {
+      mbsync.enable = true;
+      mu.enable = true;
+    };
     services.imapnotify.enable = true;
 
     accounts.email = {
@@ -49,7 +52,6 @@ in
         userName = "mvilladsen@pm.me";
         primary = true;
         aliases = [ ];
-        # TODO: Port from mbsyncrc
         folders = {
           sent = "Sent";
           inbox = "Inbox";
@@ -67,7 +69,6 @@ in
           host = "127.0.0.1";
           port = 1025;
         };
-        # TODO: Pass in age-encrypted password file as config option and use here
         passwordCommand = "cat ${cfg.pmbridge-password}";
         # NOTE: The home manager mu module is not amenable to keeping secrets, use our own implementation
         mu.enable = false;
@@ -95,6 +96,7 @@ in
           enable = true;
           boxes = [ "Inbox" ];
           onNotify = "${pkgs.isync}/bin/mbsync proton";
+          onNotifyPost = "${pkgs.mu}/bin/mu index";
         };
       };
     };
