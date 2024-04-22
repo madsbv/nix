@@ -12,6 +12,9 @@
   ...
 }:
 
+let
+  adminUser = "mvilladsen";
+in
 {
   imports = [
     ./cachix
@@ -47,11 +50,21 @@
         remoteBuilders_x86-64 = builtins.filter (host: host != hostname) nodes.servers;
       };
       neovim.enable = true;
+      keys = {
+        enable = true;
+        authorized_user = adminUser;
+      };
     };
 
     home-manager = lib.mkIf config.local.hm.enable {
+      useGlobalPkgs = true;
+      useUserPackages = true;
       extraSpecialArgs = flake-inputs // {
         inherit hostname flake-root mod;
+      };
+      users = {
+        "${adminUser}".home.homeDirectory = "/home/${adminUser}";
+        root.home.homeDirectory = "/root";
       };
       sharedModules = [
         (

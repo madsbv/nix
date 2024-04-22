@@ -55,8 +55,6 @@ in
   };
 
   home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
     users.${user} = {
       imports = [ ./home-manager.nix ];
     };

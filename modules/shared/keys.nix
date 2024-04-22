@@ -13,10 +13,7 @@ let
 in
 {
   options.local.keys = {
-    enable = lib.mkOption {
-      description = "Set SSH knownHosts.";
-      default = true;
-    };
+    enable = lib.mkEnableOption "Set SSH knownHosts.";
     enable_authorized_access = lib.mkOption {
       description = "Allow key-authenticated SSH access to user config.local.keys.authorized_user";
       default = false;
