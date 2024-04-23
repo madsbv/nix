@@ -12,9 +12,6 @@
   ...
 }:
 
-let
-  adminUser = "mvilladsen";
-in
 {
   imports = [
     ./cachix
@@ -52,7 +49,6 @@ in
       neovim.enable = true;
       keys = {
         enable = true;
-        authorized_user = adminUser;
       };
     };
 
@@ -61,10 +57,6 @@ in
       useUserPackages = true;
       extraSpecialArgs = flake-inputs // {
         inherit hostname flake-root mod;
-      };
-      users = {
-        "${adminUser}".home.homeDirectory = "/home/${adminUser}";
-        root.home.homeDirectory = "/root";
       };
       sharedModules = [
         (
