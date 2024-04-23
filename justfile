@@ -66,7 +66,7 @@ switch-nixos:
 
 alias d := deploy
 deploy:
-	just run github:serokell/deploy-rs -- --skip-checks .
+	just run github:serokell/deploy-rs -- --skip-checks --checksigs .
 
 alias dh := deploy-host
 deploy-host hostname:
