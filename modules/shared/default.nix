@@ -129,13 +129,20 @@
         # Reduce copying over SSH
         builders-use-substitutes = true;
         # Fallback quickly if substituters are not available
+        fallback = true;
         connect-timeout = 5;
+
+        warn-dirty = false;
+        experimental-features = [
+          "nix-command"
+          "flakes"
+          "repl-flake"
+          "ca-derivations"
+        ];
       };
       distributedBuilds = true;
 
       extraOptions = ''
-        experimental-features = nix-command flakes repl-flake ca-derivations
-        warn-dirty = false
         !include ${config.age.secrets.github-api-key-minimal.path}
       '';
     };
