@@ -26,7 +26,7 @@
         # See also https://github.com/rospogrigio/localtuya
         "tuya"
         "wake_on_lan"
-        "plex"
+        "jellyfin"
         "seventeentrack"
         "speedtestdotnet"
       ];
@@ -42,7 +42,7 @@
 
     # TODO: Configure
     # Available on mbv-xps13:32400/web
-    plex.enable = true;
+    jellyfin.enable = true;
 
     # Available on mbv-xps13:9091
     transmission.enable = true;
