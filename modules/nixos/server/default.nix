@@ -173,9 +173,12 @@ in
       "/etc/ssh".neededForBoot = true;
     };
 
+    home-manager.users = {
+      ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
+      root.home.homeDirectory = "/root";
+    };
+
     users = {
-      # To enable local login, set `users.users.root.initialHashedPassword`
-      # You can get the hash of a given password with `mkpasswd -m SHA-512`
       mutableUsers = false;
       users = {
         ${cfg.user} = {
@@ -184,6 +187,7 @@ in
             "wheel"
             "networkmanager"
           ];
+          # You can get the hash of a given password with `mkpasswd -m SHA-512`
           initialHashedPassword = "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
         };
       };
