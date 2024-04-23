@@ -181,8 +181,8 @@ in
 
     users = {
       mutableUsers = false;
+      defaultUserShell = pkgs.zsh;
       users = {
-        defaultUserShell = pkgs.zsh;
         ${cfg.user} = {
           isNormalUser = true;
           extraGroups = [
