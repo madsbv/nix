@@ -35,7 +35,7 @@ in
   users.users.${user} = {
     home = "/Users/${user}";
     isHidden = false;
-    # Is there a good way to set this universally for all users? Either a nixos/nix-darwin option, or a way to map over users.users?
+    # Set as users.defaultShell on nixos, but that option doesn't exist on nix-darwin
     shell = pkgs.zsh;
   };
 

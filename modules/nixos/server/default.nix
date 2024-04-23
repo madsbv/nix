@@ -2,6 +2,7 @@
   config,
   lib,
   mod,
+  pkgs,
   ...
 }:
 
@@ -181,6 +182,7 @@ in
     users = {
       mutableUsers = false;
       users = {
+        defaultShell = pkgs.zsh;
         ${cfg.user} = {
           isNormalUser = true;
           extraGroups = [
