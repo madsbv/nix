@@ -182,7 +182,7 @@ in
     users = {
       mutableUsers = false;
       users = {
-        defaultShell = pkgs.zsh;
+        defaultUserShell = pkgs.zsh;
         ${cfg.user} = {
           isNormalUser = true;
           extraGroups = [
