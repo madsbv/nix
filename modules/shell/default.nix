@@ -109,6 +109,11 @@ in
             };
           };
 
+          zellij = {
+            enable = true;
+            enableZshIntegration = true;
+          };
+
           # mbv: Try this out for now
           tmux = {
             enable = true;

@@ -36,7 +36,8 @@
       ls = "eza --binary --header --git --git-repos --all";
       # TODO: Themeing?
       cat = "bat";
-      cd = "z";
+      f = "z";
+      fj = "zi";
     };
 
     local = {
