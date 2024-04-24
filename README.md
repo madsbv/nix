@@ -5,8 +5,8 @@
 - [ ] Can we do multi-key shortcuts with skhd, e.g., 'alt-1 alt-2' for switching to space 12? Else consider adding some function key shortcuts for use with Glove80, like F10-F18 or whatever, or even duplicating the 1-9 bindings on function keys.
         - We can also do 1-0 for one screen and F1-F10 for the other.
 
-- [ ] Add some /home cache directories to persist, e.g. zoxide, zplug, zellij, maybe others
-- [ ] Config zellij
+- [x] Add some /home cache directories to persist, e.g. zoxide, zplug, zellij, maybe others
+- [x] Config zellij
 
 Refactoring
 - [x] Split modules into individual apps, using imports/options/config syntax

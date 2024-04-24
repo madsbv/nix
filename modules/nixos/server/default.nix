@@ -24,10 +24,16 @@ in
   };
 
   config = {
-    local.keys = {
-      enable = true;
-      enable_authorized_access = true;
-      authorized_user = cfg.user;
+    local = {
+      keys = {
+        enable = true;
+        enable_authorized_access = true;
+        authorized_user = cfg.user;
+      };
+      restic = {
+        enable = true;
+        persistCache = true;
+      };
     };
 
     system.autoUpgrade = {
@@ -158,9 +164,12 @@ in
           "/etc/ssh" # We need the entire directory so we can set neededForBoot
           "/var/log"
           "/var/lib"
-          # Restic basically needs its cache to be able to run in a reasonable amount of time
-          "/var/cache/restic-backups-persist"
+
+          # Preserve some history and cached stuff for easier shell usage
           "/var/cache/nix-index"
+          "/home/mvilladsen/.local/share/zsh"
+          "/home/mvilladsen/.config/zplug"
+          "/home/mvilladsen/.cache/zellij"
         ];
         files = [ "/etc/machine-id" ];
       };
