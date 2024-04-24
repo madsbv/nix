@@ -30,18 +30,6 @@
 
   home = {
     packages = pkgs.callPackage ./packages.nix { };
-
-    shellAliases = {
-      wget = "wget --hsts-file=${config.xdg.cacheHome}/.wget-hsts";
-      # ec = "emacsclient -c -n -a nvim";
-      gj = "just ${config.xdg.configHome}/nix/";
-
-      grep = "grep -i --color=always";
-      # Supposedly the space at the end of these aliases should make these commands
-      # work with other aliases as input.
-      watch = "watch -cd ";
-      sudo = "sudo ";
-    };
   };
 
   programs = {

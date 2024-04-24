@@ -8,12 +8,26 @@
 
 let
   gitignore_global = [ (builtins.readFile (flake-root + "/config/gitignore_global")) ];
+  flakedir = if pkgs.stdenv.isDarwin then "/Users/mvilladsen/.config/nix/" else "/etc/nixos/nix/";
+  shellAliases = {
+    gj = "${pkgs.just}/bin/just ${flakedir}";
+    j = "${pkgs.just}/bin/just";
+    ls = "${pkgs.eza}/bin/eza --binary --header --git --git-repos --all";
+    less = "${pkgs.less}/bin/less --ignore-case --LINE-NUMBERS";
+    # TODO: Themeing?
+    cat = "${pkgs.bat}/bin/bat";
+    grep = "${pkgs.gnugrep}/bin/grep -i --color=always";
+  };
 in
 {
   # Import all directories in this folder
   imports =
     with builtins;
     filter (p: readFileType p == "directory") (map (p: ./. + "/${p}") (attrNames (readDir ./.)));
+
+  environment = {
+    inherit shellAliases;
+  };
 
   programs = {
     zsh = {
@@ -29,11 +43,21 @@ in
       { pkgs, config, ... }:
       {
 
-        home.sessionVariables = {
-          LESSHISTFILE = "${config.xdg.cacheHome}/lesshst";
-          WGETRC = "${config.xdg.configHome}/wgetrc";
-          ZDOTDIR = "${config.xdg.configHome}/zsh";
-          ZSH_CACHE = "${config.xdg.cacheHome}/zsh";
+        home = {
+          sessionVariables = {
+            LESSHISTFILE = "${config.xdg.cacheHome}/lesshst";
+            WGETRC = "${config.xdg.configHome}/wgetrc";
+            ZDOTDIR = "${config.xdg.configHome}/zsh";
+            ZSH_CACHE = "${config.xdg.cacheHome}/zsh";
+          };
+          # The duplicate here is for the sake of Nix-Darwin, which currently places aliases in .zprofile, which doesn't get loaded by Zellij's non-login shells.
+          # TODO: Remove once fixed.
+          # https://github.com/LnL7/nix-darwin/issues/886
+          shellAliases = shellAliases // {
+            wget = "${pkgs.wget}/bin/wget --hsts-file=${config.xdg.cacheHome}/.wget-hsts";
+            f = "z";
+            fj = "zi";
+          };
         };
         programs = {
           # Shared shell configuration
@@ -105,6 +129,18 @@ in
               # TODO: Should I just set the editor variable to vim/nvim, and only open files in emacs manually?
               core.editor = "vim";
             };
+          };
+
+          bat = {
+            enable = true;
+            config = {
+              theme = "base16";
+            };
+            extraPackages = with pkgs.bat-extras; [
+              batdiff
+              batman
+              batgrep
+            ];
           };
 
           zellij = {
