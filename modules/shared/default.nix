@@ -30,16 +30,6 @@
   };
 
   config = {
-    environment.shellAliases = {
-      # TODO: Make these point to the corresponding packages, instead of just string aliases?
-      j = "just";
-      ls = "eza --binary --header --git --git-repos --all";
-      # TODO: Themeing?
-      cat = "bat";
-      f = "z";
-      fj = "zi";
-    };
-
     local = {
       builder = {
         enableLocalBuilder = true;
