@@ -45,7 +45,7 @@ in
         sshUser = "builder";
         hostName = hostname; # Tailscale
         # Might be necessary for tailscale connections
-        protocol = "ssh";
+        protocol = "ssh-ng";
         supportedFeatures = [
           "kvm"
           "big-parallel"
