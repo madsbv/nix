@@ -107,7 +107,7 @@ in
               {
                 name = "powerlevel10k-config";
                 # TODO: Copy my P10k config over
-                src = lib.cleanSource (flake-root + "/config");
+                src = lib.cleanSource (flake-root + "/config/p10k");
                 file = "p10k.zsh";
               }
             ];
