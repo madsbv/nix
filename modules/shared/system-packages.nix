@@ -30,7 +30,7 @@ with pkgs;
   just
   watchexec
   jq
-  tmux
+  zellij
   ## Tool to explore nix expression dependencies.
   ## There's also the built-in `nix path-info -r` and `nix why-depends`
   nix-tree

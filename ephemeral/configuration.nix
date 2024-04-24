@@ -100,7 +100,7 @@
       gdu
       ripgrep
       tree
-      tmux
+      zellij
     ];
   };
 
