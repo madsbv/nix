@@ -145,7 +145,8 @@ in
 
           zellij = {
             enable = true;
-            enableZshIntegration = true;
+            # This just enables autostart in zsh. I don't want that on client machines.
+            enableZshIntegration = lib.mkDefault false;
             settings = {
               serialize_pane_viewport = true;
               # Seems to pick up on the shell colors just fine?
