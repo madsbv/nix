@@ -40,10 +40,10 @@
       };
     };
 
-    # TODO: Configure
-    # Available on mbv-xps13:32400/web
+    # Available on mbv-xps13:8096
     jellyfin.enable = true;
 
+    # TODO: Configure
     # Available on mbv-xps13:9091
     transmission.enable = true;
 

@@ -27,7 +27,6 @@ in
               vim-airline
               vim-airline-themes
               vim-startify
-              vim-tmux-navigator
               molokai
               (pkgs.vimPlugins.base16-vim.overrideAttrs (
                 _old:
