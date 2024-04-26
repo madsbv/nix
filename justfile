@@ -131,3 +131,6 @@ p10k-configure:
 
 p10k-finalize:
 	cp $ZDOTDIR/plugins/powerlevel10k-config/p10k.zsh ./config/p10k/p10k.zsh
+
+p10k-clean:
+	rm -r $ZDOTDIR/plugins/powerlevel10k-config
