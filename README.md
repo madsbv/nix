@@ -18,10 +18,6 @@ I see two alternatives until this gets implemented:
 - Run services in VMs/microvms each with a Tailscale client and hostname set as appropriate for the service.
 
 
-## Media server
-Want:
-- Play stuff on TV, remote controlled. Plex?
-- github.com/Spotifyd/spotifyd might be fun to have running?
 
 # NixOS-anywhere issue
 I tested deploying to desktop with nixos-anywhere. I ran into two issues.
@@ -50,3 +46,4 @@ Glove/SKHD idea: Move/copy hjkl/s/np bindings to arrows/page up/down/home/end li
 - [ ] Figure out how to make Yabai behave better with multiple monitors, e.g. be able to move to `other monitor` instead of `recent monitor`.
 - [ ] Tame Yabai/darwin's weird behaviour regarding moving between spaces erratically when trying to do stuff on empty spaces.
 - [ ]   If we can't change the existing behaviour, we could try to adopt a workflow that includes closing, reopening and moving spaces a lot more
+- [ ] Make use of some function layer keys on the Glove to have shortcuts to go to browser, emacs, and maybe signal? I'm thinking of the current 'web browser', 'calculator', and 'my pc' buttons. Might need to rebind these in Glove.

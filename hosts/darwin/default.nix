@@ -93,7 +93,7 @@
         (builtins.readFile (flake-root + "/config/skhd/skhdrc"))
         + ''
 
-          ctrl + alt - return : ${pkgs.kitty}/bin/kitty --single-instance ~'';
+          ctrl + alt - return : ${pkgs.kitty}/bin/kitty --single-instance $HOME'';
     };
   };
   # Fix for skhd not hot-reloading changes to config files on nix-darwin activation.
