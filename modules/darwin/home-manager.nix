@@ -43,6 +43,11 @@
       darwinLaunchOptions = [ "--single-instance" ];
     };
 
+    wezterm = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
     # mbv: Let's just use this for now
     alacritty = {
       enable = true;

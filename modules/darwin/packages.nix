@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, nox }:
 
 with pkgs;
 [
@@ -9,4 +9,5 @@ with pkgs;
   # llm.withPlugins
   # ([ "llm-gpt4all" ])
   ollama
+  nox
 ]

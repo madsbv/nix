@@ -10,6 +10,7 @@
   felixkratz-formulae,
   pirj-noclamshell,
   mod,
+  nox,
   ...
 }:
 
@@ -60,7 +61,7 @@ in
     };
     # Arguments exposed to every home-module
     extraSpecialArgs = {
-      inherit user;
+      inherit user nox;
     };
   };
 
