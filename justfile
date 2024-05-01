@@ -123,14 +123,14 @@ new-host hostname target="ephemeral":
 	-rm pubkeys/ssh/ssh_host_ed25519_key.pub.{{hostname}}
 	cp new-host-{{hostname}}/ssh_host_ed25519_key.pub pubkeys/ssh/ssh_host_ed25519_key.pub.{{hostname}}
 
-# NOTE: To configure p10k, run `just p10k-configure`, then `p10k configure`, then `just p10k-finalize`
+# NOTE: To configure p10k, run `just p10k-configure`, then `p10k configure`, then `just p10k-finalize` when ready do deploy. You can use p10k-save to save a config even if you're not ready to deploy the whole flake yet.
 
 p10k-configure:
 	sudo rm -r $ZDOTDIR/plugins/powerlevel10k-config
 	cp -r ./config/p10k $ZDOTDIR/plugins/powerlevel10k-config
 
-p10k-finalize:
+p10k-save:
 	cp $ZDOTDIR/plugins/powerlevel10k-config/p10k.zsh ./config/p10k/p10k.zsh
 
-p10k-clean:
+p10k-finalize: p10k-save && switch-darwin
 	rm -r $ZDOTDIR/plugins/powerlevel10k-config
