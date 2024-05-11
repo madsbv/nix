@@ -2,6 +2,7 @@
   flake-root,
   config,
   pkgs,
+  homebrew-apple,
   homebrew-bundle,
   homebrew-core,
   homebrew-cask,
@@ -51,6 +52,7 @@ in
       "homebrew/homebrew-services" = homebrew-services;
       "felixkratz/homebrew-formulae" = felixkratz-formulae;
       "pirj/homebrew-noclamshell" = pirj-noclamshell;
+      "apple/apple" = homebrew-apple;
     };
     mutableTaps = false;
   };
