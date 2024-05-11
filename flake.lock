@@ -470,6 +470,22 @@
         "type": "github"
       }
     },
+    "homebrew-apple": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1700101961,
+        "narHash": "sha256-VGt2OfrqnxyqJCsd6c4I7BP3EhcMrPbOLP7WBL5Mh4I=",
+        "owner": "apple",
+        "repo": "homebrew-apple",
+        "rev": "2bc44284e24d39ed64d6f492a0e1f4c47a5ced08",
+        "type": "github"
+      },
+      "original": {
+        "owner": "apple",
+        "repo": "homebrew-apple",
+        "type": "github"
+      }
+    },
     "homebrew-bundle": {
       "flake": false,
       "locked": {
@@ -798,6 +814,7 @@
         "felixkratz-formulae": "felixkratz-formulae",
         "fenix": "fenix",
         "home-manager": "home-manager_2",
+        "homebrew-apple": "homebrew-apple",
         "homebrew-bundle": "homebrew-bundle",
         "homebrew-cask": "homebrew-cask",
         "homebrew-cask-fonts": "homebrew-cask-fonts",

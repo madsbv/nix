@@ -17,6 +17,7 @@
       "felixkratz/formulae/borders"
       "felixkratz/formulae/svim"
       "virt-manager"
+      "apple/apple/game-porting-toolkit"
       # "qemu"
       # "libvirt"
     ];
