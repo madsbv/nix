@@ -12,12 +12,12 @@
 
     brews = [
       # System stuff
-      # Note: Noclamshell works on current system, might need to brew services start it on a new install though.
+      # Note: Noclamshell works on current system, might need to `brew services start` it on a new install though.
       "pirj/noclamshell/noclamshell"
       "felixkratz/formulae/borders"
       "felixkratz/formulae/svim"
       "virt-manager"
-      "apple/apple/game-porting-toolkit"
+      # "apple/apple/game-porting-toolkit"
       # "qemu"
       # "libvirt"
     ];

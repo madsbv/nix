@@ -43,6 +43,7 @@ in
 
   nix-homebrew = {
     enable = true;
+    enableRosetta = true;
     user = "${user}";
     taps = {
       "homebrew/homebrew-core" = homebrew-core;
@@ -52,7 +53,7 @@ in
       "homebrew/homebrew-services" = homebrew-services;
       "felixkratz/homebrew-formulae" = felixkratz-formulae;
       "pirj/homebrew-noclamshell" = pirj-noclamshell;
-      "apple/apple" = homebrew-apple;
+      "apple/homebrew-apple" = homebrew-apple;
     };
     mutableTaps = false;
   };

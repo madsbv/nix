@@ -1,6 +1,7 @@
 {
   flake-root,
   base16-kitty,
+  bootdev,
   pkgs,
   config,
   lib,
@@ -30,9 +31,18 @@
 
   home = {
     packages = pkgs.callPackage ./packages.nix { };
+    sessionPath = [ "$HOME/go/bin" ];
   };
 
   programs = {
+    go = {
+      enable = true;
+      goPath = "go";
+      packages = {
+        "github.com/bootdotdev/bootdev" = bootdev;
+      };
+    };
+
     kitty = {
       enable = true;
       shellIntegration.enableZshIntegration = true;

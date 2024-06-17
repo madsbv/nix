@@ -30,9 +30,20 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # https://github.com/zhaofengli/nix-homebrew/issues/22#issuecomment-2119172062
+    # To fix issue installing packages whose formulae use the new deny_network_access sandboxing
+    brew-src = {
+      url = "github:Homebrew/brew/4.3.0";
+      flake = false;
+    };
     nix-homebrew = {
       url = "github:zhaofengli-wip/nix-homebrew";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nix-darwin.follows = "darwin";
+      inputs.brew-src.follows = "brew-src";
     };
+
     homebrew-apple = {
       url = "github:apple/homebrew-apple";
       flake = false;
@@ -107,6 +118,12 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    bootdev = {
+      url = "github:bootdotdev/bootdev";
+      flake = false;
+    };
+
     nox = {
       url = "github:madsbv/nix-options-search";
       inputs.nixpkgs.follows = "nixpkgs";
