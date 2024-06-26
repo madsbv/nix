@@ -90,7 +90,6 @@ in
                 { name = "jeffreytse/zsh-vi-mode"; }
                 # May need to learn to use: https://github.com/marlonrichert/zsh-autocomplete/
                 { name = "marlonrichert/zsh-autocomplete"; }
-                { name = "wfxr/forgit"; }
                 # { name = "romkatv/powerlevel10k, as:theme, depth:1"; }
               ];
             };

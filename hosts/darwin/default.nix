@@ -120,25 +120,22 @@
 
   # TODO: This should be moved into a file for gui client settings so it doesn't get loaded on all servers.
   # Enable fonts dir
-  fonts =
-    let
-      key = if pkgs.stdenv.isDarwin then "fonts" else "packages";
-    in
-    {
-      fontDir.enable = true;
-      ${key} = with pkgs; [
-        dejavu_fonts
-        emacs-all-the-icons-fonts
-        jetbrains-mono
-        feather-font # from overlay
-        font-awesome
-        hack-font
-        meslo-lgs-nf
-        nerdfonts
-        noto-fonts
-        noto-fonts-emoji
-      ];
-    };
+  fonts = {
+    # NOTE: This option will probably be required on NixOS, but no longer exists on nix-darwin
+    # fontDir.enable = true;
+    packages = with pkgs; [
+      dejavu_fonts
+      emacs-all-the-icons-fonts
+      jetbrains-mono
+      feather-font # from overlay
+      font-awesome
+      hack-font
+      meslo-lgs-nf
+      nerdfonts
+      noto-fonts
+      noto-fonts-emoji
+    ];
+  };
 
   # Note: To correlate settings in System Settings with their names here, you can use `defaults read` to output (I think) all system settings. You can then save that to a file, change something in System Settings, and diff the new output of defaults read against the previous output. E.g.:
   # ```sh

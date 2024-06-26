@@ -2,7 +2,8 @@
 
 {
   environment.systemPackages = with pkgs; [
-    nodePackages.bash-language-server
+    # TODO: Readd once fix is merged: https://nixpk.gs/pr-tracker.html?pr=319882
+    # nodePackages.bash-language-server
     shellcheck
     shfmt
   ];
