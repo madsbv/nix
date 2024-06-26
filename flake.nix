@@ -239,6 +239,7 @@
         servers = [
           "mbv-desktop"
           "mbv-xps13"
+          "mbv-workstation"
         ];
       };
     in
@@ -248,7 +249,7 @@
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
         nodes = self.darwinConfigurations // {
-          inherit (self.nixosConfigurations) mbv-xps13 mbv-desktop;
+          inherit (self.nixosConfigurations) mbv-xps13 mbv-desktop mbv-workstation;
         };
       };
 
@@ -273,6 +274,12 @@
             remoteBuild = false;
             profiles.system = {
               path = deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.mbv-mba;
+            };
+          };
+          mbv-workstation = {
+            hostname = "mbv-workstation";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
             };
           };
           mbv-desktop = {
@@ -302,6 +309,13 @@
 
       nixosConfigurations =
         {
+          mbv-workstation = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = nixos-args // {
+              hostname = "mbv-workstation";
+            };
+            modules = [ ./hosts/mbv-desktop ] ++ nixos-modules;
+          };
           mbv-desktop = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             specialArgs = nixos-args // {

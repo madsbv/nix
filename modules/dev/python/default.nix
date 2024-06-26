@@ -7,6 +7,6 @@
     black
     python311Packages.pyflakes
     python311Packages.pytest
-    nodePackages.pyright
+    pyright
   ];
 }

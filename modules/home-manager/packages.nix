@@ -34,7 +34,8 @@ with pkgs;
   stylelint
   texlab
   texliveFull
-  bitwarden-cli
+  # TODO: 240618:Fix and reenable
+  # bitwarden-cli
 
   # Documents
   djvulibre
