@@ -28,7 +28,7 @@ in
   ];
 
   nixpkgs.config = {
-    # rocmSupport = true;
+    rocmSupport = true;
   };
 
   services.ollama = {
