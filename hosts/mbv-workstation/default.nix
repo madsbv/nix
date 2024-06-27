@@ -1,5 +1,8 @@
 { mod, hostname, ... }:
 
+let
+  user = "mvilladsen";
+in
 {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
@@ -8,9 +11,20 @@
     (mod "shared/secrets/wifi.nix")
   ];
 
-  local.server = {
-    inherit hostname;
+  local = {
+    server = {
+      inherit hostname;
+    };
+    # This machine is already plenty fast, let's save some complication
+    builder.enableRemoteBuilders = false;
   };
+
+  environment.persistence."/nix/persist".directories = [
+    {
+      directory = "/home/${user}";
+      user = user;
+    }
+  ];
 
   nixpkgs.config = {
     # rocmSupport = true;
