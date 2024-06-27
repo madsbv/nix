@@ -104,6 +104,9 @@ alias e := agenix-edit
 agenix-edit *args:
 	just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
 
+### USAGE
+# Run `j new-host host` first, set up configuration files and disko, and add host key and possibly client ssh keys to config. Then run nixos-anywhere.
+# You may need to temporarily disable some pieces of software to make this build, since the ephemeral environment has limited storage space available.
 nixos-anywhere host target="ephemeral": rekey
 	just run github:nix-community/nixos-anywhere -- --copy-host-keys --build-on-remote --flake '.#{{host}}' root@{{target}}
 

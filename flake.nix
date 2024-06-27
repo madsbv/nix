@@ -279,7 +279,7 @@
           mbv-workstation = {
             hostname = "mbv-workstation";
             profiles.system = {
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-workstation;
             };
           };
           mbv-desktop = {
@@ -314,7 +314,7 @@
             specialArgs = nixos-args // {
               hostname = "mbv-workstation";
             };
-            modules = [ ./hosts/mbv-desktop ] ++ nixos-modules;
+            modules = [ ./hosts/mbv-workstation ] ++ nixos-modules;
           };
           mbv-desktop = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
