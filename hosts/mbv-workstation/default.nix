@@ -23,6 +23,7 @@ in
     {
       directory = "/home/${user}";
       user = user;
+      mode = "u=rwx,g=rx,o=";
     }
   ];
 
