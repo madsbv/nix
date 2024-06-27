@@ -7,7 +7,8 @@
   ];
 
   networking = {
-    hostId = "dcb6c4ed";
+    # First 8 characters of /etc/machine-id from ephemeral bootup
+    hostId = "7bba5a22";
   };
   nixpkgs.hostPlatform = "x86_64-linux";
   # Use the systemd-boot EFI boot loader.
