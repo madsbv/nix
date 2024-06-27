@@ -237,9 +237,11 @@
       nodes = {
         clients = [ "mbv-mba" ];
         servers = [
-          "mbv-desktop"
-          "mbv-xps13"
+          ### Currently offline
+          # "mbv-desktop"
+          # "mbv-xps13"
           "mbv-workstation"
+          "hp-90"
         ];
       };
     in
@@ -249,7 +251,12 @@
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
         nodes = self.darwinConfigurations // {
-          inherit (self.nixosConfigurations) mbv-xps13 mbv-desktop mbv-workstation;
+          inherit (self.nixosConfigurations)
+            # mbv-xps13
+            # mbv-desktop
+            mbv-workstation
+            hp-90
+            ;
         };
       };
 
@@ -282,16 +289,23 @@
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-workstation;
             };
           };
-          mbv-desktop = {
-            hostname = "mbv-desktop";
+          ### Currently offline
+          # mbv-desktop = {
+          #   hostname = "mbv-desktop";
+          #   profiles.system = {
+          #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
+          #   };
+          # };
+          # mbv-xps13 = {
+          #   hostname = "mbv-xps13";
+          #   profiles.system = {
+          #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-xps13;
+          #   };
+          # };
+          hp-90 = {
+            hostname = "hp-90";
             profiles.system = {
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
-            };
-          };
-          mbv-xps13 = {
-            hostname = "mbv-xps13";
-            profiles.system = {
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-xps13;
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hp-90;
             };
           };
         };
@@ -329,6 +343,13 @@
               hostname = "mbv-xps13";
             };
             modules = [ ./hosts/mbv-xps13 ] ++ nixos-modules;
+          };
+          hp-90 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = nixos-args // {
+              hostname = "hp-90";
+            };
+            modules = [ ./hosts/hp-90 ] ++ nixos-modules;
           };
         }
         // forLinuxSystems (system: {
