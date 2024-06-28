@@ -39,9 +39,11 @@
     };
     nix-homebrew = {
       url = "github:zhaofengli-wip/nix-homebrew";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix-darwin.follows = "darwin";
-      inputs.brew-src.follows = "brew-src";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix-darwin.follows = "darwin";
+        brew-src.follows = "brew-src";
+      };
     };
 
     homebrew-apple = {
