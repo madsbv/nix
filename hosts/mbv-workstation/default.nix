@@ -1,8 +1,5 @@
 { mod, hostname, ... }:
 
-let
-  user = "mvilladsen";
-in
 {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix

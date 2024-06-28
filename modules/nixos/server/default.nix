@@ -169,7 +169,7 @@ in
           "/var/cache/nix-index"
           {
             directory = "/home/${cfg.user}";
-            user = cfg.user;
+            inherit (cfg) user;
             mode = "u=rwx,g=rx,o=";
           }
         ];
