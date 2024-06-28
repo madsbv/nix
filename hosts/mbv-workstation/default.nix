@@ -7,6 +7,7 @@ in
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
+    ./gui.nix
     (mod "nixos/server")
     (mod "shared/secrets/wifi.nix")
   ];
