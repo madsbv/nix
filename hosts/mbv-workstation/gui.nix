@@ -1,10 +1,22 @@
 _:
 
 {
+  services = {
+    xserver = {
+      enable = true;
+      displayManager.lightdm = {
+        enable = true;
+      };
+      desktopManager.cinnamon = {
+        enable = true;
+      };
+    };
+  };
   programs = {
     # Could also try hyprland?
-    sway.enable = true;
-    waybar.enable = true;
+    # sway.enable = true;
+    # waybar.enable = true;
+    #
     nm-applet.enable = true;
     spacefm.enable = true;
     firefox.enable = true;
