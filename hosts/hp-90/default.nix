@@ -8,8 +8,12 @@
     (mod "shared/secrets/wifi.nix")
   ];
 
-  local.server = {
-    inherit hostname;
+  local = {
+    server = {
+      inherit hostname;
+    };
+    # Extremely slow laptop (Intel Celeron N1000)
+    builder.enableLocalBuilder = false;
   };
 
   services = {
