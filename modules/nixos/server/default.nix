@@ -168,16 +168,9 @@ in
           # Preserve some history and cached stuff for easier shell usage
           "/var/cache/nix-index"
           {
-            directory = "/home/${cfg.user}/.local/share/zsh";
+            directory = "/home/${cfg.user}";
             user = cfg.user;
-          }
-          {
-            directory = "/home/${cfg.user}/.config/zplug";
-            user = cfg.user;
-          }
-          {
-            directory = "/home/${cfg.user}/.cache/zellij";
-            user = cfg.user;
+            mode = "u=rwx,g=rx,o=";
           }
         ];
         files = [ "/etc/machine-id" ];

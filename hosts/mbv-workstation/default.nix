@@ -20,14 +20,6 @@ in
     builder.enableRemoteBuilders = false;
   };
 
-  environment.persistence."/nix/persist".directories = [
-    {
-      directory = "/home/${user}";
-      user = user;
-      mode = "u=rwx,g=rx,o=";
-    }
-  ];
-
   nixpkgs.config = {
     rocmSupport = true;
   };
