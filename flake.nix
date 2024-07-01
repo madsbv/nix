@@ -377,7 +377,7 @@
               impermanence.nixosModules.impermanence
               nixos-generators.nixosModules.all-formats
               disko.nixosModules.disko
-              ./ephemeral/configuration.nix
+              ./hosts/ephemeral
             ];
           };
         });

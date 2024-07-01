@@ -4,7 +4,10 @@
 { lib, modulesPath, ... }:
 
 {
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+  imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
+    ./disko.nix
+  ];
 
   boot = {
     initrd.availableKernelModules = [
