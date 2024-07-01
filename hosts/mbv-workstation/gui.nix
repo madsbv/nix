@@ -1,4 +1,4 @@
-_:
+{ lib, ... }:
 
 {
   services = {
@@ -7,11 +7,17 @@ _:
       displayManager.lightdm = {
         enable = true;
       };
-      desktopManager.cinnamon = {
+      # desktopManager.cinnamon = {
+      #   enable = true;
+      # };
+      windowManager.awesome = {
         enable = true;
+        luaModules = [ ];
       };
     };
   };
+  services.pipewire.enable = true;
+  sound.enable = lib.mkForce false;
   programs = {
     # Could also try hyprland?
     # sway.enable = true;
