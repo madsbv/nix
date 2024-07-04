@@ -1,4 +1,4 @@
-{ mod, hostname, ... }:
+{ mod, ... }:
 
 {
   imports = [
@@ -6,10 +6,6 @@
     ./configuration.nix
     (mod "nixos/server")
   ];
-
-  local.server = {
-    inherit hostname;
-  };
 
   nixpkgs.config = {
     cudaSupport = true;

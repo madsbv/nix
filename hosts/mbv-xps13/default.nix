@@ -1,16 +1,11 @@
-{ hostname, mod, ... }:
+{ mod, ... }:
 
 {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
     (mod "nixos/server")
-    (mod "shared/secrets/wifi.nix")
   ];
-
-  local.server = {
-    inherit hostname;
-  };
 
   services = {
     # TODO: Configure
