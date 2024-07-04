@@ -254,8 +254,8 @@
         userFlake = self;
         nodes = self.darwinConfigurations // {
           inherit (self.nixosConfigurations)
-            # mbv-xps13
-            # mbv-desktop
+            mbv-xps13
+            mbv-desktop
             mbv-workstation
             hp-90
             ;
