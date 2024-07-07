@@ -23,6 +23,14 @@ in
   };
 
   config = {
+    home-manager = {
+      users = {
+        ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
+        root.home.homeDirectory = "/root";
+      };
+      sharedModules = [ (mod "home-manager/nixos/common") ];
+    };
+
     local = {
       restic = {
         enable = true;
@@ -167,11 +175,6 @@ in
         ];
         files = [ "/etc/machine-id" ];
       };
-    };
-
-    home-manager.users = {
-      ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
-      root.home.homeDirectory = "/root";
     };
 
     local.ssh-clients.users = [ cfg.user ];

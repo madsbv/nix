@@ -1,4 +1,10 @@
-{ pkgs, mod, ... }:
+{
+  user,
+  nox,
+  pkgs,
+  mod,
+  ...
+}:
 
 {
   imports = [
@@ -7,6 +13,13 @@
     (mod "editor")
     ./secrets/email.nix
   ];
+
+  home-manager = {
+    sharedModules = [ (mod "home-manager/common/client") ];
+    extraSpecialArgs = {
+      inherit user nox;
+    };
+  };
 
   fonts = {
     packages = with pkgs; [

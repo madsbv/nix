@@ -11,6 +11,8 @@
     (mod "system/nixos/common")
   ];
 
+  home-manager.sharedModules = [ (mod "home-manager/nixos/client") ];
+
   local.emacs.package = pkgs.emacs;
 
   # No longer exists on nix-darwin
