@@ -139,7 +139,7 @@
 
     nixpkgs = {
       config = {
-        # Required for Zoom
+        # Required for Zoom, Furmark, mprime
         allowUnfree = true;
         allowBroken = false;
         # allowInsecure = false;
@@ -166,7 +166,7 @@
         name = "nix/path/${name}";
         value.source = value.flake;
       }) config.nix.registry;
-      systemPackages = import ../../modules/shared/system-packages.nix { inherit pkgs; };
+      systemPackages = import ./system-packages.nix { inherit pkgs; };
     };
   };
 }

@@ -11,13 +11,14 @@ let
 in
 {
   imports = [
-    (mod "nixos/common")
+    (mod "system/nixos/common")
+    (mod "system/common/server")
     ./secrets.nix
   ];
 
   options.local.server = {
     user = lib.mkOption { default = "mvilladsen"; };
-    timezone = lib.mkOption { default = "Europe/Berlin"; };
+    timezone = lib.mkOption { default = "America/Detroit"; };
   };
 
   config = {

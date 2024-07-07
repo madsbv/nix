@@ -4,7 +4,7 @@
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (mod "nixos/server")
+    (mod "system/nixos/server")
   ];
 
   services = {
@@ -26,10 +26,10 @@
         "speedtestdotnet"
       ];
       config.homeassistant = {
-        name = "Berlin";
+        name = "ha-name";
         latitude = 0.0;
         longitude = 0.0;
-        time_zone = "Europe/Berlin";
+        time_zone = "America/Detroit";
         unit_system = "metric";
         temperature_unit = "C";
       };

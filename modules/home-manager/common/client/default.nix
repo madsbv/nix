@@ -1,16 +1,29 @@
 {
-  flake-root,
-  base16-kitty,
-  bootdev,
-  pkgs,
+  user,
   config,
   lib,
   osConfig,
-  mod,
+  hostname,
+  pkgs,
+  flake-root,
+  base16-kitty,
+  bootdev,
   ...
 }:
+
+# Home manager configuration for graphical client machines.
+
+let
+  # Really just for git
+  name = "Mads Bach Villadsen";
+  email = "mvilladsen@pm.me";
+in
 {
-  imports = [ (mod "home-manager") ];
+  imports = [ ./email.nix ];
+
+  home = {
+    packages = pkgs.callPackage ./packages.nix { };
+  };
 
   local = {
     doomemacs.enable = true;
@@ -23,18 +36,10 @@
     };
   };
 
-  xdg.configFile = {
-    "svim".source = flake-root + "/config/svim";
-    "sketchybar".source = flake-root + "/config/sketchybar";
-    "karabiner".source = flake-root + "/config/karabiner";
-  };
-
-  home = {
-    packages = pkgs.callPackage ./packages.nix { };
-    sessionPath = [ "$HOME/go/bin" ];
-  };
+  home.sessionPath = [ "$HOME/go/bin" ];
 
   programs = {
+
     go = {
       enable = true;
       goPath = "go";
@@ -50,9 +55,7 @@
       extraConfig =
         builtins.readFile (flake-root + "/config/kitty/kitty.conf")
         + builtins.readFile (config.scheme base16-kitty);
-      darwinLaunchOptions = [ "--single-instance" ];
     };
-
     wezterm = {
       enable = true;
       enableZshIntegration = true;
@@ -116,6 +119,25 @@
             dim = default;
           };
       };
+    };
+    ssh = {
+      enable = true;
+      package = pkgs.openssh;
+      matchBlocks = {
+        "github.com" = {
+          hostname = "github.com";
+          identitiesOnly = true;
+        };
+      };
+      extraOptionOverrides.IdentityFile = osConfig.age.secrets."id.${hostname}.${user}".path;
+    };
+    gh = {
+      enable = true;
+      settings.editor = "vim";
+    };
+    git = {
+      userName = name;
+      userEmail = email;
     };
   };
 }

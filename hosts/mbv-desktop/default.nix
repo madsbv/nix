@@ -4,7 +4,7 @@
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (mod "nixos/server")
+    (mod "system/nixos/server")
   ];
 
   nixpkgs.config = {

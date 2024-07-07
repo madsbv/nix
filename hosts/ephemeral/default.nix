@@ -4,7 +4,7 @@
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (mod "shared/keys.nix")
+    (mod "system/common/common/keys.nix")
   ];
 
   local.keys = {
