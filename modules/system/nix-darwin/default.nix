@@ -11,7 +11,6 @@
   felixkratz-formulae,
   pirj-noclamshell,
   mod,
-  nox,
   ...
 }:
 
@@ -67,15 +66,7 @@ in
     mutableTaps = false;
   };
 
-  home-manager = {
-    users.${user} = {
-      imports = [ (mod "home-manager/darwin") ];
-    };
-    # Arguments exposed to every home-module
-    extraSpecialArgs = {
-      inherit user nox;
-    };
-  };
+  home-manager.sharedModules = [ (mod "home-manager/darwin") ];
 
   age.secrets."mbv-mba.autorestic.yml".rekeyFile =
     flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";

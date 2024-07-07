@@ -1,4 +1,5 @@
 {
+  mod,
   user,
   config,
   lib,
@@ -19,14 +20,16 @@ let
   email = "mvilladsen@pm.me";
 in
 {
-  imports = [ ./email.nix ];
+  imports = [
+    ./email.nix
+    (mod "home-manager/common/common")
+  ];
 
   home = {
     packages = pkgs.callPackage ./packages.nix { };
   };
 
   local = {
-    doomemacs.enable = true;
     email = {
       enable = true;
       maildir = "${config.xdg.dataHome}/Mail";
