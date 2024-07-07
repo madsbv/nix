@@ -4,8 +4,9 @@
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (mod "nixos/server")
-    (mod "nixos/client")
+    (mod "system/nixos/server")
+    (mod "system/nixos/client")
+    ./overclocking.nix
   ];
 
   local = {

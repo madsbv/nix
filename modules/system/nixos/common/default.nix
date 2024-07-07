@@ -12,14 +12,14 @@ let
 in
 {
   imports = [
-    (mod "shared")
+    (mod "system/common/common")
     ./restic.nix
     ./wifi.nix
   ];
 
   options.local.nixos.common = {
     user = lib.mkOption { default = "mvilladsen"; };
-    timezone = lib.mkOption { default = "Europe/Berlin"; };
+    timezone = lib.mkOption { default = "America/Detroit"; };
   };
 
   config = {

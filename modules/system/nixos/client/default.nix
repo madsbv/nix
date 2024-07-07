@@ -1,6 +1,21 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  mod,
+  ...
+}:
 
 {
+  imports = [
+    (mod "system/common/client")
+    (mod "system/nixos/common")
+  ];
+
+  local.emacs.package = pkgs.emacs;
+
+  # No longer exists on nix-darwin
+  fonts.fontDir.enable = true;
+
   services = {
     xserver = {
       enable = true;
