@@ -10,5 +10,6 @@
     furmark
     mprime
     hpl
+    corectrl
   ];
 }
