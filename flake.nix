@@ -231,6 +231,7 @@
         flake-inputs = inputs;
         flake-root = ./.;
         mod = m: ./. + "/modules/${m}";
+        user = "mvilladsen";
       };
       darwin-args = common-args;
       nixos-args = common-args;
