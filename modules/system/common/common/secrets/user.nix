@@ -11,6 +11,7 @@
     description = "List of users for which to deploy age-encrypted private SSH keys.";
     default = [ ];
   };
+
   config.age.secrets = lib.mkMerge (
     map (user: {
       "id.${hostname}.${user}" = {

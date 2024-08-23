@@ -1,9 +1,4 @@
-{
-  lib,
-  pkgs,
-  mod,
-  ...
-}:
+{ pkgs, mod, ... }:
 
 {
   imports = [
@@ -38,8 +33,6 @@
       pulse.enable = true;
     };
   };
-
-  sound.enable = lib.mkForce false;
 
   # Recommended by https://nixos.wiki/wiki/PipeWire
   security.rtkit.enable = true;
