@@ -14,8 +14,18 @@
     ./secrets/email.nix
   ];
 
+  local.emacs.enable = true;
+
   home-manager = {
-    sharedModules = [ (mod "home-manager/common/client") ];
+    sharedModules = [
+      (
+        { ... }:
+        {
+          imports = [ (mod "home-manager/common/client") ];
+          local.doomemacs.enable = true;
+        }
+      )
+    ];
     extraSpecialArgs = {
       inherit user nox;
     };
