@@ -4,6 +4,7 @@
   imports = [
     (mod "system/common/client")
     (mod "system/nixos/common")
+    ./dropbox.nix
   ];
 
   home-manager.sharedModules = [ (mod "home-manager/nixos/client") ];
@@ -47,7 +48,5 @@
     pavucontrol
     pwvucontrol
     bitwarden-desktop
-    dropbox
-    dropbox-cli
   ];
 }
