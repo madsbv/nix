@@ -46,5 +46,8 @@
   environment.systemPackages = with pkgs; [
     pavucontrol
     pwvucontrol
+    bitwarden-desktop
+    dropbox
+    dropbox-cli
   ];
 }
