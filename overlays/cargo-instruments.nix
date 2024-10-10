@@ -2,14 +2,14 @@
 _self: super: with super; {
   cargo-instruments = rustPlatform.buildRustPackage rec {
     pname = "cargo-instruments";
-    version = "0.4.9";
+    version = "0.4.10";
 
     src = fetchCrate {
       inherit pname version;
-      hash = "sha256-LR8p6N3YUfzRzNMmk9tQbPsTA8PpgnT7Q0r9+lCFgOM=";
+      hash = "sha256-9qNepo4ygGguTW+ev1gsVXQDKuSTx7218mEZQ4UgQzM=";
     };
 
-    cargoHash = "sha256-D4ZWhcnZaJh+VXI8npGrl3gUcrpPkKWMzXGNBYZ4DRY=";
+    cargoHash = "sha256-R82svOcGv1xhqHYFDY9sqeP5nE9SbpyZJAj6eZB+M+k=";
 
     nativeBuildInputs = [ pkg-config ];
 
