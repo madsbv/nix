@@ -313,7 +313,7 @@
           specialArgs = darwin-args // {
             hostname = "mbv-mba";
           };
-          modules = [ ./hosts/darwin ] ++ darwin-modules;
+          modules = [ ./hosts/mbv-mba ] ++ darwin-modules;
         };
       };
 
