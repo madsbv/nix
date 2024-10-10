@@ -31,18 +31,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # https://github.com/zhaofengli/nix-homebrew/issues/22#issuecomment-2119172062
-    # To fix issue installing packages whose formulae use the new deny_network_access sandboxing
-    brew-src = {
-      url = "github:Homebrew/brew/4.3.0";
-      flake = false;
-    };
     nix-homebrew = {
       url = "github:zhaofengli-wip/nix-homebrew";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         nix-darwin.follows = "darwin";
-        brew-src.follows = "brew-src";
       };
     };
 

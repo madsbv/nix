@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-
   homebrew = {
     enable = true;
     onActivation = {
