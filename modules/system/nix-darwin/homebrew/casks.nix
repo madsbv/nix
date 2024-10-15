@@ -44,5 +44,7 @@ _:
   "vivaldi"
   "orion"
 
-  # "teamviewer"
+  "teamviewer"
+
+  "freecad" # Exists in nixpkgs, but currently only for linux
 ]
