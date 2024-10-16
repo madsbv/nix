@@ -39,4 +39,7 @@ with pkgs;
   # Documents
   djvulibre
   poppler
+
+  # 3D modelling
+  openscad-unstable
 ]
