@@ -34,12 +34,14 @@ with pkgs;
   stylelint
   texlab
   texliveFull
-  bitwarden-cli
+  # bitwarden-cli
 
   # Documents
   djvulibre
   poppler
 
   # 3D modelling
-  openscad-unstable
+  # unstable is currently broken on Darwin: https://github.com/NixOS/nixpkgs/pull/342211#issuecomment-2356528216
+  # openscad-unstable
+  openscad
 ]

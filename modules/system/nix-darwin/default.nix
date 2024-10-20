@@ -66,7 +66,10 @@ in
     mutableTaps = false;
   };
 
-  home-manager.sharedModules = [ (mod "home-manager/darwin") ];
+  home-manager = {
+    users.${user}.home.homeDirectory = config.users.users.${user}.home;
+    sharedModules = [ (mod "home-manager/darwin") ];
+  };
 
   age.secrets."mbv-mba.autorestic.yml".rekeyFile =
     flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";
