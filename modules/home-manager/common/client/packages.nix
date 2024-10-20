@@ -34,7 +34,7 @@ with pkgs;
   stylelint
   texlab
   texliveFull
-  # TODO 241020: Build errors
+  # TODO 241020: Build errors: https://github.com/NixOS/nixpkgs/issues/339576
   # bitwarden-cli
 
   # Documents

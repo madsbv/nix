@@ -1,4 +1,6 @@
 # TODO: Make this system agnostic (probably requires generating it from nix)
+# IDEA: We could have files named "justfile-hostname" for each hostname together with a "justfile-common", and generate "justfile" from nix which just contains import statements for "justfile-common" and for the correct "justfile-hostname".
+#
 # TODO: Set up nix shell and nix-direnv, then use something like this in justfile to make sure we're actually in nix shell when necessary: https://notes.abhinavsarkar.net/2022/just-nix-podman-combo
 # Moving to this setup would simplify dev a lot
 #
