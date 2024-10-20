@@ -34,6 +34,7 @@ with pkgs;
   stylelint
   texlab
   texliveFull
+  # TODO 241020: Build errors
   # bitwarden-cli
 
   # Documents
