@@ -23,7 +23,8 @@ with pkgs;
   unzip
   fd
   ripgrep
-  ripgrep-all
+  # TODO: 241019: Potential build problem on Darwin?
+  # ripgrep-all
   fzf
   gdu
   tree

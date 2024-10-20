@@ -108,10 +108,10 @@
         auto-optimise-store = true;
         # Default is 67108864, which is 64MiB in bytes
         download-buffer-size = 268435456; # 256 MiB
+
         # sandbox = true or relaxed has problems on Darwin (see https://github.com/NixOS/nix/issues/4119)
         # If you get trapped by this, manually edit /etc/nix/nix.conf to set sandbox = false, kill nix-daemon, then try again (optionally with `--option sandbox false' added as well).
         sandbox = if pkgs.stdenv.isDarwin then false else true;
-        log-lines = lib.mkDefault 25;
         # May need to add `builder` to this list.
         trusted-users = [
           "root"
@@ -124,6 +124,11 @@
         # Fallback quickly if substituters are not available
         fallback = true;
         connect-timeout = 5;
+
+        keep-going = true;
+
+        log-lines = lib.mkDefault 250;
+        show-trace = true;
 
         warn-dirty = false;
         experimental-features = [
