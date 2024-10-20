@@ -18,10 +18,10 @@
 default: check-all
 
 run *args:
-	nix run --show-trace --inputs-from . {{args}}
+	nix run --inputs-from . {{args}}
 
 build *args:
-	nix --extra-experimental-features 'nix-command flakes' build --show-trace {{args}}
+	nix --extra-experimental-features 'nix-command flakes' build {{args}}
 
 alias l := lint
 lint:
@@ -41,11 +41,11 @@ nfc:
 
 alias c := check
 check: lint
-	nix flake check --show-trace
+	nix flake check
 
 alias ca := check-all
 check-all *args: lint
-	nix flake check --all-systems --show-trace {{args}}
+	nix flake check --all-systems {{args}}
 
 alias y := fix-yabai
 fix-yabai:
@@ -58,11 +58,11 @@ build-darwin:
 
 alias sd := switch-darwin
 switch-darwin: rekey
-	darwin-rebuild switch --show-trace --flake .#mbv-mba
+	darwin-rebuild switch --flake .#mbv-mba
 
 alias sn := switch-nixos
 switch-nixos:
-	nixos-rebuild switch --show-trace --flake .#$(hostname)
+	nixos-rebuild switch --flake .#$(hostname)
 
 alias d := deploy
 deploy:
