@@ -15,12 +15,13 @@
 # - disko#disko-installer
 # - nixos-anywhere
 
-default: check-all
+default:
+	just --list
 
-run *args:
+run *args: check-git
 	nix run --inputs-from . {{args}}
 
-build *args:
+build *args: check-git
 	nix --extra-experimental-features 'nix-command flakes' build {{args}}
 
 alias l := lint
@@ -39,12 +40,16 @@ fix:
 nfc:
 	just run github:DeterminateSystems/flake-checker
 
+# Lists all files that are neither tracked nor ignored. These will not be seen by nix, which might cause silent and confusing errors.
+check-git:
+	@if [[ -n $(git ls-files . --exclude-standard --others) ]]; then echo "The following files are not tracked and not ignored:"; git ls-files . --exclude-standard --others; exit 1; fi
+
 alias c := check
-check: lint
+check: check-git lint
 	nix flake check
 
 alias ca := check-all
-check-all *args: lint
+check-all *args: check-git lint
 	nix flake check --all-systems {{args}}
 
 alias y := fix-yabai
@@ -61,7 +66,7 @@ switch-darwin: rekey
 	darwin-rebuild switch --flake .#mbv-mba
 
 alias sn := switch-nixos
-switch-nixos:
+switch-nixos: check-git
 	nixos-rebuild switch --flake .#$(hostname)
 
 alias d := deploy
@@ -77,7 +82,7 @@ deploy-dry:
 	just run github:serokell/deploy-rs -- --dry-activate --debug-logs .
 
 alias u := update
-update:
+update: check-git
 	nix flake update
 
 alias un := update-nixos
@@ -97,11 +102,11 @@ build-ephemeral machine-type image-format="install-iso": rekey
 	chmod +w ~/ephemeral/ephemeral-{{machine-type}}-{{image-format}}.iso
 
 alias r := rekey
-rekey *args:
+rekey *args: check-git
 	just run "agenix-rekey#packages.aarch64-darwin.default" -- rekey -a {{args}}
 
 alias e := agenix-edit
-agenix-edit *args:
+agenix-edit *args: check-git
 	just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
 
 ### USAGE
