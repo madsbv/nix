@@ -104,8 +104,12 @@
             options = "--delete-older-than 30d";
           }
         ];
+
+      optimise = {
+        automatic = true;
+      };
+
       settings = {
-        auto-optimise-store = true;
         # Default is 67108864, which is 64MiB in bytes
         download-buffer-size = 268435456; # 256 MiB
 
