@@ -17,6 +17,7 @@ let
     # TODO: Themeing?
     cat = "${pkgs.bat}/bin/bat";
     grep = "${pkgs.gnugrep}/bin/grep -i --color=always";
+    psgrep = "ps aux | grep -v grep | grep";
   };
 in
 {
