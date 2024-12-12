@@ -146,7 +146,6 @@
       ...
     }@inputs:
     let
-      # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
       molokai = {
         slug = "molokai";
         scheme = "Port of the Doomemacs port of Tomas Restrepo's Molokai";
@@ -168,6 +167,11 @@
         base0E = "#9c91e4";
         base0F = "#cc6633";
       };
+      # Use the color scheme defined above
+      color-scheme = molokai;
+      ## Example of using a color scheme from the base-16 repo:
+      # color-scheme = "${inputs.base16-schemes}/base16/monokai.yaml";
+
       linuxSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -198,8 +202,6 @@
             '';
           };
         };
-
-      color-scheme = molokai;
 
       common-modules = [
         inputs.base16.nixosModule
@@ -246,7 +248,7 @@
 
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
-        nodes = self.darwinConfigurations // {
+        nixosConfigurations = self.darwinConfigurations // {
           inherit (self.nixosConfigurations)
             mbv-xps13
             mbv-desktop
