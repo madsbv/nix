@@ -35,15 +35,11 @@ with pkgs;
   ## Tool to explore nix expression dependencies.
   ## There's also the built-in `nix path-info -r` and `nix why-depends`
   nix-tree
-  # TODO: Do I really need these?
-  # sqlite
-  # perl
 
   # Encryption and security tools
   # agenix-rekey
   rage
   age-plugin-yubikey
-  # gnupg
   libfido2
   yubikey-agent
   yubikey-manager # Should be a CLI tool and shouldn't conflict with the homebrew yubico-yubikey-manager on Darwin
@@ -51,10 +47,7 @@ with pkgs;
   # Networking
   tailscale
 
-  # Virtualization
-  # TODO: Sort this out
-  # qemu
-  # libvirt
-  # edk2
-  # virt-manager # Broken on Darwin
+  # Database/server
+  sqlite
+  postgresql_jit
 ]
