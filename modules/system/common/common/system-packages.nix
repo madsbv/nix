@@ -49,5 +49,4 @@ with pkgs;
 
   # Database/server
   sqlite
-  postgresql_jit
 ]
