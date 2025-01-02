@@ -203,6 +203,27 @@
           };
         };
 
+      ### Apply nixpkgs patches/pull requests before they make their way to the normal channels (e.g. nixpkgs-unstable).
+      # Based on:
+      # https://ertt.ca/nix/patch-nixpkgs
+      # https://wiki.nixos.org/wiki/Nixpkgs/Patching_Nixpkgs
+      # For a given pull request on Github, append '.patch' to get a corresponding patch file. Download it and add it to the ./patches folder in this repo and add to the patches list below.
+      #
+      # XXX: I don't know how to make this work with nix-darwin. I think I can pass a patched pkgs to it, but it still uses its own flake input for nixpkgs.lib, which means that nixpkgs.config settings inside the system config don't apply to the patched pkgs, since it uses its own lib.
+      nixpkgs-patched =
+        system:
+        (import nixpkgs {
+          inherit system;
+        }).applyPatches
+          {
+            name = "nixpkgs-patched";
+            src = nixpkgs;
+            patches = [
+              ./patches/nixpkgs-369649-libossp-uuid.patch
+            ];
+          };
+      pkgs-patched = system: import (nixpkgs-patched system) { inherit system; };
+
       common-modules = [
         inputs.base16.nixosModule
         { scheme = color-scheme; }
@@ -231,13 +252,34 @@
       darwin-args = common-args;
       nixos-args = common-args;
 
+      nixos-system =
+        system: hostname:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = nixos-args // {
+            inherit hostname;
+          };
+          modules = [ ./hosts/${hostname} ] ++ nixos-modules;
+        };
+
+      darwin-system =
+        system: hostname:
+        darwin.lib.darwinSystem {
+          inherit system;
+          specialArgs = darwin-args // {
+            inherit hostname;
+          };
+          modules = [ ./hosts/${hostname} ] ++ darwin-modules;
+        };
+
       # NOTE: When adding new nodes, update this, agenix-rekey, and deploy-rs node lists
+      # Used to track hostnames of remote builders and of known ssh hosts
       nodes = {
         clients = [ "mbv-mba" ];
         servers = [
           ### Currently offline
-          # "mbv-desktop"
-          # "mbv-xps13"
+          "mbv-desktop"
+          "mbv-xps13"
           "mbv-workstation"
           "hp-90"
         ];
@@ -310,45 +352,15 @@
       };
 
       darwinConfigurations = {
-        mbv-mba = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          specialArgs = darwin-args // {
-            hostname = "mbv-mba";
-          };
-          modules = [ ./hosts/mbv-mba ] ++ darwin-modules;
-        };
+        mbv-mba = (darwin-system "aarch64-darwin" "mbv-mba");
       };
 
       nixosConfigurations =
         {
-          mbv-workstation = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = nixos-args // {
-              hostname = "mbv-workstation";
-            };
-            modules = [ ./hosts/mbv-workstation ] ++ nixos-modules;
-          };
-          mbv-desktop = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = nixos-args // {
-              hostname = "mbv-desktop";
-            };
-            modules = [ ./hosts/mbv-desktop ] ++ nixos-modules;
-          };
-          mbv-xps13 = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = nixos-args // {
-              hostname = "mbv-xps13";
-            };
-            modules = [ ./hosts/mbv-xps13 ] ++ nixos-modules;
-          };
-          hp-90 = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = nixos-args // {
-              hostname = "hp-90";
-            };
-            modules = [ ./hosts/hp-90 ] ++ nixos-modules;
-          };
+          mbv-workstation = (nixos-system "x86_64-linux" "mbv-workstation");
+          mbv-desktop = (nixos-system "x86_64-linux" "mbv-desktop");
+          mbv-xps13 = (nixos-system "x86_64-linux" "mbv-xps13");
+          hp-90 = (nixos-system "x86_64-linux" "hp-90");
         }
         // forLinuxSystems (system: {
           # A system configuration for ephemeral systems--either temporary VMs or for installers.

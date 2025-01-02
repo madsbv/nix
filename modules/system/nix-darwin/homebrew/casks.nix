@@ -21,8 +21,9 @@ _:
   "discord"
   "zoom"
   "signal"
-  "protonmail-bridge"
+  "proton-mail-bridge"
   "proton-mail"
+  "teamviewer"
 
   # Entertainment Tools
   "vlc"
@@ -44,7 +45,7 @@ _:
   "vivaldi"
   "orion"
 
-  "teamviewer"
-
+  # 3D modelling
   "freecad" # Exists in nixpkgs, but currently only for linux
+  "openscad"
 ]

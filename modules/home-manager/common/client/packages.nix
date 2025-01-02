@@ -44,5 +44,6 @@ with pkgs;
   # 3D modelling
   # unstable is currently broken on Darwin: https://github.com/NixOS/nixpkgs/pull/342211#issuecomment-2356528216
   # openscad-unstable
-  openscad
+  # Stable seems to also be broken
+  # openscad
 ]
