@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, nox, ... }:
 
-with pkgs;
-[
+[ nox ]
+++ (with pkgs; [
   # Communication tools
   zoom-us
   discord
@@ -46,4 +46,4 @@ with pkgs;
   # openscad-unstable
   # Stable seems to also be broken
   # openscad
-]
+])

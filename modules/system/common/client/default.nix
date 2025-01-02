@@ -1,6 +1,6 @@
 {
   user,
-  nox,
+  flake-inputs,
   pkgs,
   mod,
   ...
@@ -27,7 +27,7 @@
       )
     ];
     extraSpecialArgs = {
-      inherit user nox;
+      inherit user flake-inputs;
     };
   };
 

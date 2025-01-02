@@ -11,6 +11,7 @@
   felixkratz-formulae,
   pirj-noclamshell,
   mod,
+  lib,
   ...
 }:
 
@@ -45,6 +46,9 @@ in
   nix.linux-builder = {
     enable = true;
     package = pkgs.darwin.linux-builder-x86_64;
+    # Likely to fix weird build issues (including related to evaluating derivations while running `just check-all` as discovered on 250102), but at the cost of more rebuilding.
+    # Enable if problems arise, or consider removing /var/lib/darwin-builder to force reinstantiation of the builders store without enabling this option.
+    # ephemeral = true;
   };
   # For some reason the mkMerge/mkIf combo in modules/shared doesn't want to play nice with this option.
   programs = {

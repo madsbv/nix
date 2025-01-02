@@ -7,6 +7,7 @@
   hostname,
   pkgs,
   flake-root,
+  flake-inputs,
   base16-kitty,
   bootdev,
   ...
@@ -26,7 +27,7 @@ in
   ];
 
   home = {
-    packages = pkgs.callPackage ./packages.nix { };
+    packages = pkgs.callPackage ./packages.nix { inherit (flake-inputs) nox; };
   };
 
   local = {
