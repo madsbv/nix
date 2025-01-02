@@ -35,7 +35,8 @@
         enableLocalBuilder = true;
         enableRemoteBuilders = true;
         # Enable all servers other than this one as remote builders
-        remoteBuilders_x86-64 = builtins.filter (host: host != hostname) nodes.servers;
+        # TODO: Figure out how to check which servers are online before trying to use them as build hosts, or reduce the timeout for ssh-ng connections.
+        # remoteBuilders_x86-64 = builtins.filter (host: host != hostname) nodes.servers;
       };
       neovim.enable = true;
       keys = {
@@ -131,7 +132,7 @@
         builders-use-substitutes = true;
         # Fallback quickly if substituters are not available
         fallback = true;
-        connect-timeout = 5;
+        connect-timeout = 3;
 
         keep-going = true;
 
