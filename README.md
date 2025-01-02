@@ -4,6 +4,37 @@
 - [ ] Disk encryption on nixos machines?
 - [ ] Can we do multi-key shortcuts with skhd, e.g., 'alt-1 alt-2' for switching to space 12? Else consider adding some function key shortcuts for use with Glove80, like F10-F18 or whatever, or even duplicating the 1-9 bindings on function keys.
         - We can also do 1-0 for one screen and F1-F10 for the other.
+- [ ] Try to figure out patching nixpkgs and nix-darwin to pull in pull requests early on build failures, see [nixpkgs patching](#nixpkgs patching). 
+
+## nixpkgs patching
+The following was some code and comments from an attempt on 250101 to do this.
+I think I can probably figure out how to inject the patched nixpkgs/pkgs into the nixos systems, but I can't figure out how to inject nixpkgs to nix-darwin, other than as a flake input, which I don't think I can patch.
+
+I can inject pkgs to darwinSystem (just with inherit pkgs), but the system still uses nixpkgs from its flake input, so pkgs and nixpkgs get disconnected. In particular, settings in nixpgks.config in the system configuration don't apply to the injected instance of pkgs. The exact issue I faced was inability to set `allowUnfree = true`.
+
+``` nix
+      ### Apply nixpkgs patches/pull requests before they make their way to the normal channels (e.g. nixpkgs-unstable).
+      # Based on:
+      # https://ertt.ca/nix/patch-nixpkgs
+      # https://wiki.nixos.org/wiki/Nixpkgs/Patching_Nixpkgs
+      # For a given pull request on Github, append '.patch' to get a corresponding patch file. Download it and add it to the ./patches folder in this repo and add to the patches list below.
+      #
+      # XXX: I don't know how to make this work with nix-darwin. I think I can pass a patched pkgs to it, but it still uses its own flake input for nixpkgs.lib, which means that nixpkgs.config settings inside the system config don't apply to the patched pkgs, since it uses its own lib.
+      nixpkgs-patched =
+        system:
+        (import nixpkgs {
+          inherit system;
+        }).applyPatches
+          {
+            name = "nixpkgs-patched";
+            src = nixpkgs;
+            patches = [
+              ./patches/nixpkgs-369649-libossp-uuid.patch
+            ];
+          };
+      pkgs-patched = system: import (nixpkgs-patched system) { inherit system; };
+```
+
 
 ## Servers
 6. Set up home-assistant on xps13.
