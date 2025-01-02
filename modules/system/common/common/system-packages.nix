@@ -16,7 +16,8 @@ with pkgs;
   killall
   curlFull
   wget
-  gitFull
+  # gitFull
+  git
   zip
   zstd
   unrar
