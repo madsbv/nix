@@ -9,5 +9,7 @@ with pkgs;
   # llm.withPlugins
   # ([ "llm-gpt4all" ])
   ollama
+]
+++ [
   nox
 ]
