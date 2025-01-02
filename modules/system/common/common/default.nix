@@ -46,6 +46,7 @@
     home-manager = lib.mkIf config.local.hm.enable {
       useGlobalPkgs = true;
       useUserPackages = true;
+      backupFileExtension = "home-manager-backup";
       extraSpecialArgs = flake-inputs // {
         inherit hostname flake-root mod;
       };
@@ -70,13 +71,16 @@
 
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
+    # nix-darwin has its own mechanism for this
     nix = {
-      registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
-        (lib.filterAttrs (_: lib.isType "flake")) flake-inputs
+      registry = lib.mkIf pkgs.stdenv.isLinux (
+        (lib.mapAttrs (_: flake: { inherit flake; })) (
+          (lib.filterAttrs (_: lib.isType "flake")) flake-inputs
+        )
       );
       # This will additionally add your inputs to the system's legacy channels
       # Making legacy nix commands consistent as well, awesome!
-      nixPath = [ "/etc/nix/path" ];
+      nixPath = lib.mkIf pkgs.stdenv.isLinux [ "/etc/nix/path" ];
       package = pkgs.nixVersions.latest;
 
       gc =
@@ -173,10 +177,13 @@
     };
 
     environment = {
-      etc = lib.mapAttrs' (name: value: {
-        name = "nix/path/${name}";
-        value.source = value.flake;
-      }) config.nix.registry;
+      # nix-darwin has its own mechanism for this
+      etc = lib.mkIf pkgs.stdenv.isLinux (
+        lib.mapAttrs' (name: value: {
+          name = "nix/path/${name}";
+          value.source = value.flake;
+        }) config.nix.registry
+      );
       systemPackages = import ./system-packages.nix { inherit pkgs; };
     };
   };
