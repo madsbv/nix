@@ -2,7 +2,7 @@
   description = "Starter Configuration with secrets for MacOS and NixOS";
   inputs = {
     ### Nix basics ###
-    nixpkgs.url = "github:NixOS/nixpkgs/552fcd0015230194f2dfbc0c5270a9388a2e3c35";
+    nixpkgs.url = "github:NixOS/nixpkgs/585f76290ed66a3fdc5aae0933b73f9fd3dca7e3";
     # Local copy of fork of nixpkgs for development/testing package upgrades
     #nixpkgs.url = "github:madsbv/nixpkgs/emacs-no-titlebar-patch";
     # nixpkgs.url = "git+file:///Users/mvilladsen/workspace/github.com/madsbv/nixpkgs/";
