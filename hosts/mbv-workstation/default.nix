@@ -1,4 +1,4 @@
-{ mod, ... }:
+{ mod, pkgs, ... }:
 
 {
   imports = [
@@ -17,6 +17,11 @@
   nixpkgs.config = {
     rocmSupport = true;
   };
+
+  environment.systemPackages = with pkgs; [
+    protonup-qt
+    mangohud
+  ];
 
   programs = {
     steam = {
