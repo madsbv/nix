@@ -64,12 +64,18 @@ build-darwin:
 	just build ".#darwinConfigurations.mbv-mba.system"
 
 alias sd := switch-darwin
-switch-darwin: rekey
+switch-darwin: rekey build-darwin
 	darwin-rebuild switch --flake .#mbv-mba
 
+build-nixos: check-git
+	nixos-rebuild build --flake .#$(hostname)
+
 alias sn := switch-nixos
-switch-nixos: check-git
+switch-nixos: build-nixos
 	nixos-rebuild switch --flake .#$(hostname)
+
+switch-nixos-boot: build-nixos
+	nixos-rebuild boot --flake .#$(hostname)
 
 alias d := deploy
 deploy:
