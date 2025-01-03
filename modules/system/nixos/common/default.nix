@@ -166,14 +166,14 @@ in
 
           # Preserve some history and cached stuff for easier shell usage
           "/var/cache/nix-index"
-          # TODO: Fix
-          {
-            directory = "/home/${cfg.user}";
-            inherit (cfg) user;
-            mode = "u=rwx,g=rx,o=";
-          }
+
+          # Cache zsh plugins and such
+          "/root"
         ];
         files = [ "/etc/machine-id" ];
+        users.${cfg.user}.directories = [
+          "."
+        ];
       };
     };
 
