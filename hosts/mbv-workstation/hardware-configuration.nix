@@ -30,7 +30,7 @@
 
   # From https://nixos.wiki/wiki/AMD_GPU
   systemd = {
-    tmpfiles.rules = [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
+    # tmpfiles.rules = [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
     packages = with pkgs; [ lact ];
     # For lact
     services.lactd.wantedBy = [ "multi-user.target" ];
@@ -41,25 +41,25 @@
     graphics = {
       enable = true;
       enable32bit = true;
-      extraPackages = with pkgs; [
-        rocmPackages.clr.icd
-        amdvlk
-      ];
-      extraPackages32 = with pkgs; [
-        driversi686Linux.amdvlk
-      ];
+      # extraPackages = with pkgs; [
+      #   rocmPackages.clr.icd
+      #   amdvlk
+      # ];
+      # extraPackages32 = with pkgs; [
+      #   driversi686Linux.amdvlk
+      # ];
     };
     amdgpu = {
-      amdvlk.enable = true;
+      # amdvlk.enable = true;
       initrd.enable = true;
-      opencl.enable = true;
+      # opencl.enable = true;
     };
     bluetooth = {
       enable = true;
       powerOnBoot = true;
     };
   };
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  # services.xserver.videoDrivers = [ "amdgpu" ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
