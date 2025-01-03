@@ -29,13 +29,24 @@
   };
 
   # From https://nixos.wiki/wiki/AMD_GPU
-  systemd.tmpfiles.rules = [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
+  systemd = {
+    tmpfiles.rules = [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
+    packages = with pkgs; [ lact ];
+    # For lact
+    services.lactd.wantedBy = [ "multi-user.target" ];
+  };
+  # lact = Linux AmdGpu Controller
+  environment.systemPackages = with pkgs; [ lact ];
   hardware = {
     graphics = {
       enable = true;
+      enable32bit = true;
       extraPackages = with pkgs; [
         rocmPackages.clr.icd
         amdvlk
+      ];
+      extraPackages32 = with pkgs; [
+        driversi686Linux.amdvlk
       ];
     };
     amdgpu = {
