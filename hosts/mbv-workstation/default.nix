@@ -23,12 +23,20 @@
       enable = true;
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
+      gamescopeSession.enable = true;
       # extest.enable = true; # Maybe useful for controllers?
     };
 
     tuxclocker = {
       enable = true;
       enableAMD = true;
+    };
+
+    gamemode.enable = true;
+    gamescope = {
+      enable = true;
+      capSysNice = true;
+
     };
   };
 
