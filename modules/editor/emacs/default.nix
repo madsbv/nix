@@ -13,6 +13,9 @@ in
   options.local.emacs = {
     enable = lib.mkEnableOption "Emacs";
     package = lib.mkPackageOption pkgs "emacs" { };
+    doomConfigRepo = lib.mkOption {
+      default = "https://github.com/madsbv/doom.d.git";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -51,11 +54,11 @@ in
               activation.installDoomEmacs = lib.mkIf config.local.doomemacs.enable (
                 lib.hm.dag.entryAfter [ "writeBoundary" ] ''
                   if [ ! -d "${doomDir}" ]; then
-                     ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${my-doomemacs-config}/ ${doomDir}
+                      ${pkgs.git} clone ${cfg.doomConfigRepo} "${doomDir}"
                   fi
                   if [ ! -d "${emacsDir}" ]; then
-                     ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 "${doomemacs}"/ "${emacsDir}"
-                     ${emacsDir}/bin/doom install
+                      ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 "${doomemacs}"/ "${emacsDir}"
+                      ${emacsDir}/bin/doom install
                   fi
                 ''
               );
