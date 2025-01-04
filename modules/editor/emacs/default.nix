@@ -13,6 +13,9 @@ in
   options.local.emacs = {
     enable = lib.mkEnableOption "Emacs";
     package = lib.mkPackageOption pkgs "emacs" { };
+    doomRepo = lib.mkOption {
+      default = "https://github.com/doomemacs/doomemacs.git";
+    };
     doomConfigRepo = lib.mkOption {
       default = "https://github.com/madsbv/doom.d.git";
     };
@@ -57,7 +60,7 @@ in
                       ${pkgs.git}/bin/git clone ${cfg.doomConfigRepo} "${doomDir}"
                   fi
                   if [ ! -d "${emacsDir}" ]; then
-                      ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 "${doomemacs}"/ "${emacsDir}"
+                      ${pkgs.git}/bin/git clone ${cfg.doomRepo} "${emacsDir}"
                       ${emacsDir}/bin/doom install
                   fi
                 ''
