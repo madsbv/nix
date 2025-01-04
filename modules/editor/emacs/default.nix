@@ -54,7 +54,7 @@ in
               activation.installDoomEmacs = lib.mkIf config.local.doomemacs.enable (
                 lib.hm.dag.entryAfter [ "writeBoundary" ] ''
                   if [ ! -d "${doomDir}" ]; then
-                      ${pkgs.git} clone ${cfg.doomConfigRepo} "${doomDir}"
+                      ${pkgs.git}/bin/git clone ${cfg.doomConfigRepo} "${doomDir}"
                   fi
                   if [ ! -d "${emacsDir}" ]; then
                       ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 "${doomemacs}"/ "${emacsDir}"
