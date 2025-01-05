@@ -40,7 +40,12 @@ in
     };
   };
 
-  home.sessionPath = [ "$HOME/go/bin" ];
+  home = {
+    sessionPath = [ "$HOME/go/bin" ];
+    sessionVariables = {
+      TERMINAL = "kitty";
+    };
+  };
 
   programs = {
 
