@@ -252,22 +252,6 @@
         "type": "github"
       }
     },
-    "doomemacs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1733434763,
-        "narHash": "sha256-sebujw5VvBWMS+wXyjiGF81iyjPM/QQDnw5l7tDJCvk=",
-        "owner": "doomemacs",
-        "repo": "doomemacs",
-        "rev": "ba1dca322f9a07bc2b7bec6a98f2c3c55c0bbd77",
-        "type": "github"
-      },
-      "original": {
-        "owner": "doomemacs",
-        "repo": "doomemacs",
-        "type": "github"
-      }
-    },
     "felixkratz-formulae": {
       "flake": false,
       "locked": {
@@ -597,22 +581,6 @@
         "type": "github"
       }
     },
-    "my-doomemacs-config": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1730317588,
-        "narHash": "sha256-LpJFf9bC+3lSQWxGyKu3EM9vFZa3reKeo4QjoEKUP/g=",
-        "owner": "madsbv",
-        "repo": "doom.d",
-        "rev": "1f38dae2778b8735893633191b59f510c63ec787",
-        "type": "github"
-      },
-      "original": {
-        "owner": "madsbv",
-        "repo": "doom.d",
-        "type": "github"
-      }
-    },
     "nix-homebrew": {
       "inputs": {
         "brew-src": "brew-src",
@@ -792,7 +760,6 @@
         "darwin": "darwin_2",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
-        "doomemacs": "doomemacs",
         "felixkratz-formulae": "felixkratz-formulae",
         "fenix": "fenix",
         "home-manager": "home-manager_2",
@@ -803,7 +770,6 @@
         "homebrew-core": "homebrew-core",
         "homebrew-services": "homebrew-services",
         "impermanence": "impermanence",
-        "my-doomemacs-config": "my-doomemacs-config",
         "nix-homebrew": "nix-homebrew",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
