@@ -2,14 +2,7 @@
   flake-root,
   config,
   pkgs,
-  homebrew-apple,
-  homebrew-bundle,
-  homebrew-core,
-  homebrew-cask,
-  homebrew-services,
-  homebrew-cask-fonts,
-  felixkratz-formulae,
-  pirj-noclamshell,
+  inputs,
   mod,
   lib,
   ...
@@ -60,7 +53,7 @@ in
     enable = true;
     enableRosetta = true;
     user = "${user}";
-    taps = {
+    taps = with inputs; {
       "homebrew/homebrew-core" = homebrew-core;
       "homebrew/homebrew-cask" = homebrew-cask;
       "homebrew/homebrew-bundle" = homebrew-bundle;

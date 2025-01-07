@@ -7,9 +7,8 @@
   hostname,
   pkgs,
   flake-root,
-  flake-inputs,
-  base16-kitty,
-  bootdev,
+  nox,
+  inputs,
   ...
 }:
 
@@ -27,7 +26,7 @@ in
   ];
 
   home = {
-    packages = pkgs.callPackage ./packages.nix { inherit (flake-inputs) nox; };
+    packages = pkgs.callPackage ./packages.nix { inherit nox; };
   };
 
   local = {
@@ -53,7 +52,7 @@ in
       enable = true;
       goPath = "go";
       packages = {
-        "github.com/bootdotdev/bootdev" = bootdev;
+        "github.com/bootdotdev/bootdev" = inputs.bootdev;
       };
     };
 
@@ -63,7 +62,7 @@ in
       # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
       extraConfig =
         builtins.readFile (flake-root + "/config/kitty/kitty.conf")
-        + builtins.readFile (config.scheme base16-kitty);
+        + builtins.readFile (config.scheme inputs.base16-kitty);
     };
     wezterm = {
       enable = true;

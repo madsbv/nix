@@ -116,6 +116,7 @@
 
     nox = {
       url = "github:madsbv/nix-options-search";
+      # url = "git+file:///Users/mvilladsen/workspace/github.com/madsbv/nix-options-search/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -211,10 +212,10 @@
         disko.nixosModules.disko
       ] ++ common-modules;
 
-      common-args = inputs // {
-        inherit nodes color-scheme;
-        flake-inputs = inputs;
+      common-args = system: {
+        inherit nodes color-scheme inputs;
         flake-root = ./.;
+        nox = inputs.nox.packages.${system}.default;
         mod = m: ./. + "/modules/${m}";
         user = "mvilladsen";
       };
@@ -225,7 +226,7 @@
         system: hostname:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = nixos-args // {
+          specialArgs = (nixos-args system) // {
             inherit hostname;
           };
           modules = [ ./hosts/${hostname} ] ++ nixos-modules;
@@ -235,7 +236,7 @@
         system: hostname:
         darwin.lib.darwinSystem {
           inherit system;
-          specialArgs = darwin-args // {
+          specialArgs = (darwin-args system) // {
             inherit hostname;
           };
           modules = [ ./hosts/${hostname} ] ++ darwin-modules;

@@ -1,12 +1,11 @@
 {
-  flake-inputs,
+  inputs,
   flake-root,
   hostname,
   nodes,
   lib,
   config,
   pkgs,
-  base16,
   color-scheme,
   mod,
   ...
@@ -48,15 +47,20 @@
       useGlobalPkgs = true;
       useUserPackages = true;
       backupFileExtension = "home-manager-backup";
-      extraSpecialArgs = flake-inputs // {
-        inherit hostname flake-root mod;
+      extraSpecialArgs = {
+        inherit
+          hostname
+          flake-root
+          mod
+          inputs
+          ;
       };
       sharedModules = [
         (
           { ... }:
           {
             # Currently used for Kitty and Alacritty only
-            imports = [ base16.homeManagerModule ];
+            imports = [ inputs.base16.homeManagerModule ];
             scheme = color-scheme;
             xdg.enable = true;
             home = {
@@ -75,9 +79,7 @@
     # nix-darwin has its own mechanism for this
     nix = {
       registry = lib.mkIf pkgs.stdenv.isLinux (
-        (lib.mapAttrs (_: flake: { inherit flake; })) (
-          (lib.filterAttrs (_: lib.isType "flake")) flake-inputs
-        )
+        (lib.mapAttrs (_: flake: { inherit flake; })) ((lib.filterAttrs (_: lib.isType "flake")) inputs)
       );
       # This will additionally add your inputs to the system's legacy channels
       # Making legacy nix commands consistent as well, awesome!
