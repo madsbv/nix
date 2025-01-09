@@ -7,3 +7,4 @@
 *.iso
 /new-host-*
 /autorestic.yml
+*.wg
