@@ -163,9 +163,8 @@
         # allowInsecure = false;
         allowUnsupportedSystem = false;
         warnUndeclaredOptions = true;
-        # TODO: Try this out
-        # contentAddressedByDefault = true;
       };
+
       overlays =
         # Apply each overlay found in the /overlays directory
         let
