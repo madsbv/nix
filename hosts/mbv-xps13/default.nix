@@ -13,6 +13,7 @@
     home-assistant = {
       enable = true;
       configWritable = true;
+      lovelaceConfigWritable = true;
       extraComponents = [
         "awair"
         "accuweather"
