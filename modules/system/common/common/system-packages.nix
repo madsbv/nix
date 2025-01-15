@@ -24,7 +24,7 @@ with pkgs;
   unzip
   fd
   ripgrep
-  # TODO: 241019: Potential build problem on Darwin?
+  ## TODO: 241019: Potential build problem on Darwin?
   # ripgrep-all
   fzf
   gdu
@@ -33,9 +33,15 @@ with pkgs;
   watchexec
   jq
   zellij
+  ## CLI file manager
+  yazi
+
+  # Nix tools
   ## Tool to explore nix expression dependencies.
   ## There's also the built-in `nix path-info -r` and `nix why-depends`
   nix-tree
+  ## Ranger-style interface for navigating flake.lock files
+  nix-melt
 
   # Encryption and security tools
   # agenix-rekey

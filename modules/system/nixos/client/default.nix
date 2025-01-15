@@ -40,8 +40,15 @@
 
   programs = {
     nm-applet.enable = true;
-    spacefm.enable = true;
     firefox.enable = true;
+    thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [
+        thunar-volman
+        thunar-dropbox-plugin
+        thunar-archive-plugin
+      ];
+    };
   };
 
   environment.systemPackages = with pkgs; [
