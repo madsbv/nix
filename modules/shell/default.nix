@@ -118,6 +118,12 @@ in
             '';
           };
 
+          # Terminal file manager
+          yazi = {
+            enable = true;
+            enableZshIntegration = true;
+          };
+
           git = {
             enable = true;
             ignores = gitignore_global;
