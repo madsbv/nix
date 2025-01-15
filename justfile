@@ -60,8 +60,8 @@ fix-yabai:
 	launchctl kickstart -k gui/501/org.nixos.sketchybar
 
 alias bd := build-darwin
-build-darwin:
-	just build ".#darwinConfigurations.mbv-mba.system"
+build-darwin *args:
+	just build {{args}} ".#darwinConfigurations.mbv-mba.system"
 
 alias sd := switch-darwin
 switch-darwin: rekey build-darwin
