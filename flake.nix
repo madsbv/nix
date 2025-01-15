@@ -27,7 +27,11 @@
 
     ### Darwin ###
     darwin = {
-      url = "github:LnL7/nix-darwin/master";
+      url = "github:LnL7/nix-darwin/";
+      # Good commit:
+      # url = "github:LnL7/nix-darwin/57733bd1dc81900e13438e5b4439239f1b29db0e";
+      # commit be4c1b897accbdfc3429e99b5bd5234c5663776e introduces an openssh module to nix-darwin. However, agenix uses `services.openssh.enable` to detect darwin vs linux, and the introduction of this option seems to break that.
+
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

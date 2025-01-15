@@ -2,6 +2,8 @@
   hostname,
   flake-root,
   pkgs,
+  config,
+  lib,
   ...
 }:
 {
@@ -14,6 +16,18 @@
 
   imports = [ ./user.nix ];
   # NOTE: Agenix does not error on build if decryption fails. See launchd service if weirdness occurs.
+  age.identityPaths =
+    if pkgs.stdenv.isDarwin then
+      [
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_rsa_key"
+      ]
+    else if (config.services.openssh.enable or false) then
+      map (e: e.path) (
+        lib.filter (e: e.type == "rsa" || e.type == "ed25519") config.services.openssh.hostKeys
+      )
+    else
+      [ ];
   age.rekey = {
     # Hostkey from /etc/ssh/ssh_host_...
     # Generated with `sudo ssh-keygen -A`
