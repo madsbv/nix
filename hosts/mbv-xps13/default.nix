@@ -25,6 +25,14 @@
         "jellyfin"
         "seventeentrack"
         "speedtestdotnet"
+        "default_config"
+        "met"
+        "esphome"
+        "tplink"
+        "tplink_tapo"
+        "ecobee"
+        "homekit_controller"
+        "roomba"
       ];
       config.homeassistant = {
         name = "ha-name";
