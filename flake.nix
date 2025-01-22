@@ -310,12 +310,12 @@
           #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
           #   };
           # };
-          # mbv-xps13 = {
-          #   hostname = "mbv-xps13";
-          #   profiles.system = {
-          #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-xps13;
-          #   };
-          # };
+          mbv-xps13 = {
+            hostname = "mbv-xps13";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-xps13;
+            };
+          };
           hp-90 = {
             hostname = "hp-90";
             profiles.system = {
@@ -351,7 +351,7 @@
             #   services.openssh.enable = true;
             # };
             # nixpkgs.hostPlatform = "aarch64-darwin";
-            specialArgs = nixos-args // {
+            specialArgs = (nixos-args system) // {
               inherit system;
               hostname = "ephemeral";
             };

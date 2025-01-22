@@ -8,3 +8,4 @@
 /new-host-*
 /autorestic.yml
 *.wg
+*.nmconnection
