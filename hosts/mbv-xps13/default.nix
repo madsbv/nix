@@ -5,45 +5,10 @@
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
     (mod "system/nixos/server")
+    (mod "services/home-assistant")
   ];
 
   services = {
-    # TODO: Configure
-    # Available on mbv-xps13:8123
-    home-assistant = {
-      enable = true;
-      configWritable = true;
-      lovelaceConfigWritable = true;
-      extraComponents = [
-        "awair"
-        "accuweather"
-        "tailscale"
-        # Supposedly for Smart Life
-        # See also https://github.com/rospogrigio/localtuya
-        "tuya"
-        "wake_on_lan"
-        "jellyfin"
-        "seventeentrack"
-        "speedtestdotnet"
-        "default_config"
-        "met"
-        "esphome"
-        "tplink"
-        "tplink_tapo"
-        "ecobee"
-        "homekit_controller"
-        "roomba"
-      ];
-      config.homeassistant = {
-        name = "ha-name";
-        latitude = 0.0;
-        longitude = 0.0;
-        time_zone = "America/Detroit";
-        unit_system = "metric";
-        temperature_unit = "C";
-      };
-    };
-
     # Available on mbv-xps13:8096
     jellyfin.enable = true;
 

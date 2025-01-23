@@ -2,8 +2,6 @@
   config,
   lib,
   pkgs,
-  my-doomemacs-config,
-  doomemacs,
   ...
 }:
 let
