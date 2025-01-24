@@ -116,6 +116,7 @@ rekey *args: check-git
 alias e := agenix-edit
 agenix-edit *args: check-git
 	just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
+	git add {{args}}
 
 ### USAGE
 # Run `j new-host host` first, set up configuration files and disko, and add host key and possibly client ssh keys to config. Then run nixos-anywhere.
