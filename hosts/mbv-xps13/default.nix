@@ -6,6 +6,7 @@
     ./configuration.nix
     (mod "system/nixos/server")
     (mod "services/home-assistant")
+    (mod "system/nixos/common/laptop.nix")
   ];
 
   services = {
