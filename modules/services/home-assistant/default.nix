@@ -104,6 +104,11 @@ in
 
   system.activationScripts = {
     linkHomeAssistantSecrets = lib.stringAfter [ "var" ] ''
+      if [[ -e /var/lib/hass/secrets.yaml ]]
+      then
+          rm /var/lib/hass/secrets.yaml
+      fi
+
       ln -s ${config.age.secrets."home-assistant-secrets.yaml".path} /var/lib/hass/secrets.yaml
     '';
     fixAppdaemonConfigPermissions = lib.stringAfter [ "etc" ] ''
