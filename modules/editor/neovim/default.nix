@@ -41,20 +41,6 @@ in
             viAlias = true;
             vimdiffAlias = true;
             defaultEditor = true;
-            plugins = with pkgs.vimPlugins; [
-              molokai
-              # NOTE: Molokai was originally a vim theme modified from Monokai, so just use the native one here.
-              # Can we do this programmatically depending on color-scheme? Would be pretty convoluted
-              (pkgs.vimPlugins.base16-vim.overrideAttrs (
-                _old:
-                let
-                  schemeFile = config.scheme base16-vim;
-                in
-                {
-                  patchPhase = "cp ${schemeFile} colors/base16-scheme.vim";
-                }
-              ))
-            ];
           };
         }
       )
