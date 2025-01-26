@@ -14,7 +14,6 @@ let
     j = "${pkgs.just}/bin/just";
     ls = "${pkgs.eza}/bin/eza --binary --header --git --git-repos --all";
     less = "${pkgs.less}/bin/less --ignore-case --LINE-NUMBERS";
-    # TODO: Themeing?
     cat = "${pkgs.bat}/bin/bat";
     grep = "${pkgs.gnugrep}/bin/grep -i --color=always";
     psgrep = "ps aux | grep -v grep | grep";
@@ -53,6 +52,7 @@ in
           };
           # The duplicate here is for the sake of Nix-Darwin, which currently places aliases in .zprofile, which doesn't get loaded by Zellij's non-login shells.
           # TODO: Remove once fixed.
+          # TODO: Create a PR to actually fix this.
           # https://github.com/LnL7/nix-darwin/issues/886
           shellAliases = shellAliases // {
             wget = "${pkgs.wget}/bin/wget --hsts-file=${config.xdg.cacheHome}/.wget-hsts";
@@ -87,6 +87,7 @@ in
               enable = true;
               zplugHome = "${config.xdg.configHome}/zplug";
               plugins = [
+                # TODO: Do I actually use these? Can I install them in some other way, so I can avoid the zplug loading time/cache management issues?
                 { name = "ajeetdsouza/zoxide"; }
                 { name = "jeffreytse/zsh-vi-mode"; }
                 # May need to learn to use: https://github.com/marlonrichert/zsh-autocomplete/
@@ -106,7 +107,6 @@ in
               }
               {
                 name = "powerlevel10k-config";
-                # TODO: Copy my P10k config over
                 src = lib.cleanSource (flake-root + "/config/p10k");
                 file = "p10k.zsh";
               }

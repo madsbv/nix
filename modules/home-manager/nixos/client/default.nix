@@ -7,6 +7,9 @@
     # ./dropbox.nix
   ];
   xdg.configFile = {
-    "awesome".source = flake-root + "/config/awesome";
+    "awesome" = {
+      source = flake-root + "/config/awesome";
+      recursive = true;
+    };
   };
 }
