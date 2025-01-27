@@ -62,8 +62,6 @@ Thumbs.db
 
 ## Logs and databases
 *.log
-*.sql
-*.sqlite
 
 ## LaTeX
 # Core latex/pdflatex auxiliary files:
@@ -146,6 +144,3 @@ Thumbs.db
 
 # easy-todo
 *.lod
-
-# Avoid accidentaly adding a symlink managed by yadm
-/home/madsbv/.system-files-backup/system-files
