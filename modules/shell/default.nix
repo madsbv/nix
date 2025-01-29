@@ -27,6 +27,9 @@ in
 
   environment = {
     inherit shellAliases;
+    # For zsh completion of system packages.
+    pathsToLink = [ "/share/zsh" ];
+    systemPackages = [ pkgs.zsh-autocomplete ];
   };
 
   programs = {
@@ -83,20 +86,6 @@ in
               ignoreAllDups = true;
             };
 
-            zplug = {
-              enable = true;
-              zplugHome = "${config.xdg.configHome}/zplug";
-              plugins = [
-                # TODO: Do I actually use these? Can I install them in some other way, so I can avoid the zplug loading time/cache management issues?
-                { name = "ajeetdsouza/zoxide"; }
-                { name = "jeffreytse/zsh-vi-mode"; }
-                # May need to learn to use: https://github.com/marlonrichert/zsh-autocomplete/
-                { name = "marlonrichert/zsh-autocomplete"; }
-                # { name = "romkatv/powerlevel10k, as:theme, depth:1"; }
-              ];
-            };
-
-            # TODO: How do I want to balance using nix vs something like zplug as zsh plugin managers? I'd expect to have to do some manual configuration to use nix, as in P10k below...
             plugins = [
               {
                 # To customize prompt, `unset POWERLEVEL9K_CONFIG_FILE` and run `p10k configure`.
@@ -107,15 +96,28 @@ in
               }
               {
                 name = "powerlevel10k-config";
-                src = lib.cleanSource (flake-root + "/config/p10k");
+                src = lib.cleanSource (flake-root + "/config/zsh-plugins/p10k-config");
                 file = "p10k.zsh";
+              }
+              {
+                name = "vi-mode";
+                src = pkgs.zsh-vi-mode;
+                file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
               }
             ];
             initExtraBeforeCompInit = ''
               # p10k instant prompt
               local P10K_INSTANT_PROMPT="${config.xdg.cacheHome}/p10k-instant-prompt-''${(%):-%n}.zsh"
               [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
+              source ${pkgs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
             '';
+
+            enableVteIntegration = true;
+          };
+
+          zoxide = {
+            enable = true;
+            enableZshIntegration = true;
           };
 
           # Terminal file manager
