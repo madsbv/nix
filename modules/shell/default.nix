@@ -109,7 +109,7 @@ in
               # p10k instant prompt
               local P10K_INSTANT_PROMPT="${config.xdg.cacheHome}/p10k-instant-prompt-''${(%):-%n}.zsh"
               [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
-              source ${pkgs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
+              source ${pkgs.zsh-autocomplete}/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
             '';
 
             enableVteIntegration = true;
