@@ -5,6 +5,7 @@
     (mod "system/common/client")
     (mod "system/nixos/common")
     ./dropbox.nix
+    ./yubikey.nix
   ];
 
   home-manager.sharedModules = [ (mod "home-manager/nixos/client") ];
