@@ -54,14 +54,25 @@
 
     ollama = {
       enable = true;
-      # TODO: Try enabling rocm based accelleration
-      # acceleration = false;
+      acceleration = "rocm";
+      ## Setting to force ollama to use GPU
+      rocmOverrideGfx = "10.1.1";
+
       # The default, repeated for documentation
       # listenAddress = "0.0.0.0:11434";
       # host = "0.0.0.0";
       # port = "11434";
-      models = "/var/lib/ollama/models";
       home = "/var/lib/ollama";
+      models = "/var/lib/ollama/models";
+      loadModels = [
+        "deepseek-r1:14b"
+        "qwen2.5-coder:14b-instruct-q6_K"
+      ];
+      environmentVariables = {
+        OLLAMA_KEEP_ALIVE = "10m";
+        OLLAMA_LOAD_TIMEOUT = "15m";
+        OLLAMA_FLASH_ATTENTION = "1";
+      };
     };
   };
   local.restic.exclude = [ "/var/lib/ollama/models" ];
