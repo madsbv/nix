@@ -1,0 +1,7 @@
+[appdaemon]
+    # Note: You can create a copy of the app by copying the section below and changing the heading [apps(...)]
+  [equalize_brightness_kitchen]
+    module = "equalize_brightness"
+    class = "EqualizeBrightness"
+    initial_states = true
+    lights = ["light.coffee_station_light", "light.kitchen_cabinet_light", "light.kitchen_main_light", "light.kitchen_sink_light", "light.pantry_light"]

@@ -111,8 +111,10 @@ in
 
       ln -s ${config.age.secrets."home-assistant-secrets.yaml".path} /var/lib/hass/secrets.yaml
     '';
+    # Make sure hass owns appdaemon's directory and that the hass group can write to it (for justfile rsync development)
     fixAppdaemonConfigPermissions = lib.stringAfter [ "etc" ] ''
       chown -R hass /etc/appdaemon
+      chmod -R u=rwx,g=rwx,o= /etc/appdaemon
     '';
   };
 
@@ -122,17 +124,21 @@ in
       # Copy all appdaemon apps in this repo to /etc/appdaemon/apps.
       # Allows live modification for testing and development, though /etc/appdaemon is not a persistent directory.
       dirToEtcAttrs (flake-root + "/modules/services/home-assistant/appdaemon/apps") "appdaemon/apps" {
-        mode = "0644";
+        # 0770 is equivalent to u=rwx,g=rwx,o=, as above.
+        mode = "0770";
         user = "hass";
       }
       // {
         "/appdaemon/appdaemon.toml" = {
           source = appdaemonConfig;
-          mode = "0644";
+          mode = "0770";
           user = "hass";
         };
       };
   };
+
+  # To allow me to remote transfer files directly to appdaemon/apps for development.
+  users.groups.hass.members = [ "mvilladsen" ];
 
   age.secrets = {
     "appdaemon-secrets.toml" = {
