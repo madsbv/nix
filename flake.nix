@@ -21,6 +21,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agenix-rekey = {
+      # 250202: Source of PR https://github.com/oddlama/agenix-rekey/pull/73 which adds a subcommand to reencrypt all source secrets with new masterIdentities.
+      # url = "github:charludo/agenix-rekey";
       url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
     };
