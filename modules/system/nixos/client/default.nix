@@ -18,6 +18,9 @@
   services = {
     xserver = {
       enable = true;
+      # Equivalent to `xset r rate 200 40`
+      autoRepeatDelay = 200;
+      autoRepeatInterval = 40;
       displayManager.lightdm = {
         enable = true;
       };
