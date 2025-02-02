@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import hassapi as hass
-import asyncio
 
 
 class EqualizeBrightness(hass.Hass):
@@ -21,7 +20,7 @@ class EqualizeBrightness(hass.Hass):
             )
 
     async def equalize_attribute(
-        self, entity: str, attribute: str, old, new, **kwargs
+        self, entity: str, attribute: str, old, new, **_
     ) -> None:
 
         if new is not None and self.brightness != new:
