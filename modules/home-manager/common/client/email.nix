@@ -41,15 +41,12 @@ in
       mbsync.enable = true;
       mu.enable = true;
     };
-    services =
-      {
-        imapnotify.enable = true;
-      }
-      // lib.mkIf pkgs.stdenv.isLinux {
-        protonmail-bridge.enable = true;
-      };
+    services = {
+      imapnotify.enable = true;
+    };
 
     accounts.email = {
+      # TODO: Add more/new addresses
       maildirBasePath = cfg.maildir;
       accounts."proton" = {
         maildir.path = "Proton";
