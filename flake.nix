@@ -284,6 +284,9 @@
         autoRollback = true;
         magicRollback = true;
 
+        # Tweaking
+        fastConnection = true;
+
         # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
         nodes = {
           # NOTE: In order for a macos system to receive SSH connections, you need to go to System Settings -> General, and turn 'Remote Login' on, and then under the options for remote login, turn on full disk access.

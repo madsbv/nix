@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  flake-root,
   ...
 }:
 ### Defines and sets minimal permissions for a "builder" user which other machines can SSH into via tailscale ssh (controlled by tailscale ACL). Should be written so it can be imported as-is into either a nix-darwin or nixos configuration.
@@ -23,13 +24,19 @@ in
   };
 
   config = {
-    # Create builder user
-    # Making this Darwin/NixOS agnostic is rather restrictive
     users = lib.mkIf cfg.enableLocalBuilder {
-      users.builder = lib.mkIf pkgs.stdenv.isLinux {
-        isSystemUser = true;
-        group = "builder";
-      };
+      users.builder =
+        {
+          openssh.authorizedKeys.keyFiles = [
+            (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-mba.mvilladsen.pub")
+            (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
+          ];
+        }
+        // lib.mkIf pkgs.stdenv.isLinux {
+          isSystemUser = true;
+          group = "builder";
+        };
+      # nix-darwin does not have users.users.<name>.group option, only gid option, so set here as well.
       groups.builder = {
         members = [ "builder" ];
       };
@@ -37,7 +44,6 @@ in
 
     # TODO: Somehow make this a map over all nodes with enableLocalBuilder set. Not sure how automated we can make this? Maybe deploy-rs will help?
     # We could of course declare this on the top level
-    # TODO: Can we add mbv-mba to this list easily?
     nix.buildMachines = lib.mkIf cfg.enableRemoteBuilders (
       map (hostname: {
         # sshKey = config.age.secrets.ssh-user-mbv-mba.path; # I'm pretty sure we don't need this with Tailscale
@@ -53,6 +59,20 @@ in
         ];
         maxJobs = 8;
       }) cfg.remoteBuilders_x86-64
+
+      ++ [
+        {
+          system = "aarch64-darwin";
+          sshUser = "builder";
+          hostName = "mbv-mba";
+          protocol = "ssh-ng";
+          supportedFeatures = [
+            "kvm"
+            "big-parallel"
+            "benchmark"
+          ];
+        }
+      ]
     );
   };
 }
