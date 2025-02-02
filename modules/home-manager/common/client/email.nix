@@ -41,7 +41,13 @@ in
       mbsync.enable = true;
       mu.enable = true;
     };
-    services.imapnotify.enable = true;
+    services =
+      {
+        imapnotify.enable = true;
+      }
+      // lib.mkIf pkgs.stdenv.isLinux {
+        protonmail-bridge.enable = true;
+      };
 
     accounts.email = {
       maildirBasePath = cfg.maildir;
