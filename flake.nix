@@ -297,7 +297,7 @@
             user = "mvilladsen";
             # NOTE: In principle this should not be necessary since we have turned off password for sudo, but in practice it still seems necessary, even if we can just pass in an empty password
             interactiveSudo = true;
-            remoteBuild = false;
+            # remoteBuild = false;
             profiles.system = {
               path = deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.mbv-mba;
             };

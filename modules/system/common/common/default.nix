@@ -128,6 +128,7 @@
           "root"
           "@admin"
           "@wheel"
+          "@builders"
         ];
 
         # Reduce copying over SSH

@@ -19,11 +19,19 @@ in
     (mod "system/common/client")
   ];
 
-  users.users.${user} = {
-    home = "/Users/${user}";
-    isHidden = false;
-    # Set as users.defaultShell on nixos, but that option doesn't exist on nix-darwin
-    shell = pkgs.zsh;
+  users = {
+    users.${user} = {
+      home = "/Users/${user}";
+      isHidden = false;
+      # Set as users.defaultShell on nixos, but that option doesn't exist on nix-darwin
+      shell = pkgs.zsh;
+    };
+    knownUsers = [ "builder" ];
+    knownGroups = [ "builders" ];
+    users.builder = {
+      uid = 42;
+      gid = 42;
+    };
   };
 
   # Enable sudo authentication with Touch ID
@@ -35,13 +43,17 @@ in
   # Enable linux builder VM.
   # This setting relies on having access to a cached version of the builder, since Darwin can't build it itself. The configuration options of the builder *can* be changed, but requires access to a (in this case) aarch64-linux builder to build. Hence on a new machine, or if there's any problems with the existing builder, the build fails.
   # For this reason, avoid changing the configuration options of linux-builder if at all possible.
-  nix.linux-builder = {
-    enable = true;
-    package = pkgs.darwin.linux-builder-x86_64;
-    # Likely to fix weird build issues (including related to evaluating derivations while running `just check-all` as discovered on 250102), but at the cost of more rebuilding.
-    # Enable if problems arise, or consider removing /var/lib/darwin-builder to force reinstantiation of the builders store without enabling this option.
-    # ephemeral = true;
+  nix = {
+    linux-builder = {
+      enable = true;
+      package = pkgs.darwin.linux-builder-x86_64;
+      # Likely to fix weird build issues (including related to evaluating derivations while running `just check-all` as discovered on 250102), but at the cost of more rebuilding.
+      # Enable if problems arise, or consider removing /var/lib/darwin-builder to force reinstantiation of the builders store without enabling this option.
+      # ephemeral = true;
+    };
+    configureBuildUsers = true;
   };
+
   # For some reason the mkMerge/mkIf combo in modules/shared doesn't want to play nice with this option.
   programs = {
     zsh.enableSyntaxHighlighting = true;

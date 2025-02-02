@@ -34,11 +34,16 @@ in
         }
         // lib.mkIf pkgs.stdenv.isLinux {
           isSystemUser = true;
-          group = "builder";
+          group = "builders";
+        }
+        // lib.mkIf pkgs.stdenv.isDarwin {
+          isHidden = true;
+          home = "/var/nix-builder";
         };
       # nix-darwin does not have users.users.<name>.group option, only gid option, so set here as well.
-      groups.builder = {
+      groups.builders = {
         members = [ "builder" ];
+        gid = 42;
       };
     };
 
