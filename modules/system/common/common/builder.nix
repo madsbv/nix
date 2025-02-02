@@ -37,7 +37,9 @@ in
           group = "builders";
         }
         // lib.mkIf pkgs.stdenv.isDarwin {
-          isHidden = true;
+          isHidden = false;
+          uid = 42;
+          gid = 42;
           home = "/var/nix-builder";
         };
       # nix-darwin does not have users.users.<name>.group option, only gid option, so set here as well.
@@ -68,7 +70,7 @@ in
       ++ [
         {
           system = "aarch64-darwin";
-          sshUser = "builder";
+          sshUser = "mvilladsen";
           hostName = "mbv-mba";
           protocol = "ssh-ng";
           supportedFeatures = [
@@ -76,6 +78,7 @@ in
             "big-parallel"
             "benchmark"
           ];
+          maxJobs = 8;
         }
       ]
     );

@@ -28,10 +28,6 @@ in
     };
     knownUsers = [ "builder" ];
     knownGroups = [ "builders" ];
-    users.builder = {
-      uid = 42;
-      gid = 42;
-    };
   };
 
   # Enable sudo authentication with Touch ID

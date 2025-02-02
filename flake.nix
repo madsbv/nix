@@ -251,13 +251,18 @@
       # NOTE: When adding new nodes, update this, agenix-rekey, and deploy-rs node lists
       # Used to track hostnames of remote builders and of known ssh hosts
       nodes = {
-        clients = [ "mbv-mba" ];
+        clients = [
+          "mbv-mba"
+          "mbv-workstation"
+        ];
         servers = [
-          ### Currently offline
           "mbv-desktop"
           "mbv-xps13"
-          "mbv-workstation"
           "hp-90"
+        ];
+        buildMachines = [
+          "mbv-workstation"
+          "mbv-xps13"
         ];
       };
     in
