@@ -154,4 +154,4 @@ p10k-finalize: p10k-save && switch-darwin
 
 alias ap := appdaemon-push
 appdaemon-push:
-	rsync -rz --delete --chown=hass:hass modules/services/home-assistant/appdaemon/apps/ mbv-xps13:/etc/appdaemon/apps
+	rsync -rz --delete  modules/services/home-assistant/appdaemon/apps/ mbv-xps13:/etc/appdaemon/apps

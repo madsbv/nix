@@ -15,6 +15,7 @@ let
     longitude = "!secret longitude"
     elevation = "!secret elevation"
     app_dir = "/etc/appdaemon/apps"
+    use_dictionary_unpacking = true
 
     [appdaemon.plugins.HASS]
     type = "hass"

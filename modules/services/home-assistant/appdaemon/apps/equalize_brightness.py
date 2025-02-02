@@ -1,50 +1,35 @@
 #!/usr/bin/env python3
-import asyncio
 import hassapi as hass
-from typing import List
+import asyncio
 
 
 class EqualizeBrightness(hass.Hass):
     async def initialize(self) -> None:
         """Initialize the app with a list of lights to be equalized."""
         # Get the list of lights from the configuration
-        group_lights = self.args["lights"]
+        self.lights = []
+        for light_name in self.args["lights"]:
+            self.lights.append(self.get_entity(light_name))
 
-        if not group_lights:
-            return
+        # Track current brightness settings, to avoid changing attrs multiple times.
+        self.brightness = None
 
-        for light in group_lights:
-            self.states.register_listener(
-                f"light.{light}",
-                "brightness",
-                lambda *args: self.listener_brightness(
-                    self, args[0], args[1], group_lights
-                ),
+        for light in self.lights:
+            # `duration` debounces callbacks
+            light.listen_state(
+                self.equalize_attribute, attribute="brightness", duration=0.1
             )
 
-        async def listener_brightness(
-            self, event_type: str, data: dict, group_lights: List[str]
-        ) -> None:
-            """Listen for brightness changes on any light and adjust other lights in the group."""
-            await asyncio.sleep(0.1)
-            triggered_light = next(
-                entity for entity in group_lights if entity == data["entity_id"]
-            )
-            current_brightness = hass.states.get(triggered_light)["attributes"][
-                "brightness"
-            ]
-
-            # Update all other lights in the group
-            for light in group_lights:
-                if light != data["entity_id"]:
-                    await self.set_light_brightness(light, current_brightness)
-
-    async def set_light_brightness(
-        self, target_light: str, brightness_value: int
+    async def equalize_attribute(
+        self, entity: str, attribute: str, old, new, **kwargs
     ) -> None:
-        """Set the brightness of a light."""
-        await hass.services.async_call(
-            "light",
-            "set_brightnes",
-            {"entity_id": target_light, "brightness": brightness_value},
-        )
+
+        if new is not None and self.brightness != new:
+            self.brightness = new
+            attrs = {attribute: new}
+            for light in self.lights:
+                if light != entity:
+                    self.log(
+                        f"entity: {entity}, attribute: {attribute}, old: {old}, new: {new}, light: {light}"
+                    )
+                    light.call_service("turn_on", **attrs)
