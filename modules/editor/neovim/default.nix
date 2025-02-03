@@ -41,6 +41,10 @@ in
             viAlias = true;
             vimdiffAlias = true;
             defaultEditor = true;
+            extraPackages = with pkgs; [
+              # nvim occasionally compiles stuff for its plugins, e.g. treesitter modules
+              gcc
+            ];
           };
         }
       )

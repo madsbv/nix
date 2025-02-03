@@ -6,6 +6,9 @@
   zoom-us
   discord
 
+  # Clipboard management from terminal and neovim
+  xsel
+
   # Media-related packages
   ffmpeg
   imagemagick
