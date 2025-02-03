@@ -1,4 +1,9 @@
-{ mod, pkgs, ... }:
+{
+  mod,
+  pkgs,
+  flake-root,
+  ...
+}:
 
 {
   imports = [
@@ -9,10 +14,11 @@
     ./overclocking.nix
   ];
 
-  local = {
-    # This machine is already plenty fast, let's save some complication
-    builder.enableRemoteBuilders = false;
-  };
+  users.users.root.openssh.authorizedKeys.keys = [
+    # Enables running deploy-rs for localhost. Normally Tailscale would allow user on a client to access root anywhere, but Tailscale does not manage ssh to localhost.
+    # https://github.com/tailscale/tailscale/issues/11097
+    (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
+  ];
 
   nixpkgs.config = {
     rocmSupport = true;
@@ -76,4 +82,5 @@
     };
   };
   local.restic.exclude = [ "/var/lib/ollama/models" ];
+  environment.persistence."/nix/persist".directories = [ "/var/lib/ollama/models" ];
 }

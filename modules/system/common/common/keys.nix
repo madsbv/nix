@@ -15,12 +15,12 @@ in
   options.local.keys = {
     enable = lib.mkEnableOption "Set SSH knownHosts.";
     enable_authorized_access = lib.mkOption {
-      description = "Allow key-authenticated SSH access to user config.local.keys.authorized_user";
+      description = "Allow key-authenticated SSH access to users config.local.keys.authorized_users";
       default = false;
     };
-    authorized_user = lib.mkOption {
-      description = "User to allow key-authenticated access for.";
-      default = "mvilladsen";
+    authorized_users = lib.mkOption {
+      description = "Users to allow key-authenticated access for.";
+      default = [ "mvilladsen" ];
     };
     authorized_user_keys = lib.mkOption {
       description = "List of public keys for the authorized user.";
@@ -47,9 +47,11 @@ in
     )
   );
 
-  # Allow mvilladsen to SSH in to all machines.
+  # Allow access to given users with given keys
   # This will create the user, but will not give it any useful permissions in isolation.
-  config.users.users = lib.mkIf cfg.enable_authorized_access {
-    ${cfg.authorized_user}.openssh.authorizedKeys.keys = cfg.authorized_user_keys;
-  };
+  config.users.users = lib.mkIf cfg.enable_authorized_access (
+    lib.mergeAttrsList (
+      map (user: { ${user}.openssh.authorizedKeys.keys = cfg.authorized_user_keys; }) cfg.authorized_users
+    )
+  );
 }

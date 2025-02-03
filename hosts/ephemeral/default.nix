@@ -10,7 +10,7 @@
   local.keys = {
     enable = true;
     enable_authorized_access = true;
-    authorized_user = "root";
+    authorized_users = [ "root" ];
   };
 
   # To enable local login, set `users.users.root.initialHashedPassword`

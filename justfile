@@ -85,6 +85,13 @@ alias dh := deploy-host
 deploy-host hostname:
 	just run github:serokell/deploy-rs ".#{{hostname}}"
 
+alias dnl := deploy-non-laptops
+deploy-non-laptops:
+	just deploy-host mbv-xps13
+	just deploy-host hp-90
+	# just deploy-host mbv-desktop
+	just deploy-host mbv-workstation
+
 alias dd := deploy-dry
 deploy-dry:
 	just run github:serokell/deploy-rs -- --dry-activate --debug-logs .

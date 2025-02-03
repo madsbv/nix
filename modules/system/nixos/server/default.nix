@@ -29,7 +29,7 @@ in
       keys = {
         enable = true;
         enable_authorized_access = true;
-        authorized_user = cfg.user;
+        authorized_users = [ cfg.user ];
       };
     };
 
