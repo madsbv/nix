@@ -118,11 +118,13 @@ build-ephemeral machine-type image-format="install-iso": rekey
 
 alias r := rekey
 rekey *args: check-git
-	just run "agenix-rekey#packages.aarch64-darwin.default" -- rekey -a {{args}}
+	# just run "agenix-rekey#packages.aarch64-darwin.default" -- rekey -a {{args}}
+	just run "agenix-rekey" -- rekey -a {{args}}
 
 alias e := agenix-edit
 agenix-edit *args: check-git
-	just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
+	# just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
+	just run "agenix-rekey" -- edit {{args}}
 	git add {{args}}
 
 ### USAGE
