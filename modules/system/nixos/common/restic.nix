@@ -43,6 +43,7 @@ in
       persist = {
         inherit (cfg) exclude paths;
         inherit environmentFile passwordFile repositoryFile;
+        # TODO: Add initialize=true and confirm backups actually happen.
 
         # Creates restic-persist in path
         createWrapper = true;

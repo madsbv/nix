@@ -35,6 +35,7 @@ with pkgs;
   zellij
   ## CLI file manager
   yazi
+  lsof
 
   # Nix tools
   ## Tool to explore nix expression dependencies.

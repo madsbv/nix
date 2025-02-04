@@ -4,7 +4,6 @@
   imports = [
     (mod "system/common/client")
     (mod "system/nixos/common")
-    ./dropbox.nix
     ./yubikey.nix
   ];
 

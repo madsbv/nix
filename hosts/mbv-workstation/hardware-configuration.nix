@@ -25,6 +25,11 @@
       kernelModules = [ "amdgpu" ];
     };
     kernelModules = [ "kvm-amd" ];
+    kernel.sysctl = {
+      # Currently the nixos defaults, may want to increase
+      "fs.inotify.max_user_instances" = 524288;
+      "fs.inotify.max_user_watches" = 524288;
+    };
     extraModulePackages = [ ];
   };
 

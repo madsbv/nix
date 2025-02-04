@@ -9,7 +9,7 @@
   imports = [
     (mod "home-manager/common/client")
     (mod "home-manager/nixos/common")
-    # ./dropbox.nix
+    ./dropbox.nix
   ];
 
   home.packages = with pkgs; [
