@@ -122,7 +122,7 @@ rekey *args: check-git
 	just run "agenix-rekey" -- rekey -a {{args}}
 
 alias e := agenix-edit
-agenix-edit *args: check-git
+agenix-edit *args:
 	# just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
 	just run "agenix-rekey" -- edit {{args}}
 	git add {{args}}

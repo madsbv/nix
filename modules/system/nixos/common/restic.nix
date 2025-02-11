@@ -2,6 +2,7 @@
   config,
   lib,
   flake-root,
+  hostname,
   ...
 }:
 
@@ -10,6 +11,8 @@ let
   environmentFile = config.age.secrets.restic-env.path;
   passwordFile = config.age.secrets.restic-password.path;
   repositoryFile = config.age.secrets.restic-repo.path;
+
+  hc-sh = config.age.secrets.healthchecks-sh.path;
 
   # Storage optimization
   resticOpts = [
@@ -71,6 +74,20 @@ in
           RandomizedDelaySec = "20h";
         };
       };
+      # Structure of healthchecks.io requests and secrets:
+      # Have a script which takes a string input. The script should contain my healthchecks.io slug, prepend the given string, and make a request.
+      # This way we can make the script a secret, and have the backupCleanupCommand and backupPrepareCommand type parameters just be a script that calls the secret script with the right hostname/check name/parameters.
+      # If we append the query paramenter `?create=1`, a check will be created if it doesn't already exist.
+
+      # Corresponds to the ExecStartPre parameter of systemd.
+      # These commands must run successfully before the service is started (unless prefixed with `-`).
+      # Could be used to check repo status, or for healthchecks.io timing metrics.
+      # backupPrepareCommand = ''${hc-sh} "${hostname}-restic-backup/start?create=1"'';
+
+      ## From the systemd.service manpages: https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+      # Note that all commands that are configured with this setting are invoked with the result code of the service, as well as the main process' exit code and status, set in the $SERVICE_RESULT, $EXIT_CODE and $EXIT_STATUS environment variables, see systemd.exec(5) for details.
+      # In particular, we can use these for healthcheck calls.
+      # backupCleanupCommand = ''${hc-sh} "${hostname}-restic-backup/$EXIT_CODE"'';
 
       # Occasionally prune and optimize storage and run cached check.
       persist-prune = {
@@ -100,6 +117,10 @@ in
           # Add as much random delay as reasonably possible, to reduce the risk of multiple machines trying to access the repo simultaneously, or of backup runs and a check or prune run running at the same time.
           RandomizedDelaySec = "2d";
         };
+
+        # backupPrepareCommand = ''${hc-sh} "${hostname}-restic-prune/start?create=1"'';
+        # backupCleanupCommand = ''${hc-sh} "${hostname}-restic-prune/$EXIT_CODE"'';
+
       };
 
       # Run a thorough check
@@ -125,6 +146,8 @@ in
           # Add as much random delay as reasonably possible, to reduce the risk of multiple machines trying to access the repo simultaneously, or of backup runs and a check or prune run running at the same time.
           RandomizedDelaySec = "3d";
         };
+        # backupPrepareCommand = ''${hc-sh} "${hostname}-restic-check/start?create=1"'';
+        # backupCleanupCommand = ''${hc-sh} "${hostname}-restic-check/$EXIT_CODE"'';
       };
     };
 

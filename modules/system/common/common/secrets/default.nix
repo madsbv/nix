@@ -37,12 +37,12 @@
       # NOTE: Yubikeys associated to identities specified in masterIdentities have to be present when editing or creating new secrets with `agenix edit`. However, those files also contain the recipient information for the Yubikey, which is all that's required for encryption. We put the recipient info in the separate file `recipients.pub` and use those as extraEncryptionKeys, which doesn't require the Yubikey to be present for encryption, but still allows for decryption via `age -d -i ${identityfile} secret.age`.
       masterIdentities = [
         {
-          identity = (flake-root + "/pubkeys/yubikey/age-yubikey-identity-mba.pub");
+          identity = flake-root + "/pubkeys/yubikey/age-yubikey-identity-mba.pub";
           # Optional: Explicitly ties the identity to its pubkey. In its absence rekey should still automatically be able to extract this from the identity file.
           pubkey = "age1yubikey1q2t85cf42wjjmdy7kph9vvle8llgmx2u6xq33g4draprw07ml50nj3jsamg";
         }
         {
-          identity = (flake-root + "/pubkeys/yubikey/age-yubikey-identity-workstation.pub");
+          identity = flake-root + "/pubkeys/yubikey/age-yubikey-identity-workstation.pub";
           pubkey = "age1yubikey1qwmzt4jfuxnj3g44pds28r9mnaf8cvkpcw0rftr3c3ldu3yhvr9vz580q34";
 
         }
@@ -56,5 +56,6 @@
       agePlugins = [ pkgs.age-plugin-yubikey ];
     };
     secrets.github-api-key-minimal.rekeyFile = flake-root + "/secrets/other/github-nix-api-access.age";
+    secrets.healthchecks-sh.rekeyFile = flake-root + "/secrets/other/healthchecks.sh.age";
   };
 }

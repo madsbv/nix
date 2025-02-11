@@ -1,6 +1,4 @@
-{
-  ...
-}:
+_:
 
 {
   # For laptop-based servers: Turn screen brightness on and off when lid is opened and closed.

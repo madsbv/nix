@@ -9,3 +9,4 @@
 /autorestic.yml
 *.wg
 *.nmconnection
+/secrets/other/healthchecks.sh
