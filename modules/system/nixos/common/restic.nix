@@ -45,6 +45,9 @@ in
         inherit environmentFile passwordFile repositoryFile;
         # TODO: Add initialize=true and confirm backups actually happen.
 
+        initialize = true;
+        inhibitsSleep = true;
+
         # Creates restic-persist in path
         createWrapper = true;
 
@@ -64,12 +67,16 @@ in
         timerConfig = {
           OnCalendar = "daily";
           Persistent = true;
+          # Add as much random delay as reasonably possible, to reduce the risk of multiple machines trying to access the repo simultaneously, or of backup runs and a check or prune run running at the same time.
+          RandomizedDelaySec = "20h";
         };
       };
 
       # Occasionally prune and optimize storage and run cached check.
       persist-prune = {
         inherit environmentFile passwordFile repositoryFile;
+
+        inhibitsSleep = true;
 
         # Explicitly disable taking backups
         paths = null;
@@ -90,12 +97,16 @@ in
           # Run every Monday
           OnCalendar = "Mon";
           Persistent = true;
+          # Add as much random delay as reasonably possible, to reduce the risk of multiple machines trying to access the repo simultaneously, or of backup runs and a check or prune run running at the same time.
+          RandomizedDelaySec = "2d";
         };
       };
 
       # Run a thorough check
       persist-check = {
         inherit environmentFile passwordFile repositoryFile;
+
+        inhibitsSleep = true;
 
         # Explicitly disable taking backups
         paths = null;
@@ -111,6 +122,8 @@ in
           # Run every Wednesday
           OnCalendar = "Wed";
           Persistent = true;
+          # Add as much random delay as reasonably possible, to reduce the risk of multiple machines trying to access the repo simultaneously, or of backup runs and a check or prune run running at the same time.
+          RandomizedDelaySec = "3d";
         };
       };
     };
