@@ -49,6 +49,7 @@
                 "cargo"
                 "clippy"
                 "--fix"
+                "--allow-staged"
                 "--color"
                 "always"
               ];
