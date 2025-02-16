@@ -14,11 +14,14 @@
     ./overclocking.nix
   ];
 
-  users.users.root.openssh.authorizedKeys.keys = [
-    # Enables running deploy-rs for localhost. Normally Tailscale would allow user on a client to access root anywhere, but Tailscale does not manage ssh to localhost.
-    # https://github.com/tailscale/tailscale/issues/11097
-    (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
-  ];
+  users.users = {
+    root.openssh.authorizedKeys.keys = [
+      # Enables running deploy-rs for localhost. Normally Tailscale would allow user on a client to access root anywhere, but Tailscale does not manage ssh to localhost.
+      # https://github.com/tailscale/tailscale/issues/11097
+      (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
+    ];
+    mvilladsen.extraGroups = [ "gamemode" ];
+  };
 
   nixpkgs.config = {
     rocmSupport = true;
@@ -43,11 +46,33 @@
       enableAMD = true;
     };
 
-    gamemode.enable = true;
-    gamescope = {
+    # TODO: Run Steam with gamemoderun automatically--probably a wrapper script, but how to register as application with Awesomewm program launcher?
+    gamemode = {
       enable = true;
-      capSysNice = true;
+      enableRenice = true;
+      settings = {
+        general = {
+          renice = 10;
+          inhibit_screensaver = 1;
+          disable_splitlock = 1;
+        };
 
+        # Warning: GPU optimisations have the potential to damage hardware
+        # gpu = {
+        #   apply_gpu_optimisations = "accept-responsibility";
+        #   gpu_device = 1;
+        #   amd_performance_level = "high";
+        # };
+
+        cpu = {
+          pin_cores = "yes";
+        };
+
+        custom = {
+          start = "''${pkgs.libnotify}/bin/notify-send 'GameMode started'";
+          end = "''${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
+        };
+      };
     };
   };
 

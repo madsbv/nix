@@ -14,6 +14,18 @@
   # No longer exists on nix-darwin
   fonts.fontDir.enable = true;
 
+  xdg = {
+    portal = {
+      enable = true;
+      config = {
+        common = {
+          default = [ "gtk" ];
+        };
+      };
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    };
+  };
+
   services = {
     xserver = {
       enable = true;
