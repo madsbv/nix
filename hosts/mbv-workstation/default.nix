@@ -87,7 +87,7 @@
       enable = true;
       acceleration = "rocm";
       ## Setting to force ollama to use GPU
-      rocmOverrideGfx = "10.1.1";
+      rocmOverrideGfx = "11.0.1";
 
       # The default, repeated for documentation
       # listenAddress = "0.0.0.0:11434";
@@ -98,10 +98,11 @@
       loadModels = [
         "deepseek-r1:14b"
         "qwen2.5-coder:14b-instruct-q6_K"
+        "qwen2.5:14b"
       ];
       environmentVariables = {
-        OLLAMA_KEEP_ALIVE = "10m";
-        OLLAMA_LOAD_TIMEOUT = "15m";
+        OLLAMA_KEEP_ALIVE = "30m";
+        OLLAMA_LOAD_TIMEOUT = "30m";
         OLLAMA_FLASH_ATTENTION = "1";
       };
     };
