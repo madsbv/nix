@@ -7,62 +7,95 @@
 }:
 
 {
-  home-manager.sharedModules = lib.mkIf config.local.hm.enable [
-    {
-      programs.bacon = {
-        enable = true;
-        settings = {
-          keybindings = {
-            # Some defaults
-            s = "toggle-summary";
-            w = "toggle-wrap";
-            b = "toggle-backtrace";
-            # Vim modifications of defaults
-            esc = "back";
-            g = "scroll-to-top";
-            shift-g = "scroll-to-bottom";
-            k = "scroll-lines(-1)";
-            j = "scroll-lines(1)";
-            ctrl-u = "scroll-page(-1)";
-            ctrl-d = "scroll-page(1)";
-            # Default job commands
-            a = "job:check-all";
-            i = "job:initial";
-            c = "job:clippy"; # Already runs clippy with --all-targets
-            d = "job:doc-open";
-            t = "job:test";
-            r = "job:run";
-            # Custom job commands
-            f = "job:clippy-fix";
-            v = "job:semver-checks";
-          };
-          jobs = {
-            semver-checks = {
-              command = [
-                "cargo"
-                "semver-checks"
-              ];
-              need_stdout = true;
+  home-manager.sharedModules = lib.mkIf config.local.hm.enable ([
+    (
+      { config, ... }:
+      let
+        # Relative to home
+        cargo-home = ".cargo";
+      in
+      {
+        programs.bacon = {
+          enable = true;
+          settings = {
+            keybindings = {
+              # Some defaults
+              s = "toggle-summary";
+              w = "toggle-wrap";
+              b = "toggle-backtrace";
+              # Vim modifications of defaults
+              esc = "back";
+              g = "scroll-to-top";
+              shift-g = "scroll-to-bottom";
+              k = "scroll-lines(-1)";
+              j = "scroll-lines(1)";
+              ctrl-u = "scroll-page(-1)";
+              ctrl-d = "scroll-page(1)";
+              # Default job commands
+              a = "job:check-all";
+              i = "job:initial";
+              c = "job:clippy"; # Already runs clippy with --all-targets
+              d = "job:doc-open";
+              t = "job:test";
+              r = "job:run";
+              # Custom job commands
+              f = "job:clippy-fix";
+              v = "job:semver-checks";
             };
-            clippy-fix = {
-              command = [
-                "cargo"
-                "clippy"
-                "--fix"
-                "--allow-staged"
-                "--color"
-                "always"
-              ];
-              need_stdout = false;
+            jobs = {
+              semver-checks = {
+                command = [
+                  "cargo"
+                  "semver-checks"
+                ];
+                need_stdout = true;
+              };
+              clippy-fix = {
+                command = [
+                  "cargo"
+                  "clippy"
+                  "--fix"
+                  "--allow-staged"
+                  "--color"
+                  "always"
+                ];
+                need_stdout = false;
+              };
             };
           };
         };
-      };
 
-      # Enables using programs installed via Cargo
-      home.sessionPath = [ "$HOME/.cargo/bin" ];
-    }
-  ];
+        # Enables using programs installed via Cargo
+        home = {
+          sessionPath = [ "$HOME/.cargo/bin" ];
+          sessionVariables = {
+            CARGO_HOME = "${config.home.homeDirectory}/${cargo-home}";
+          };
+          file.cargo-toml = {
+            target = "${cargo-home}/config.toml";
+            text = ''
+              [alias]     # command aliases
+              b = "build"
+              c = "check"
+              t = "test"
+              r = "run"
+              rr = "run --release"
+
+              [build]
+              target-dir = "$CARGO_HOME/target"         # path of where to place all generated artifacts
+              incremental = true            # whether or not to enable incremental compilation
+
+              [future-incompat-report]
+              frequency = 'always' # when to display a notification about a future incompat report
+
+              [net]
+              git-fetch-with-cli = true
+            '';
+          };
+        };
+      }
+    )
+  ]);
 
   nixpkgs.overlays = [ inputs.fenix.overlays.default ];
   environment.systemPackages = with pkgs; [
