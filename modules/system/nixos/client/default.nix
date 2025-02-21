@@ -59,6 +59,8 @@
       path = with pkgs; [ gnome-keyring ];
     };
     gnome.gnome-keyring.enable = true;
+    # Image thumbnail service, for thunar
+    tumbler.enable = true;
   };
 
   # Recommended by https://nixos.wiki/wiki/PipeWire
@@ -73,6 +75,7 @@
         thunar-volman
         thunar-dropbox-plugin
         thunar-archive-plugin
+        thunar-media-tags-plugin
       ];
     };
     # Some gnome-based software depends on dconf to store configuration settings
@@ -86,5 +89,7 @@
     bitwarden-desktop
 
     protonvpn-gui
+
+    geeqie # Image viewer
   ];
 }
