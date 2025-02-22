@@ -314,12 +314,12 @@
             };
           };
           ### Currently offline
-          # mbv-desktop = {
-          #   hostname = "mbv-desktop";
-          #   profiles.system = {
-          #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
-          #   };
-          # };
+          mbv-desktop = {
+            hostname = "mbv-desktop";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mbv-desktop;
+            };
+          };
           mbv-xps13 = {
             hostname = "mbv-xps13";
             profiles.system = {
