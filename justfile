@@ -163,4 +163,5 @@ p10k-finalize: p10k-save && switch-darwin
 
 alias ap := appdaemon-push
 appdaemon-push:
+	@echo "If permission error, ssh to mbv-xps13 and 'chown -R hass /etc/appdaemon; chgrp -R hass /etc/appdaemon'"
 	rsync -rz --delete  modules/services/home-assistant/appdaemon/apps/ mbv-xps13:/etc/appdaemon/apps
