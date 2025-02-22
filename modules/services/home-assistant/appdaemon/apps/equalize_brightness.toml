@@ -1,6 +1,0 @@
-# NOTE: You can create multiple copies of an app by just having multiple sections of it.
-[equalize_brightness_kitchen]
-module = "equalize_brightness"
-class = "EqualizeBrightness"
-initial_states = true
-lights = ["light.coffee_station_light", "light.kitchen_cabinet_lights", "light.kitchen_main_light", "light.kitchen_sink_light", "light.pantry_light"]

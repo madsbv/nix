@@ -90,6 +90,7 @@ in
         "ecobee"
         "homekit_controller"
         "roomba"
+        "mobile_app"
       ];
       config.homeassistant = {
         name = "!secret name";

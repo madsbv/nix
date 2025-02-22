@@ -1,0 +1,16 @@
+# NOTE: You can create multiple copies of an app by just having multiple sections of it.
+[equalize_brightness_kitchen]
+module = "equalize_attributes"
+class = "EqualizeAttributes"
+initial_states = true
+lights = ["light.coffee_station_light", "light.kitchen_cabinet_lights", "light.kitchen_main_light", "light.kitchen_sink_light", "light.pantry_light"]
+attributes = ["state", "brightness", "color_temp_kelvin"]
+excludes = [["color_temp_kelvin", "hs_color"]]
+
+[equalize_brightness_mads_office]
+module = "equalize_attributes"
+class = "EqualizeAttributes"
+initial_states = true
+lights = ["light.madss_office_ceiling_light_1", "light.madss_office_ceiling_light_2", "light.madss_office_ceiling_light_3"]
+attributes = ["state", "brightness", "color_temp_kelvin", "hs_color", "effect"]
+excludes = [["color_temp_kelvin", "hs_color"]]
