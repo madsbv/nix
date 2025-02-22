@@ -1,0 +1,11 @@
+{
+  ...
+}:
+
+{
+  imports = [
+    ./jellyfin
+    ./transmission
+    ./ripping
+  ];
+}

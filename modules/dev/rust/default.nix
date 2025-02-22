@@ -7,7 +7,7 @@
 }:
 
 {
-  home-manager.sharedModules = lib.mkIf config.local.hm.enable ([
+  home-manager.sharedModules = lib.mkIf config.local.hm.enable [
     (
       { config, ... }:
       let
@@ -95,7 +95,7 @@
         };
       }
     )
-  ]);
+  ];
 
   nixpkgs.overlays = [ inputs.fenix.overlays.default ];
   environment.systemPackages = with pkgs; [

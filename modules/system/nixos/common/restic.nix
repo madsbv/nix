@@ -2,7 +2,6 @@
   config,
   lib,
   flake-root,
-  hostname,
   ...
 }:
 
@@ -11,8 +10,6 @@ let
   environmentFile = config.age.secrets.restic-env.path;
   passwordFile = config.age.secrets.restic-password.path;
   repositoryFile = config.age.secrets.restic-repo.path;
-
-  hc-sh = config.age.secrets.healthchecks-sh.path;
 
   # Storage optimization
   resticOpts = [
