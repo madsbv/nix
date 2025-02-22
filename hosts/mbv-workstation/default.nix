@@ -35,6 +35,16 @@
   programs = {
     steam = {
       enable = true;
+      package = pkgs.steam.override {
+        extraPkgs = (
+          pkgs: with pkgs; [
+            gamemode
+            python3
+            # additional packages...
+            # e.g. some games require python3
+          ]
+        );
+      };
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
       gamescopeSession.enable = true;
