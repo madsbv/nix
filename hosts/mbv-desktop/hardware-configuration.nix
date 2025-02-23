@@ -33,11 +33,11 @@
   hardware = {
     graphics = {
       enable = true;
-      enable32Bit = true;
     };
     nvidia = {
       modesetting.enable = true;
       open = false; # Doesn't support gtx 970
+      powerManagement.enable = true; # Experimental, known to cause suspend issues. Enabling to try to fix graphical corruption on resume.
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
