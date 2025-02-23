@@ -26,6 +26,7 @@
       };
     };
     # See https://www.reddit.com/r/NixOS/comments/12ibbl9/protonvpn_nixos_setup/ for potential protonvpn nixos integration options
+    # Note that tailscale exit nodes need to be allowed on a per-device basis. Putting transmission in a network namespace with tailscale and protonvpn, and nothing else, should force all peer traffic through proton.
   };
 
   environment.persistence."/nix/persist" = {
