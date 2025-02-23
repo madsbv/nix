@@ -1,4 +1,4 @@
-{ mod, ... }:
+{ mod, pkgs, ... }:
 
 {
   imports = [
@@ -11,8 +11,27 @@
   nixpkgs.config = {
     cudaSupport = true;
   };
+
+  programs = {
+    nm-applet.enable = true;
+    firefox.enable = true;
+  };
+  environment.systemPackages = with pkgs; [
+    pavucontrol
+    pwvucontrol
+  ];
+
   services = {
     # Provides blueman-applet and blueman-manager for managing bluetooth connections
     blueman.enable = true;
+
+    xserver = {
+      cinnamon.apps.enable = true;
+      desktopManager.cinnamon = {
+        enable = true;
+      };
+      displayManager.gdm.enable = true;
+    };
   };
+
 }

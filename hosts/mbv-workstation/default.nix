@@ -2,6 +2,7 @@
   mod,
   pkgs,
   flake-root,
+  lib,
   ...
 }:
 
@@ -13,6 +14,8 @@
     (mod "system/nixos/client")
     ./overclocking.nix
   ];
+
+  system.autoUpgrade.allowReboot = lib.mkForce false;
 
   users.users = {
     root.openssh.authorizedKeys.keys = [

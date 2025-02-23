@@ -28,10 +28,18 @@
     extraModulePackages = [ ];
   };
 
+  services.xserver.videoDrivers = [ "nvidia" ];
+
   hardware = {
     graphics = {
       enable = true;
       enable32Bit = true;
+    };
+    nvidia = {
+      modesetting.enable = true;
+      open = false; # Doesn't support gtx 970
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
     bluetooth = {
       enable = true;

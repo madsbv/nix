@@ -7,6 +7,8 @@
     ./yubikey.nix
   ];
 
+  # TODO: Really needs some refactoring to accomodate mbv-desktop as well.
+
   home-manager.sharedModules = [ (mod "home-manager/nixos/client") ];
 
   local.emacs.package = pkgs.emacs;
