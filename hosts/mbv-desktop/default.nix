@@ -25,8 +25,8 @@
     # Provides blueman-applet and blueman-manager for managing bluetooth connections
     blueman.enable = true;
 
+    cinnamon.apps.enable = true;
     xserver = {
-      cinnamon.apps.enable = true;
       desktopManager.cinnamon = {
         enable = true;
       };
