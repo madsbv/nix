@@ -7,13 +7,14 @@ lights = ["light.coffee_station_light", "light.kitchen_cabinet_lights", "light.k
 attributes = ["state", "brightness", "color_temp_kelvin"]
 excludes = [["color_temp_kelvin", "hs_color"]]
 
-[equalize_brightness_mads_office]
-module = "equalize_attributes"
-class = "EqualizeAttributes"
-initial_states = true
-lights = ["light.madss_office_ceiling_light_1", "light.madss_office_ceiling_light_2", "light.madss_office_ceiling_light_3"]
-attributes = ["state", "brightness", "color_temp_kelvin", "hs_color", "effect"]
-excludes = [["color_temp_kelvin", "hs_color"]]
+### Seems to conflict with auto daylight adjustment of lights from Tapo app
+# [equalize_brightness_mads_office]
+# module = "equalize_attributes"
+# class = "EqualizeAttributes"
+# initial_states = true
+# lights = ["light.madss_office_ceiling_light_1", "light.madss_office_ceiling_light_2", "light.madss_office_ceiling_light_3"]
+# attributes = ["state", "brightness", "color_temp_kelvin", "hs_color", "effect"]
+# excludes = [["color_temp_kelvin", "hs_color"]]
 
 [equalize_brightness_main_bedroom]
 module = "equalize_attributes"
