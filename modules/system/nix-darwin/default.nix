@@ -47,7 +47,6 @@ in
       # Enable if problems arise, or consider removing /var/lib/darwin-builder to force reinstantiation of the builders store without enabling this option.
       # ephemeral = true;
     };
-    configureBuildUsers = true;
   };
 
   # For some reason the mkMerge/mkIf combo in modules/shared doesn't want to play nice with this option.
@@ -116,7 +115,6 @@ in
   };
 
   services = {
-    nix-daemon.enable = true;
     tailscale.enable = true;
     # NOTE: On permissions: The MacOS System Settings menus for giving various accessibility permissions to things like Yabai and SKHD fill up with duplicates over time after upgrading each app multiple times. One can get rid of this by running `tccutil reset All`, which resets permissions for everything, and clears up the duplicates.
     # Note that this is a pretty brute-force method. It will require reenabling permissions on everything, and will possibly lock up the system until a restart.

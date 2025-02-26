@@ -93,7 +93,6 @@
             if pkgs.stdenv.isDarwin then
               {
                 # Nix-darwin
-                user = "root";
                 interval = {
                   Weekday = 0;
                   Hour = 2;
