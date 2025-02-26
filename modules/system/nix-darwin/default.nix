@@ -32,7 +32,7 @@ in
 
   # Enable sudo authentication with Touch ID
   security = {
-    pam.enableSudoTouchIdAuth = true;
+    pam.services.sudo_local.touchIdAuth = true;
     sudo.extraConfig = "%admin ALL = (ALL) NOPASSWD: ALL";
   };
 
