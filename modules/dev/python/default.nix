@@ -8,5 +8,6 @@
     python311Packages.pyflakes
     python311Packages.pytest
     pyright
+    uv
   ];
 }
