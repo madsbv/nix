@@ -110,6 +110,7 @@
     cargo-diet
     cargo-msrv
     cargo-semver-checks
+    cargo-watch
     # (lib.mkIf stdenv.isDarwin cargo-instruments)
   ];
 }
