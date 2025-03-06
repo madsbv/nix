@@ -6,7 +6,9 @@
   mod,
   ...
 }:
-
+let
+  user = "mvilladsen";
+in
 {
   imports = [
     (mod "system/common/common")
@@ -18,15 +20,10 @@
   local.emacs.enable = true;
 
   home-manager = {
-    sharedModules = [
-      (
-        { ... }:
-        {
-          imports = [ (mod "home-manager/common/client") ];
-          local.doomemacs.enable = true;
-        }
-      )
-    ];
+    users.${user} = {
+      imports = [ (mod "home-manager/common/client") ];
+      local.doomemacs.enable = true;
+    };
     extraSpecialArgs = {
       inherit user inputs nox;
     };

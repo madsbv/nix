@@ -1,5 +1,8 @@
 { pkgs, mod, ... }:
 
+let
+  user = "mvilladsen";
+in
 {
   imports = [
     (mod "system/common/client")
@@ -9,7 +12,12 @@
 
   # TODO: Really needs some refactoring to accomodate mbv-desktop as well.
 
-  home-manager.sharedModules = [ (mod "home-manager/nixos/client") ];
+  home-manager = {
+    users.${user} = {
+      imports = [ (mod "home-manager/nixos/client") ];
+    };
+    sharedModules = [ (mod "home-manager/nixos/common") ];
+  };
 
   local.emacs.package = pkgs.emacs;
 
