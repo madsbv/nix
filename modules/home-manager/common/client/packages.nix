@@ -17,6 +17,7 @@
   multimarkdown
   pandoc
   fontconfig
+  spotify
 
   # Writing
   # Function provided by nixpkgs. Required to build aspell together with its dictionaries, otherwise they will be isolated from each other in the nix store.
