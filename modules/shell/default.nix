@@ -13,6 +13,7 @@ let
     gj = "${pkgs.just}/bin/just ${flakedir}";
     j = "${pkgs.just}/bin/just";
     ls = "${pkgs.eza}/bin/eza --binary --header --git --git-repos --all";
+    l = "ls -alh";
     less = "${pkgs.less}/bin/less --ignore-case --LINE-NUMBERS";
     cat = "${pkgs.bat}/bin/bat";
     grep = "${pkgs.gnugrep}/bin/grep -i --color=always";
