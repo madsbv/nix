@@ -34,13 +34,14 @@
               # Default job commands
               a = "job:check-all";
               i = "job:initial";
-              c = "job:clippy"; # Already runs clippy with --all-targets
+              c = "job:clippy-all"; # Already runs clippy with --all-targets
               d = "job:doc-open";
               t = "job:test";
               r = "job:run";
-              # Custom job commands
+              # Custom keybindings
               f = "job:clippy-fix";
               v = "job:semver-checks";
+              l = "job:run-long"; # For long-running programs, e.g. servers
             };
             jobs = {
               semver-checks = {
