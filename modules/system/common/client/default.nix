@@ -1,5 +1,4 @@
 {
-  user,
   inputs,
   pkgs,
   nox,

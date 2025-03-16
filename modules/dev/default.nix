@@ -12,20 +12,17 @@
     filter (p: readFileType p == "directory") (map (p: ./. + "/${p}") (attrNames (readDir ./.)));
 
   home-manager.sharedModules = lib.mkIf config.local.hm.enable [
-    (
-      { config, ... }:
-      {
-        programs.awscli = {
-          enable = true;
-          settings = {
-            "default" = {
-              region = "us-east-2";
-            };
+    (_: {
+      programs.awscli = {
+        enable = true;
+        settings = {
+          "default" = {
+            region = "us-east-2";
           };
-          # TODO: Figure out how to add credentials
         };
-      }
-    )
+        # TODO: Figure out how to add credentials
+      };
+    })
   ];
   environment.systemPackages =
     with pkgs;
