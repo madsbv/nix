@@ -47,10 +47,23 @@ in
   };
 
   programs = {
-
+    librewolf = {
+      enable = true;
+      languagePacks = [
+        "en-US"
+        "da"
+      ];
+      settings = {
+        "webgl.disabled" = false;
+        "identity.fxaccounts.enabled" = true;
+        # The default (1, sticky blocking). Set to "2" for strict blocking.
+        "media.autoplay.blocking_policy" = 1;
+      };
+    };
     go = {
       enable = true;
       goPath = "go";
+      # TODO: This makes the package available as a library, not binary. Is there an alternative in Nix or do we add a `go install` command to activation script?
       packages = {
         "github.com/bootdotdev/bootdev" = inputs.bootdev;
       };
