@@ -10,7 +10,7 @@ in
 {
   options.local.emacs = {
     enable = lib.mkEnableOption "Emacs";
-    package = lib.mkPackageOption pkgs "emacs" { };
+    package = lib.mkPackageOption pkgs "my-emacs" { };
     doomRepo = lib.mkOption {
       default = "https://github.com/doomemacs/doomemacs.git";
     };

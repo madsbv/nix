@@ -72,7 +72,7 @@ build-nixos: check-git
 
 alias sn := switch-nixos
 switch-nixos: build-nixos
-	nixos-rebuild switch --flake .#$(hostname)
+	sudo nixos-rebuild switch --flake .#$(hostname)
 
 switch-nixos-boot: build-nixos
 	nixos-rebuild boot --flake .#$(hostname)

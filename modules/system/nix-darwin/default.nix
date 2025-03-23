@@ -87,7 +87,7 @@ in
     keys.enable_authorized_access = true;
     emacs = {
       enable = true;
-      package = pkgs.my-emacs-mac;
+      # package = pkgs.my-emacs-mac;
     };
 
     # TODO: Configure

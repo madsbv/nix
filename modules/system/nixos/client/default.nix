@@ -19,7 +19,7 @@ in
     sharedModules = [ (mod "home-manager/nixos/common") ];
   };
 
-  local.emacs.package = pkgs.emacs;
+  # local.emacs.package = pkgs.emacs;
 
   # No longer exists on nix-darwin
   fonts.fontDir.enable = true;
