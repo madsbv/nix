@@ -10,7 +10,6 @@ let
     withImageMagick = true;
     withTreeSitter = true;
     withNativeCompilation = true;
-    withPgtk = true;
   };
 in
 {
@@ -26,7 +25,7 @@ in
   my-emacs =
     if prev.stdenv.isDarwin then
       # Standard Emacs (i.e. not emacs-macport, which seems largely unmaintained), with homebrew-emacs-plus patches applied: https://github.com/d12frosted/homebrew-emacs-plus
-      my-emacs-generic.overrideAttrs (old: {
+      (my-emacs-generic.override { withPgtk = true; }).overrideAttrs (old: {
         patches = (old.patches or [ ]) ++ [
           # Fix OS window role so that yabai can pick up Emacs
           (prev.fetchpatch {
