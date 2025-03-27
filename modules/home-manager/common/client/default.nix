@@ -59,6 +59,7 @@ in
         # The default (1, sticky blocking). Set to "2" for strict blocking.
         "media.autoplay.blocking_policy" = 1;
       };
+      nativeMessagingHosts = [ pkgs.tridactyl-native ];
     };
     go = {
       enable = true;
