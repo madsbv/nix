@@ -149,10 +149,6 @@
         ];
       };
       distributedBuilds = true;
-
-      extraOptions = ''
-        !include ${config.age.secrets.github-api-key-minimal.path}
-      '';
     };
 
     nixpkgs = {

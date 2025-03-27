@@ -55,7 +55,6 @@
 
       agePlugins = [ pkgs.age-plugin-yubikey ];
     };
-    secrets.github-api-key-minimal.rekeyFile = flake-root + "/secrets/other/github-nix-api-access.age";
     secrets.healthchecks-sh.rekeyFile = flake-root + "/secrets/other/healthchecks.sh.age";
   };
 }
