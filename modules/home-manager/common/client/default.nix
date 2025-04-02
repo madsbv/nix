@@ -61,20 +61,48 @@ in
         "da"
       ];
       settings = {
-        "webgl.disabled" = false;
+        "browser.download.useDownloadDir" = true;
+        "browser.newtab.extensionControlled" = true;
+        "browser.newtab.privateAllowed" = true;
+        "browser.newtabpage.activity-stream.showSearch" = false;
+        "browser.newtabpage.enabled" = false;
+        "browser.search.separatePrivateDefault" = false;
+        "browser.startup.homepage" = "chrome://browser/content/blanktab.html";
+        "browser.startup.page" = 3;
+        "browser.tabs.inTitlebar" = 0;
+        "browser.tabs.warnOnOpen" = false;
+        "browser.theme.content-theme" = 0;
+        "browser.theme.toolbar-theme" = 0;
+        "browser.toolbars.bookmarks.visibility" = "never";
+        "browser.translations.panelShown" = true;
+        "datareporting.usage.uploadEnabled" = false;
+        "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+        "extensions.ui.extension.hidden" = false;
+        "extensions.ui.plugin.hidden" = false;
+        "general.autoScroll" = true;
+        "identity.fxaccounts.account.device.name" = "LibreWolf on mbv-workstation";
         "identity.fxaccounts.enabled" = true;
         # The default (1, sticky blocking). Set to "2" for strict blocking.
         "media.autoplay.blocking_policy" = 1;
+        "media.eme.enabled" = true;
+        "privacy.clearOnShutdown.history" = false;
+        "privacy.clearOnShutdown.downloads" = false;
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.globalprivacycontrol.enabled" = false;
+        # Tridactyl on addons.mozilla.org and others
+        "privacy.resistFingerprinting.block_mozAddonManager" = true;
+        "privacy.userContext.extension" = "tridactyl.vim@cmcaine.co.uk";
+        "services.sync.declinedEngines" = "passwords,addresses,creditcards";
+        "services.sync.engine.passwords" = false;
+        "services.sync.engine.prefs.modified" = false;
+        # userChrome.css
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "webgl.disabled" = false;
       };
       nativeMessagingHosts = [ pkgs.tridactyl-native ];
       profiles = {
         primary = {
           isDefault = true;
-          # To make tridactyl work on addons.mozilla.org and others
-          settings = {
-            "privacy.resistFingerprinting.block_mozAddonManager" = true;
-            "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          };
           userChrome = ''
             /* Hide tab bar completely */
             #TabsToolbar {
