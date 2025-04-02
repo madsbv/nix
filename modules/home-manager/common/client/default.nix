@@ -44,8 +44,9 @@ in
     sessionVariables = {
       TERMINAL = "kitty";
     };
-    activation.librewolfNativeMessaging = lib.hm.dag.entryAfter [ "writeBoundary" ] ''ln -s ~/.mozilla/native-messaging-hosts ~/.librewolf/native-messaging-hosts'';
-    # sudo ln -s /usr/lib/mozilla/native-messaging-hosts /usr/lib/librewolf/native-messaging-hosts
+    activation.librewolfNativeMessaging = lib.hm.dag.entryAfter [
+      "writeBoundary"
+    ] ''ln -sf ~/.mozilla/native-messaging-hosts ~/.librewolf/native-messaging-hosts'';
   };
 
   xdg.configFile."tridactyl" = {
@@ -66,6 +67,33 @@ in
         "media.autoplay.blocking_policy" = 1;
       };
       nativeMessagingHosts = [ pkgs.tridactyl-native ];
+      profiles = {
+        primary = {
+          isDefault = true;
+          # To make tridactyl work on addons.mozilla.org and others
+          settings = {
+            "privacy.resistFingerprinting.block_mozAddonManager" = true;
+            "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          };
+          userChrome = ''
+            /* Hide tab bar completely */
+            #TabsToolbar {
+              visibility: collapse;
+            }
+            /* When window is not focused, match the URL bar opacity with the inactive application buttons */
+            #nav-bar {
+              :root[tabsintitlebar] & {
+                will-change: opacity;
+                transition: opacity var(--inactive-window-transition);
+
+                &:-moz-window-inactive {
+                  opacity: var(--inactive-titlebar-opacity);
+                }
+              }
+            }
+          '';
+        };
+      };
     };
     go = {
       enable = true;

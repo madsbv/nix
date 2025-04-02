@@ -78,7 +78,6 @@ in
 
   programs = {
     nm-applet.enable = true;
-    firefox.enable = true;
     thunar = {
       enable = true;
       plugins = with pkgs.xfce; [
