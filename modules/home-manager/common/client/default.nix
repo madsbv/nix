@@ -44,6 +44,12 @@ in
     sessionVariables = {
       TERMINAL = "kitty";
     };
+    activation.librewolfNativeMessaging = lib.hm.dag.entryAfter [ "writeBoundary" ] ''ln -s ~/.mozilla/native-messaging-hosts ~/.librewolf/native-messaging-hosts'';
+    # sudo ln -s /usr/lib/mozilla/native-messaging-hosts /usr/lib/librewolf/native-messaging-hosts
+  };
+
+  xdg.configFile."tridactyl" = {
+    source = flake-root + "/config/tridactyl/";
   };
 
   programs = {

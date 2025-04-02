@@ -15,6 +15,9 @@ set searchurls.duckduckgo https://duckduckgo.com/?q=
 set searchurls.youtube https://www.youtube.com/results?search_query=
 set smoothscroll true
 
+set browser librewolf
+set editorcmd wezterm -e nvim
+
 " Binds
 bind J tabnext
 bind K tabprev
@@ -171,6 +174,14 @@ bind zO zoom 0.3
 bind . repeat
 bind m gobble 1 markadd
 bind ` gobble 1 markjump
+
+bind / fillcmdline find
+bind ? fillcmdline find --reverse
+bind n findnext --search-from-view
+bind N findnext --search-from-view --reverse
+bind gn findselect
+bind gN composite findnext --search-from-view --reverse; findselect
+bind ,<Space> nohlsearch
 
 " For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
 " vim: set filetype=tridactyl
