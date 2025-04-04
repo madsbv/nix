@@ -54,6 +54,7 @@ in
   };
 
   programs = {
+    zathura.enable = true;
     librewolf = {
       enable = true;
       languagePacks = [

@@ -2,14 +2,14 @@
 
 [ nox ]
 ++ (with pkgs; [
-  # Communication tools
+  ## Communication tools
   zoom-us
   discord
 
-  # Clipboard management from terminal and neovim
+  ## Clipboard management from terminal and neovim
   xsel
 
-  # Media-related packages
+  ## Media-related packages
   ffmpeg
   imagemagick
   graphviz
@@ -19,7 +19,7 @@
   fontconfig
   spotify
 
-  # Writing
+  ## Writing
   # Function provided by nixpkgs. Required to build aspell together with its dictionaries, otherwise they will be isolated from each other in the nix store.
   # en-computers and en-science are two special dictionaries (and the only ones provided) for computer and science jargon.
   (aspellWithDicts (
@@ -41,9 +41,11 @@
   # TODO 241020: Build errors: https://github.com/NixOS/nixpkgs/issues/339576
   # bitwarden-cli
 
-  # Documents
+  ## Documents
   djvulibre
   poppler
+  # Merge and rearrange pdf pages
+  pdfarranger
 
   # 3D modelling
   # unstable is currently broken on Darwin: https://github.com/NixOS/nixpkgs/pull/342211#issuecomment-2356528216
