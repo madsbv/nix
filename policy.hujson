@@ -1,4 +1,4 @@
-// Example/default ACLs for unrestricted connections.
+// This tailnet's ACLs are maintained in https://github.com/madsbv/nix
 {
 	// Declare static groups of users. Use autogroups for all users or users with a specific role.
 	// "groups": {
@@ -8,15 +8,15 @@
 	// Define the tags which can be applied to devices and by which users.
 	"tagOwners": {
 		"tag:client": ["autogroup:admin"],
-		"tag:vm":     ["autogroup:admin"],
-		"tag:server": ["autogroup:admin"],
+		"tag:vm": ["autogroup:admin"],
+		"tag:server": ["autogroup:admin"]
 	},
 
 	// Define access control lists for users, groups, autogroups, tags,
 	// Tailscale IP addresses, and subnet ranges.
 	"acls": [
 		// Allow client and server devices to connect to everything.
-		{"action": "accept", "src": ["tag:client", "tag:server"], "dst": ["*:*"]},
+		{ "action": "accept", "src": ["tag:client", "tag:server"], "dst": ["*:*"] }
 		// Don't allow ephemeral vms to access anything
 	],
 
@@ -24,72 +24,64 @@
 	"ssh": [
 		{
 			"action": "accept",
-			"src":    ["tag:client"],
-			"dst":    ["tag:client", "tag:vm", "tag:server"],
-			"users":  ["mvilladsen", "root", "builder"],
+			"src": ["tag:client"],
+			"dst": ["tag:client", "tag:vm", "tag:server"],
+			"users": ["mvilladsen", "root", "builder"]
 		},
 		{
 			"action": "accept",
-			"src":    ["tag:client", "tag:server", "tag:vm"],
-			"dst":    ["tag:client", "tag:server", "tag:vm"],
-			"users":  ["builder"],
-		},
+			"src": ["tag:client", "tag:server", "tag:vm"],
+			"dst": ["tag:client", "tag:server", "tag:vm"],
+			"users": ["builder"]
+		}
 	],
 
 	// Test access rules every time they're saved.
 	// Test that clients can access vms, but not vice versa
 	"tests": [
 		{
-			"src":  "tag:vm",
-			"deny": ["tag:client:22"],
+			"src": "tag:vm",
+			"deny": ["tag:client:22"]
 		},
 		{
-			"src":    "tag:client",
-			"accept": ["tag:vm:22"],
-		},
+			"src": "tag:client",
+			"accept": ["tag:vm:22"]
+		}
 	],
 
 	"sshTests": [
 		{
-			"src":  "tag:vm",
-			"deny": ["tag:client:22"],
+			"src": "tag:vm",
+			"deny": ["tag:client:22"]
 		},
 		{
-			"src":    "tag:client",
-			"accept": ["tag:vm:22"],
+			"src": "tag:client",
+			"accept": ["tag:vm:22"]
 		},
 		{
-			"src":    "tag:client",
-			"dst":    ["tag:vm", "tag:server", "tag:client"],
+			"src": "tag:client",
+			"dst": ["tag:vm", "tag:server", "tag:client"],
+			"accept": ["builder"]
+		},
+		{
+			"src": "tag:server",
+			"dst": ["tag:vm"],
 			"accept": ["builder"],
+			"deny": ["mvilladsen", "root"]
 		},
 		{
-			"src":    "tag:server",
-			"dst":    ["tag:vm"],
-			"accept": ["builder"],
-			"deny":   ["mvilladsen", "root"],
-		},
-		{
-			"src":    "mvilladsen@mbv-mba",
-			"accept": ["mbv-mba:22"],
+			"src": "mvilladsen@mbv-mba",
+			"accept": ["mbv-mba:22"]
 		},
 		{
 			"src": "tag:client",
 			"dst": ["tag:client", "tag:server"],
-			"accept": [
-				"builder",
-				"mvilladsen",
-				"root",
-			],
+			"accept": ["builder", "mvilladsen", "root"]
 		},
 		{
 			"src": "mvilladsen@mbv-workstation",
 
-			"accept": [
-				"builder@mbv-mba",
-				"mvilladsen@mbv-mba",
-				"root@mbv-mba",
-			],
-		},
-	],
+			"accept": ["builder@mbv-mba", "mvilladsen@mbv-mba", "root@mbv-mba"]
+		}
+	]
 }
