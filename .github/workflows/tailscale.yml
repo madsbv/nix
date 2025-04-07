@@ -1,0 +1,56 @@
+name: Sync Tailscale ACLs
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  apply-acl:
+    if: github.event_name == 'push'
+    environment: production
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch version-cache.json
+        uses: actions/cache@v4
+        with:
+          path: ./version-cache.json
+          key: version-cache.json-${{ github.run_id }}
+          restore-keys: |
+            version-cache.json-
+      - name: Deploy ACL
+        id: deploy-acl
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID_WRITE }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET_WRITE }}
+          tailnet: ${{ secrets.TS_TAILNET }}
+          action: apply
+
+  test-acl:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch version-cache.json
+        uses: actions/cache@v4
+        with:
+          path: ./version-cache.json
+          key: version-cache.json-${{ github.run_id }}
+          restore-keys: |
+            version-cache.json-
+      - name: Test ACL
+        id: test-acl
+        # Tailscale has released OAuth support for their action, but haven't cut a new release yet
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID_READ }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET_READ }}
+          tailnet: ${{ secrets.TS_TAILNET }}
+          action: test
