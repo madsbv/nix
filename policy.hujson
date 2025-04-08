@@ -84,7 +84,7 @@
 		},
 		{
 			"src": "madsbv@github",
-			"dst": ["tag:client", "tag:server", "madsbv@github"],
+			"dst": ["tag:ephemeral", "tag:server", "madsbv@github"],
 			"accept": ["builder", "mvilladsen", "root"]
 		},
 		{
