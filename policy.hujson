@@ -69,7 +69,7 @@
 			"deny": ["madsbv@github:22"]
 		},
 		{
-			"src": "groups:consumers",
+			"src": "group:consumers",
 			"accept": ["tag:server:80"],
 			"deny": ["tag:server:22", "madsbv@github:22"]
 		}
