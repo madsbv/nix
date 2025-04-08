@@ -82,7 +82,6 @@
 			"accept": ["builder"],
 			"deny": ["mvilladsen", "root"]
 		},
-		,
 		{
 			"src": "madsbv@github",
 			"dst": ["tag:client", "tag:server", "madsbv@github"],
