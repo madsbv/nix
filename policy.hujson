@@ -1,87 +1,108 @@
 // This tailnet's ACLs are maintained in https://github.com/madsbv/nix
 {
 	// Declare static groups of users. Use autogroups for all users or users with a specific role.
-	// "groups": {
-	//  	"group:example": ["alice@example.com", "bob@example.com"],
-	// },
+	"groups": {
+		"group:consumers": ["madsbv@github"]
+	},
 
 	// Define the tags which can be applied to devices and by which users.
 	"tagOwners": {
-		"tag:client": ["autogroup:admin"],
-		"tag:vm": ["autogroup:admin"],
+		"tag:ephemeral": ["autogroup:admin"],
 		"tag:server": ["autogroup:admin"]
 	},
 
-	// Define access control lists for users, groups, autogroups, tags,
-	// Tailscale IP addresses, and subnet ranges.
 	"acls": [
-		// Allow client and server devices to connect to everything.
-		{ "action": "accept", "src": ["tag:client", "tag:server"], "dst": ["*:*"] }
-		// Don't allow ephemeral vms to access anything
-	],
-
-	// Define users and devices that can use Tailscale SSH.
-	"ssh": [
 		{
 			"action": "accept",
-			"src": ["tag:client"],
-			"dst": ["tag:client", "tag:vm", "tag:server"],
-			"users": ["mvilladsen", "root", "builder"]
+			"src": ["autogroup:admin"],
+			"dst": ["*:*"]
+		},
+		{
+			// Servers may need to communicate with each other or access builders over SSH
+			"action": "accept",
+			"src": ["tag:server"],
+			"dst": ["tag:server:*"]
+		},
+		{
+			// Consumers need access to services
+			"action": "accept",
+			"src": ["group:consumers"],
+			"dst": ["tag:server:80-10000"]
+		},
+		{
+			// For ssh builder access on ephemerals
+			"action": "accept",
+			"src": ["tag:ephemeral"],
+			"dst": ["tag:server:22"]
+		}
+	],
+
+	"ssh": [
+		// Members can access their own devices freely, admins can access all tags freely, and tagged devices can access the builder user on other tagged devices.
+		{
+			"action": "accept",
+			"src": ["autogroup:member"],
+			"dst": ["autogroup:self"],
+			"users": ["root", "autogroup:nonroot"]
 		},
 		{
 			"action": "accept",
-			"src": ["tag:client", "tag:server", "tag:vm"],
-			"dst": ["tag:client", "tag:server", "tag:vm"],
+			"src": ["autogroup:admin"],
+			"dst": ["tag:server", "tag:ephemeral"],
+			"users": ["root", "autogroup:nonroot"]
+		},
+		{
+			"action": "accept",
+			"src": ["tag:server", "tag:ephemeral"],
+			"dst": ["tag:server", "tag:ephemeral"],
 			"users": ["builder"]
 		}
 	],
 
-	// Test access rules every time they're saved.
-	// Test that clients can access vms, but not vice versa
 	"tests": [
 		{
-			"src": "tag:vm",
-			"deny": ["tag:client:22"]
+			"src": "madsbv@github",
+			"accept": ["tag:ephemeral:22", "tag:server:80", "madsbv@github:22"]
 		},
 		{
-			"src": "tag:client",
-			"accept": ["tag:vm:22"]
+			"src": "tag:server",
+			"accept": ["tag:server:80"],
+			"deny": ["madsbv@github:22"]
+		},
+		{
+			"src": "tag:ephemeral",
+			"accept": ["tag:server:22"],
+			"deny": ["madsbv@github:22"]
+		},
+		{
+			"src": "group:consumers",
+			"accept": ["tag:server:80"],
+			"deny": ["tag:server:22", "madsbv@github:22"]
 		}
 	],
 
 	"sshTests": [
 		{
-			"src": "tag:vm",
-			"deny": ["tag:client:22"]
-		},
-		{
-			"src": "tag:client",
-			"accept": ["tag:vm:22"]
-		},
-		{
-			"src": "tag:client",
-			"dst": ["tag:vm", "tag:server", "tag:client"],
-			"accept": ["builder"]
-		},
-		{
-			"src": "tag:server",
-			"dst": ["tag:vm"],
+			"src": "tag:ephemeral",
+			"dst": ["tag:ephemeral", "tag:server"],
 			"accept": ["builder"],
 			"deny": ["mvilladsen", "root"]
 		},
 		{
-			"src": "mvilladsen@mbv-mba",
-			"accept": ["mbv-mba:22"]
+			"src": "tag:server",
+			"dst": ["tag:ephemeral", "tag:server"],
+			"accept": ["builder"],
+			"deny": ["mvilladsen", "root"]
 		},
 		{
-			"src": "tag:client",
-			"dst": ["tag:client", "tag:server"],
+			"src": "madsbv@github",
+			"dst": ["tag:ephemeral", "tag:server", "madsbv@github"],
 			"accept": ["builder", "mvilladsen", "root"]
 		},
 		{
-			"src": "mvilladsen@mbv-workstation",
-
-			"accept": ["builder@mbv-mba", "mvilladsen@mbv-mba", "root@mbv-mba"]
+			"src": "group:consumers",
+			"dst": ["tag:server", "madsbv@github", "tag:ephemeral"],
+			"deny": ["autogroup:nonroot", "root"]
 		}
 	]
 }
