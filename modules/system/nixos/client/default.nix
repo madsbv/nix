@@ -77,6 +77,7 @@ in
   security.rtkit.enable = true;
 
   programs = {
+    i3lock.enable = true;
     nm-applet.enable = true;
     thunar = {
       enable = true;
