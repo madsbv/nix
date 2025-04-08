@@ -21,7 +21,7 @@
 			// Consumers need access to services, and servers may need to communicate with each other.
 			"action": "accept",
 			"src": ["group:consumers", "tag:server"],
-			"dst": ["tag:server:*"]
+			"dst": ["tag:server:80-10000"]
 		},
 		{
 			// For ssh builder access on ephemerals
