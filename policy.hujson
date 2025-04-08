@@ -88,11 +88,6 @@
 			"accept": ["builder", "mvilladsen", "root"]
 		},
 		{
-			"src": "mvilladsen@mbv-workstation",
-			"dst": ["mbv-mba", "mbv-desktop", "mbv-xps13"],
-			"accept": ["builder", "mvilladsen", "root"]
-		},
-		{
 			"src": "group:consumers",
 			"dst": ["tag:server", "madsbv@github", "tag:ephemeral"],
 			"deny": ["autogroup:nonroot", "root"]
