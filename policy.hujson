@@ -18,9 +18,15 @@
 			"dst": ["*:*"]
 		},
 		{
-			// Consumers need access to services, and servers may need to communicate with each other.
+			// Servers may need to communicate with each other or access builders over SSH
 			"action": "accept",
-			"src": ["group:consumers", "tag:server"],
+			"src": ["tag:server"],
+			"dst": ["tag:server:*"]
+		},
+		{
+			// Consumers need access to services
+			"action": "accept",
+			"src": ["group:consumers"],
 			"dst": ["tag:server:80-10000"]
 		},
 		{
@@ -77,8 +83,14 @@
 
 	"sshTests": [
 		{
+			"src": "tag:ephemeral",
+			"dst": ["tag:ephemeral", "tag:server"],
+			"accept": ["builder"],
+			"deny": ["mvilladsen", "root"]
+		},
+		{
 			"src": "tag:server",
-			"dst": ["tag:ephemeral"],
+			"dst": ["tag:ephemeral", "tag:server"],
 			"accept": ["builder"],
 			"deny": ["mvilladsen", "root"]
 		},
