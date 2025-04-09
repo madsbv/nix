@@ -21,6 +21,9 @@ in
       default = true;
     };
     remoteBuilders_x86-64 = lib.mkOption { default = [ ]; };
+    hostname = lib.mkOption {
+      description = "The hostname of this machine, to be excluded from the list of buildmachines";
+    };
   };
 
   config = {
@@ -52,26 +55,13 @@ in
     # TODO: Somehow make this a map over all nodes with enableLocalBuilder set. Not sure how automated we can make this? Maybe deploy-rs will help?
     # We could of course declare this on the top level
     nix.buildMachines = lib.mkIf cfg.enableRemoteBuilders (
-      map (hostname: {
-        # sshKey = config.age.secrets.ssh-user-mbv-mba.path; # I'm pretty sure we don't need this with Tailscale
-        system = "x86_64-linux";
-        sshUser = "builder";
-        hostName = hostname; # Tailscale
-        # Might be necessary for tailscale connections
-        protocol = "ssh-ng";
-        supportedFeatures = [
-          "kvm"
-          "big-parallel"
-          "benchmark"
-        ];
-        maxJobs = 8;
-      }) cfg.remoteBuilders_x86-64
-
-      ++ [
-        {
-          system = "aarch64-darwin";
-          sshUser = "mvilladsen";
-          hostName = "mbv-mba";
+      builtins.filter (builder: builder.hostName != cfg.hostname) (
+        map (builderHostname: {
+          # sshKey = config.age.secrets.ssh-user-mbv-mba.path; # I'm pretty sure we don't need this with Tailscale
+          system = "x86_64-linux";
+          sshUser = "builder";
+          hostName = builderHostname; # Tailscale
+          # Might be necessary for tailscale connections
           protocol = "ssh-ng";
           supportedFeatures = [
             "kvm"
@@ -79,8 +69,23 @@ in
             "benchmark"
           ];
           maxJobs = 8;
-        }
-      ]
+        }) cfg.remoteBuilders_x86-64
+
+        ++ [
+          {
+            system = "aarch64-darwin";
+            sshUser = "mvilladsen";
+            hostName = "mbv-mba";
+            protocol = "ssh-ng";
+            supportedFeatures = [
+              "kvm"
+              "big-parallel"
+              "benchmark"
+            ];
+            maxJobs = 8;
+          }
+        ]
+      )
     );
   };
 }
