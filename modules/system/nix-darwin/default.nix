@@ -96,8 +96,9 @@ in
             deps,
             ...
           }:
+          # Insert absolute paths to binaries for fd and head (otherwise fd might not exist and the darwin system head might be used, which does not support as many options)
           ''
-            ${decrypt} ${lib.escapeShellArg deps.autorestic-base.file} | ${lib.getBin pkgs.sd}/bin/sd "@fd@" "${lib.getBin pkgs.fd}/bin/fd"
+            ${decrypt} ${lib.escapeShellArg deps.autorestic-base.file} | ${lib.getBin pkgs.sd}/bin/sd "@fd@" "${lib.getBin pkgs.fd}/bin/fd" | ${lib.getBin pkgs.sd}/bin/sd "@head@" "${lib.getBin pkgs.coreutils-full}/bin/head"
           '';
       };
     };
