@@ -7,6 +7,10 @@
 }:
 
 {
+  environment.variables = lib.mkIf pkgs.stdenv.isDarwin {
+    # To fix cargo failing to find libiconv on C linking
+    LIBRARY_PATH = [ "${pkgs.darwin.libiconv}/lib" ];
+  };
   home-manager.sharedModules = lib.mkIf config.local.hm.enable [
     (
       { config, ... }:
