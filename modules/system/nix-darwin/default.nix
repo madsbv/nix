@@ -43,6 +43,8 @@ in
     linux-builder = {
       enable = true;
       package = pkgs.darwin.linux-builder-x86_64;
+      # Default is 1; increase priority of local builder over unreliable remote machines, since we usually won't build much x86_64 on aarch64 machines.
+      speedFactor = 10;
       # Likely to fix weird build issues (including related to evaluating derivations while running `just check-all` as discovered on 250102), but at the cost of more rebuilding.
       # Enable if problems arise, or consider removing /var/lib/darwin-builder to force reinstantiation of the builders store without enabling this option.
       # ephemeral = true;
@@ -157,16 +159,9 @@ in
 
           ctrl + alt - return : ${pkgs.kitty}/bin/kitty --single-instance $HOME'';
     };
-  };
-  # Fix for skhd not hot-reloading changes to config files on nix-darwin activation.
-  # https://github.com/LnL7/nix-darwin/issues/333#issuecomment-1981495455
-  system.activationScripts.hotloadSKHD.text = ''
-    su - $(logname) -c '${pkgs.skhd}/bin/skhd -r'
-  '';
 
-  # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
-  # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
-  services = {
+    # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.
+    # It would be better to be able to set the configs as part of the service definitions, but that is not supported.
     karabiner-elements.enable = true;
     # The sketchybar service module has a config option, but it takes the contents of sketchybarrc as argument. My config is split across multiple arguments.
     sketchybar = {
@@ -179,6 +174,11 @@ in
       extraPackages = [ pkgs.jq ];
     };
   };
+  # Fix for skhd not hot-reloading changes to config files on nix-darwin activation.
+  # https://github.com/LnL7/nix-darwin/issues/333#issuecomment-1981495455
+  system.activationScripts.hotloadSKHD.text = ''
+    su - $(logname) -c '${pkgs.skhd}/bin/skhd -r'
+  '';
 
   # Note: To correlate settings in System Settings with their names here, you can use `defaults read` to output (I think) all system settings. You can then save that to a file, change something in System Settings, and diff the new output of defaults read against the previous output. E.g.:
   # defaults read > before
