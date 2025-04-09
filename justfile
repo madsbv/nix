@@ -117,8 +117,9 @@ build-ephemeral machine-type image-format="install-iso": rekey
 	chmod +w ~/ephemeral/ephemeral-{{machine-type}}-{{image-format}}.iso
 
 alias r := rekey
+# Use with `-f` to force generate/rekey everything
 rekey *args: check-git
-	# just run "agenix-rekey#packages.aarch64-darwin.default" -- rekey -a {{args}}
+	just run "agenix-rekey" -- generate -a {{args}}
 	just run "agenix-rekey" -- rekey -a {{args}}
 
 alias e := agenix-edit

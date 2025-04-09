@@ -40,7 +40,7 @@ in
       };
     # Convenience job to be able to do one-off operations on the backup repo with the correct environment set.
     # The default action is to diff two given revs of the backup; change hashes to explore state evolution, or change the action to do other checks.
-    auotrestic-diff.serviceConfig =
+    autorestic-diff.serviceConfig =
       let
         label = "${hostname}.autorestic-diff";
       in

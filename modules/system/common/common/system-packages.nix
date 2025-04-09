@@ -23,6 +23,7 @@ with pkgs;
   unrar
   unzip
   fd
+  sd # sed alternative
   ripgrep
   ## TODO: 241019: Potential build problem on Darwin?
   # ripgrep-all

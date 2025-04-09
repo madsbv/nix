@@ -77,10 +77,31 @@ in
     sharedModules = [ (mod "home-manager/darwin") ];
   };
 
-  age.secrets."mbv-mba.autorestic.yml".rekeyFile =
-    flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";
-  local = {
+  age.secrets = {
+    # Build autorestic config with absolute paths to needed binaries by writing template, then doing text substitution in generator.
+    # Proof of concept for combining secrets with nix-native information.
+    "mbv-mba.autorestic.yml.base".rekeyFile = flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";
+    "mbv-mba.autorestic.yml" = {
+      generator = {
+        dependencies = {
+          autorestic-base = config.age.secrets."mbv-mba.autorestic.yml.base";
+        };
+        script =
+          {
+            pkgs,
+            lib,
+            decrypt,
+            deps,
+            ...
+          }:
+          ''
+            ${decrypt} ${lib.escapeShellArg deps.autorestic-base.file} | ${lib.getBin pkgs.sd}/bin/sd "@fd@" "${lib.getBin pkgs.fd}/bin/fd"
+          '';
+      };
+    };
+  };
 
+  local = {
     autorestic.ymlFile = config.age.secrets."mbv-mba.autorestic.yml".path;
     ssh-clients.users = [ user ];
 
