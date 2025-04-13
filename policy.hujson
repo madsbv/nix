@@ -2,7 +2,7 @@
 {
 	// Declare static groups of users. Use autogroups for all users or users with a specific role.
 	"groups": {
-		"group:consumers": ["madsbv@github"]
+		"group:consumers": ["madsbv@github", "emschaal@github"]
 	},
 
 	// Define the tags which can be applied to devices and by which users.
