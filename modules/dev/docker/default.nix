@@ -1,15 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}:
-let
-  user = "mvilladsen";
-in
-{
+_: {
   # TODO: docker/podman options (in system or home-manager) do not support Darwin. How to configure?
-  # We could try to exclude import of this file from dev/, or just universally enable this on linux through system, or not enable any services and just install packages.
+  # For now we're just configuring these in every nixos system in system/nixos/common
+  #
   # environment.systemPackages = with pkgs; [
   #   docker
   #   podman

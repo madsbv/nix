@@ -188,6 +188,7 @@ in
           extraGroups = [
             "wheel"
             "networkmanager"
+            "docker"
           ];
           # You can get the hash of a given password with `mkpasswd -m SHA-512`
           initialHashedPassword = "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
