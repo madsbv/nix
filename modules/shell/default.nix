@@ -106,7 +106,7 @@ in
                 file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
               }
             ];
-            initExtraBeforeCompInit = ''
+            initContent = lib.mkOrder 550 ''
               # p10k instant prompt
               local P10K_INSTANT_PROMPT="${config.xdg.cacheHome}/p10k-instant-prompt-''${(%):-%n}.zsh"
               [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"

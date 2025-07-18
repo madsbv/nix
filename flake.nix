@@ -37,13 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-homebrew = {
-      url = "github:zhaofengli-wip/nix-homebrew";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        nix-darwin.follows = "darwin";
-      };
-    };
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
     homebrew-apple = {
       url = "github:apple/homebrew-apple";
@@ -63,10 +57,6 @@
     };
     homebrew-services = {
       url = "github:homebrew/homebrew-services";
-      flake = false;
-    };
-    homebrew-cask-fonts = {
-      url = "github:homebrew/homebrew-cask-fonts";
       flake = false;
     };
     felixkratz-formulae = {

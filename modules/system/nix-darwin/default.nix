@@ -65,7 +65,6 @@ in
       "homebrew/homebrew-core" = homebrew-core;
       "homebrew/homebrew-cask" = homebrew-cask;
       "homebrew/homebrew-bundle" = homebrew-bundle;
-      "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
       "homebrew/homebrew-services" = homebrew-services;
       "felixkratz/homebrew-formulae" = felixkratz-formulae;
       "pirj/homebrew-noclamshell" = pirj-noclamshell;

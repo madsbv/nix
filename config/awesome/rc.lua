@@ -240,7 +240,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift", "Control" }, "s",
         function() os.execute("i3lock -c 000000 -e -f && systemctl suspend") end, 
         { description = "suspend system", group = "system" }),
-    awful.key({ modkey, "Shift", "Control" }, "s", function() os.execute("i3lock -c 000000 -e -f") end,
+    awful.key({ modkey, "Shift", "Control" }, "l", function() os.execute("i3lock -c 000000 -e -f") end,
         { description = "lock screen", group = "system" }),
     awful.key({ modkey, }, "s", hotkeys_popup.show_help,
         { description = "show help", group = "awesome" }),

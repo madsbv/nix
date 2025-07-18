@@ -60,6 +60,7 @@
     amdgpu = {
       # amdvlk.enable = true;
       initrd.enable = true;
+      overdrive.enable = true;
       # opencl.enable = true;
     };
     bluetooth = {

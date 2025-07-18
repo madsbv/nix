@@ -62,10 +62,7 @@
       # extest.enable = true; # Maybe useful for controllers?
     };
 
-    tuxclocker = {
-      enable = true;
-      enableAMD = true;
-    };
+    tuxclocker.enable = true;
 
     # TODO: Run Steam with gamemoderun automatically--probably a wrapper script, but how to register as application with Awesomewm program launcher?
     gamemode = {
