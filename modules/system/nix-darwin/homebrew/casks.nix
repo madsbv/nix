@@ -16,6 +16,8 @@ _:
   # Documents
   "calibre"
   "djview"
+  "libreoffice-still" # Stable version
+  "libreoffice-still-language-pack"
 
   # Communication Tools
   "discord"
