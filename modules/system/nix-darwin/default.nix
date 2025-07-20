@@ -187,6 +187,7 @@ in
   # # See which options changed
   # ```
   system = {
+    primaryUser = user;
     stateVersion = 4;
     defaults = {
       NSGlobalDomain = {

@@ -11,30 +11,36 @@ let
 in
 {
   options = {
-    local.dock.enable = mkOption {
-      description = "Enable dock";
-      default = stdenv.isDarwin;
-      example = false;
-    };
+    local.dock = {
+      enable = mkOption {
+        description = "Enable dock";
+        default = stdenv.isDarwin;
+        example = false;
+      };
 
-    local.dock.entries = mkOption {
-      description = "Entries on the Dock";
-      type =
-        with types;
-        listOf (submodule {
-          options = {
-            path = lib.mkOption { type = str; };
-            section = lib.mkOption {
-              type = str;
-              default = "apps";
+      user = mkOption {
+        description = "User to set up dock for";
+      };
+
+      entries = mkOption {
+        description = "Entries on the Dock";
+        type =
+          with types;
+          listOf (submodule {
+            options = {
+              path = lib.mkOption { type = str; };
+              section = lib.mkOption {
+                type = str;
+                default = "apps";
+              };
+              options = lib.mkOption {
+                type = str;
+                default = "";
+              };
             };
-            options = lib.mkOption {
-              type = str;
-              default = "";
-            };
-          };
-        });
-      readOnly = true;
+          });
+        readOnly = true;
+      };
     };
   };
 
@@ -77,9 +83,7 @@ in
       createEntries = concatMapStrings (entry: ''
         ${dockutil}/bin/dockutil --no-restart --add '${entry.path}' --section ${entry.section} ${entry.options}
       '') cfg.entries;
-    in
-    {
-      system.activationScripts.postUserActivation.text = ''
+      dockSetupScript = ''
         echo >&2 "Setting up the Dock..."
         haveURIs="$(${dockutil}/bin/dockutil --list | ${pkgs.coreutils}/bin/cut -f2)"
         if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
@@ -91,6 +95,9 @@ in
           echo >&2 "Dock setup complete."
         fi
       '';
+    in
+    {
+      system.activationScripts.setupDock.text = "sudo -u ${cfg.user} ${dockSetupScript}";
     }
   );
 }
