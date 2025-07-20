@@ -64,8 +64,8 @@ build-darwin *args:
 	just build {{args}} ".#darwinConfigurations.mbv-mba.system"
 
 alias sd := switch-darwin
-switch-darwin: rekey
-	darwin-rebuild switch --flake .#mbv-mba
+switch-darwin: check-git # rekey
+	sudo darwin-rebuild switch --flake .#mbv-mba
 
 build-nixos: check-git
 	nixos-rebuild build --flake .#$(hostname)
