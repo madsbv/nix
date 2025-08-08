@@ -100,6 +100,10 @@ in
 
     protonvpn-gui
 
-    geeqie # Image viewer
+    # Image viewers
+    # geeqie # Depends on libsoup-2 which has vulnerability
+    kdePackages.gwenview
+    image-roll
+    eog
   ];
 }

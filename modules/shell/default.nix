@@ -80,8 +80,7 @@ in
             # Not sure how this relates to zsh-vi-mode
             # defaultKeymap = "viins";
             autocd = false;
-            # Grossly, this is relative to Home, which config.xdg.configHome is not.
-            dotDir = ".config/zsh";
+            dotDir = "${config.xdg.configHome}/zsh";
             history = {
               path = "${config.xdg.dataHome}/zsh/zsh_history";
               ignoreAllDups = true;
