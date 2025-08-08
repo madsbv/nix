@@ -23,6 +23,7 @@
     "NetworkManager/system-connections/att.nmconnection".source = config.age.secrets.att-nm.path;
     "NetworkManager/system-connections/synapse.nmconnection".source =
       config.age.secrets.synapse-nm.path;
-    "NetworkManager/system-connections/vindbjerggaard.nmconnection".source = config.age.secrets.vindbjerggaard.path;
+    "NetworkManager/system-connections/vindbjerggaard.nmconnection".source =
+      config.age.secrets.vindbjerggaard.path;
   };
 }

@@ -88,13 +88,10 @@ in
       )
     );
     # Fix annoyance where unavailable remote builders cause significant delay in starting build
-    programs.ssh.extraConfig = lib.mkIf cfg.enableRemoteBuilders (
-      # SSH connection timeout in seconds
-''
+    programs.ssh.extraConfig = lib.mkIf cfg.enableRemoteBuilders ''
       ConnectTimeout = 10
       ServerAliveInterval = 5
       ServerAliveCountMax = 2
-''
-    );
+    '';
   };
 }
