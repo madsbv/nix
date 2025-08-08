@@ -23,7 +23,7 @@
       # https://github.com/tailscale/tailscale/issues/11097
       (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
     ];
-    mvilladsen.extraGroups = [ "gamemode" ];
+    mvilladsen.extraGroups = [ "gamemode" "adbusers"];
   };
 
   nixpkgs.config = {
@@ -45,6 +45,7 @@
   ];
 
   programs = {
+    adb.enable = true;
     steam = {
       enable = true;
       package = pkgs.steam.override {
