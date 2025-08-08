@@ -68,7 +68,17 @@
       powerOnBoot = true;
     };
   };
-  # services.xserver.videoDrivers = [ "amdgpu" ];
+  services.xserver = {
+    # videoDrivers = [ "amdgpu" ];
+    xrandrHeads = [
+      "HDMI-1"
+      {
+        output = "DP-2";
+        primary = true;
+      }
+      "DP-1"
+    ];
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
