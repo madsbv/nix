@@ -238,8 +238,11 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = gears.table.join(
     awful.key({ modkey, "Shift", "Control" }, "s",
-        function() os.execute("i3lock -c 000000 -e -f && systemctl suspend") end, 
+        function() os.execute("i3lock -c 000000 -e -f && systemctl suspend") end,
         { description = "suspend system", group = "system" }),
+    awful.key({ modkey, "Shift", "Control" }, "h",
+        function() os.execute("i3lock -c 000000 -e -f && systemctl hibernate") end, 
+        { description = "hibernate system", group = "system" }),
     awful.key({ modkey, "Shift", "Control" }, "l", function() os.execute("i3lock -c 000000 -e -f") end,
         { description = "lock screen", group = "system" }),
     awful.key({ modkey, }, "s", hotkeys_popup.show_help,

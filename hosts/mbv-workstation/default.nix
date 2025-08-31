@@ -99,9 +99,6 @@
     # Provides blueman-applet and blueman-manager for managing bluetooth connections
     blueman.enable = true;
 
-    # Daemon to monitor APC UPS'. The default settings autodetect connections to the UPS over USB, and automatically shut down the computer if the UPS falls below 50% or 5 minutes of battery time.
-    apcupsd.enable = true;
-
     ollama = {
       enable = true;
       acceleration = "rocm";
