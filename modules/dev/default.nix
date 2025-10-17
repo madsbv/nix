@@ -14,7 +14,8 @@
   home-manager.sharedModules = lib.mkIf config.local.hm.enable [
     (_: {
       programs.awscli = {
-        enable = true;
+        # Test failures prevent build on 251013: https://github.com/NixOS/nixpkgs/issues/450617
+        enable = false;
         settings = {
           "default" = {
             region = "us-east-2";

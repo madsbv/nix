@@ -71,33 +71,38 @@
         };
 
         # Enables using programs installed via Cargo
-        home = {
-          sessionPath = [ "$HOME/.cargo/bin" ];
-          sessionVariables = {
-            CARGO_HOME = "${config.home.homeDirectory}/${cargo-home}";
+        home =
+          let
+            cargoHome = "${config.home.homeDirectory}/${cargo-home}";
+          in
+          {
+            sessionPath = [ "$HOME/.cargo/bin" ];
+            sessionVariables = {
+              CARGO_HOME = cargoHome;
+              CARGO_TARGET_DIR = "${cargoHome}/target";
+            };
+            file.cargo-toml = {
+              target = "${cargo-home}/config.toml";
+              text = ''
+                [alias]     # command aliases
+                b = "build"
+                c = "check"
+                t = "test"
+                r = "run"
+                rr = "run --release"
+
+                [build]
+                target-dir = "${cargoHome}/target"         # path of where to place all generated artifacts
+                incremental = true            # whether or not to enable incremental compilation
+
+                [future-incompat-report]
+                frequency = 'always' # when to display a notification about a future incompat report
+
+                [net]
+                git-fetch-with-cli = true
+              '';
+            };
           };
-          file.cargo-toml = {
-            target = "${cargo-home}/config.toml";
-            text = ''
-              [alias]     # command aliases
-              b = "build"
-              c = "check"
-              t = "test"
-              r = "run"
-              rr = "run --release"
-
-              [build]
-              target-dir = "$CARGO_HOME/target"         # path of where to place all generated artifacts
-              incremental = true            # whether or not to enable incremental compilation
-
-              [future-incompat-report]
-              frequency = 'always' # when to display a notification about a future incompat report
-
-              [net]
-              git-fetch-with-cli = true
-            '';
-          };
-        };
       }
     )
   ];

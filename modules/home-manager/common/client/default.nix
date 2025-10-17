@@ -126,7 +126,7 @@ in
     };
     go = {
       enable = true;
-      goPath = "go";
+      env.GOPATH = "${config.home.homeDirectory} go";
       # TODO: This makes the package available as a library, not binary. Is there an alternative in Nix or do we add a `go install` command to activation script?
       packages = {
         "github.com/bootdotdev/bootdev" = inputs.bootdev;
@@ -205,10 +205,18 @@ in
           };
       };
     };
+
     ssh = {
       enable = true;
       package = pkgs.openssh;
+      enableDefaultConfig = false;
       matchBlocks = {
+        "*" = {
+          serverAliveInterval = 0;
+          serverAliveCountMax = 3;
+          hashKnownHosts = false;
+          userKnownHostsFile = "~/.ssh/known_hosts";
+        };
         "github.com" = {
           hostname = "github.com";
           identitiesOnly = true;
