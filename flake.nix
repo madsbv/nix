@@ -175,18 +175,15 @@
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
-              zsh
               git
               age-plugin-yubikey
               agenix-rekey.packages.${system}.default
+              deploy-rs.packages.${system}.default
               statix
               deadnix
+              nixfmt-rfc-style
+              nixfmt-tree
             ];
-
-            # nix develop enters a bash shell by default. This gets us back to zsh. The `exec` *replaces* the running bash instance with zsh; without it we'd have to exit twice to get back to original shell.
-            shellHook = ''
-              exec ${pkgs.zsh}/bin/zsh
-            '';
           };
         };
 
@@ -199,14 +196,16 @@
         nix-homebrew.darwinModules.nix-homebrew
         agenix.darwinModules.default
         agenix-rekey.nixosModules.default
-      ] ++ common-modules;
+      ]
+      ++ common-modules;
       nixos-modules = [
         home-manager.nixosModules.home-manager
         agenix.nixosModules.default
         agenix-rekey.nixosModules.default
         impermanence.nixosModules.impermanence
         disko.nixosModules.disko
-      ] ++ common-modules;
+      ]
+      ++ common-modules;
 
       common-args = system: {
         inherit nodes color-scheme inputs;
@@ -329,39 +328,38 @@
         mbv-mba = darwin-system "aarch64-darwin" "mbv-mba";
       };
 
-      nixosConfigurations =
-        {
-          mbv-workstation = nixos-system "x86_64-linux" "mbv-workstation";
-          mbv-desktop = nixos-system "x86_64-linux" "mbv-desktop";
-          mbv-xps13 = nixos-system "x86_64-linux" "mbv-xps13";
-          hp-90 = nixos-system "x86_64-linux" "hp-90";
-        }
-        // forLinuxSystems (system: {
-          # A system configuration for ephemeral systems--either temporary VMs or for installers.
-          # Use nixos-generators to build a VM or ISO with
-          # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
-          # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
-          # Example formats: install-iso qcow-efi (for qemu vm)
-          "ephemeral-${system}" = nixpkgs.lib.nixosSystem {
-            inherit system;
+      nixosConfigurations = {
+        mbv-workstation = nixos-system "x86_64-linux" "mbv-workstation";
+        mbv-desktop = nixos-system "x86_64-linux" "mbv-desktop";
+        mbv-xps13 = nixos-system "x86_64-linux" "mbv-xps13";
+        hp-90 = nixos-system "x86_64-linux" "hp-90";
+      }
+      // forLinuxSystems (system: {
+        # A system configuration for ephemeral systems--either temporary VMs or for installers.
+        # Use nixos-generators to build a VM or ISO with
+        # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
+        # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
+        # Example formats: install-iso qcow-efi (for qemu vm)
+        "ephemeral-${system}" = nixpkgs.lib.nixosSystem {
+          inherit system;
 
-            # For VMs
-            # Specific formats can be configured with something like:
-            # formatConfigs.vmware = { config, ... }: {
-            #   services.openssh.enable = true;
-            # };
-            # nixpkgs.hostPlatform = "aarch64-darwin";
-            specialArgs = (nixos-args system) // {
-              inherit system;
-              hostname = "ephemeral";
-            };
-            modules = [
-              impermanence.nixosModules.impermanence
-              nixos-generators.nixosModules.all-formats
-              disko.nixosModules.disko
-              ./hosts/ephemeral
-            ];
+          # For VMs
+          # Specific formats can be configured with something like:
+          # formatConfigs.vmware = { config, ... }: {
+          #   services.openssh.enable = true;
+          # };
+          # nixpkgs.hostPlatform = "aarch64-darwin";
+          specialArgs = (nixos-args system) // {
+            inherit system;
+            hostname = "ephemeral";
           };
-        });
+          modules = [
+            impermanence.nixosModules.impermanence
+            nixos-generators.nixosModules.all-formats
+            disko.nixosModules.disko
+            ./hosts/ephemeral
+          ];
+        };
+      });
     };
 }

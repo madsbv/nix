@@ -1,17 +1,16 @@
 # TODO: Make this system agnostic (probably requires generating it from nix)
 # IDEA: We could have files named "justfile-hostname" for each hostname together with a "justfile-common", and generate "justfile" from nix which just contains import statements for "justfile-common" and for the correct "justfile-hostname".
-#
-# TODO: Set up nix shell and nix-direnv, then use something like this in justfile to make sure we're actually in nix shell when necessary: https://notes.abhinavsarkar.net/2022/just-nix-podman-combo
-# Moving to this setup would simplify dev a lot
-#
+
+## Depends on the devShell defined in flake. Use with nix-direnv.
 # Dependencies:
 # - parallel
 # - fd
-# - nixfmt-rfc-style
+# - nixfmt-tree
 # - deadnix
 # - statix
 # - deploy-rs
 # - agenix-rekey
+
 #
 # Rarely used dependencies (should probably remain as `nix run` calls):
 # - disko#disko-installer
@@ -28,14 +27,14 @@ build *args: check-git
 
 alias l := lint
 lint:
-	just run nixpkgs#deadnix
-	just run nixpkgs#statix -- check
+	deadnix
+	statix check
 
 alias f := fix
 fix:
-	just run nixpkgs#deadnix -- -e
-	just run nixpkgs#statix -- fix
-	fd .nix$ | parallel 'just run nixpkgs#nixfmt-rfc-style -- {}'
+	deadnix -e
+	statix fix
+	treefmt
 
 # https://github.com/DeterminateSystems/flake-checker
 # Health check for flake.lock
@@ -79,11 +78,11 @@ switch-nixos-boot:
 
 alias d := deploy
 deploy:
-	just run github:serokell/deploy-rs -- --skip-checks --checksigs .
+	deploy --skip-checks --checksigs .
 
 alias dh := deploy-host
 deploy-host hostname:
-	just run github:serokell/deploy-rs ".#{{hostname}}"
+	deploy ".#{{hostname}}"
 
 alias dnl := deploy-non-laptops
 deploy-non-laptops:
@@ -94,7 +93,7 @@ deploy-non-laptops:
 
 alias dd := deploy-dry
 deploy-dry:
-	just run github:serokell/deploy-rs -- --dry-activate --debug-logs .
+	deploy --dry-activate --debug-logs .
 
 alias u := update
 update: check-git
@@ -119,13 +118,12 @@ build-ephemeral machine-type image-format="install-iso": rekey
 alias r := rekey
 # Use with `-f` to force generate/rekey everything
 rekey *args: check-git
-	just run "agenix-rekey" -- generate -a {{args}}
-	just run "agenix-rekey" -- rekey -a {{args}}
+	agenix generate -a {{args}}
+	agenix rekey -a {{args}}
 
 alias e := agenix-edit
 agenix-edit *args:
-	# just run "agenix-rekey#packages.aarch64-darwin.default" -- edit {{args}}
-	just run "agenix-rekey" -- edit {{args}}
+	agenix edit {{args}}
 	git add {{args}}
 
 ### USAGE

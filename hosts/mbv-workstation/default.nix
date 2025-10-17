@@ -23,7 +23,10 @@
       # https://github.com/tailscale/tailscale/issues/11097
       (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
     ];
-    mvilladsen.extraGroups = [ "gamemode" "adbusers"];
+    mvilladsen.extraGroups = [
+      "gamemode"
+      "adbusers"
+    ];
   };
 
   nixpkgs.config = {

@@ -13,18 +13,17 @@ _self: super: with super; {
 
     nativeBuildInputs = [ pkg-config ];
 
-    buildInputs =
-      [
-        libgit2
-        openssl
-        sccache
-        libiconv
-        llvmPackages_13.libclang
-      ]
-      ++ lib.optionals stdenv.isDarwin [
-        darwin.apple_sdk.frameworks.SystemConfiguration
-        darwin.apple_sdk.frameworks.CoreServices
-      ];
+    buildInputs = [
+      libgit2
+      openssl
+      sccache
+      libiconv
+      llvmPackages_13.libclang
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
     meta = with lib; {
       description = "Easily profile your rust crate with Xcode Instruments.";

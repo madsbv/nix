@@ -58,7 +58,8 @@ in
           "--read-concurrency=8"
           # We're running the backup headless, so there's no reason to show progress estimation
           "--no-scan"
-        ] ++ resticOpts;
+        ]
+        ++ resticOpts;
 
         # Set the default explicitly to avoid accidental pruning
         # This disables both `forget --prune` and `check` from running after backups.

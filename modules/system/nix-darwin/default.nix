@@ -153,11 +153,9 @@ in
       # See https://github.com/LnL7/nix-darwin/issues/406
       # Also, nix-based string replacement does not work when reading from separate file, so we have to do that here.
       enable = true;
-      skhdConfig =
-        (builtins.readFile (flake-root + "/config/skhd/skhdrc"))
-        + ''
+      skhdConfig = (builtins.readFile (flake-root + "/config/skhd/skhdrc")) + ''
 
-          ctrl + alt - return : ${pkgs.kitty}/bin/kitty --single-instance $HOME'';
+        ctrl + alt - return : ${pkgs.kitty}/bin/kitty --single-instance $HOME'';
     };
 
     # NOTE: The config files for these services are in the users home directory. They are set in modules/darwin/home-manager as xdg.configFile's.

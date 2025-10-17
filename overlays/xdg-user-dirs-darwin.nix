@@ -6,8 +6,7 @@ _final: prev: {
       platforms = prev.lib.platforms.unix;
     };
     nativeBuildInputs =
-      attrs.nativeBuildInputs
-      ++ prev.lib.optionals prev.stdenv.isDarwin [ prev.gettext ];
+      attrs.nativeBuildInputs ++ prev.lib.optionals prev.stdenv.isDarwin [ prev.gettext ];
     buildInputs = prev.lib.optionals prev.stdenv.isDarwin [ prev.libiconv ];
   });
 }

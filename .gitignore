@@ -11,3 +11,4 @@
 *.nmconnection
 /secrets/other/healthchecks.sh
 /.projectile-cache.eld
+.direnv

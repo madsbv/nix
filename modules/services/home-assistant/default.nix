@@ -57,7 +57,8 @@ let
         name = "${targetDir}/${file}";
         value = {
           source = sourceDir + "/${file}";
-        } // otherAttrs;
+        }
+        // otherAttrs;
       }) (readDirFilesRec sourceDir)
     );
 

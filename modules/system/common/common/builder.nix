@@ -28,23 +28,22 @@ in
 
   config = {
     users = lib.mkIf cfg.enableLocalBuilder {
-      users.builder =
-        {
-          openssh.authorizedKeys.keyFiles = [
-            (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-mba.mvilladsen.pub")
-            (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
-          ];
-        }
-        // lib.mkIf pkgs.stdenv.isLinux {
-          isSystemUser = true;
-          group = "builders";
-        }
-        // lib.mkIf pkgs.stdenv.isDarwin {
-          isHidden = false;
-          uid = 42;
-          gid = 42;
-          home = "/var/nix-builder";
-        };
+      users.builder = {
+        openssh.authorizedKeys.keyFiles = [
+          (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-mba.mvilladsen.pub")
+          (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
+        ];
+      }
+      // lib.mkIf pkgs.stdenv.isLinux {
+        isSystemUser = true;
+        group = "builders";
+      }
+      // lib.mkIf pkgs.stdenv.isDarwin {
+        isHidden = false;
+        uid = 42;
+        gid = 42;
+        home = "/var/nix-builder";
+      };
       # nix-darwin does not have users.users.<name>.group option, only gid option, so set here as well.
       groups.builders = {
         members = [ "builder" ];
