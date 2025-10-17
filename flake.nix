@@ -181,7 +181,6 @@
               deploy-rs.packages.${system}.default
               statix
               deadnix
-              nixfmt-rfc-style
               nixfmt-tree
             ];
           };
