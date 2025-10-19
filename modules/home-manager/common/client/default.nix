@@ -127,16 +127,11 @@ in
     go = {
       enable = true;
       env.GOPATH = "${config.home.homeDirectory} go";
-      # TODO: This makes the package available as a library, not binary. Is there an alternative in Nix or do we add a `go install` command to activation script?
-      packages = {
-        "github.com/bootdotdev/bootdev" = inputs.bootdev;
-      };
     };
 
     kitty = {
       enable = true;
       shellIntegration.enableZshIntegration = true;
-      # TODO: Either do settings natively in nix, or figure out how to just manage this config file as xdg config?
       extraConfig =
         builtins.readFile (flake-root + "/config/kitty/kitty.conf")
         + builtins.readFile (config.scheme inputs.base16-kitty);
