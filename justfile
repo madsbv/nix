@@ -69,6 +69,10 @@ switch-darwin: check-git # rekey
 build-nixos: check-git
 	nixos-rebuild build --flake .#$(hostname)
 
+alias bn := build-nixos
+build-nixos:
+	sudo nixos-rebuild build --flake .#$(hostname)
+
 alias sn := switch-nixos
 switch-nixos:
 	sudo nixos-rebuild switch --flake .#$(hostname)
