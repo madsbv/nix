@@ -2,11 +2,10 @@
   description = "Starter Configuration with secrets for MacOS and NixOS";
   inputs = {
     ### Nix basics ###
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # Local copy of fork of nixpkgs for development/testing package upgrades
-    #nixpkgs.url = "github:madsbv/nixpkgs/emacs-no-titlebar-patch";
-    # nixpkgs.url = "git+file:///Users/mvilladsen/workspace/github.com/madsbv/nixpkgs/";
     home-manager = {
+      # url = "github:nix-community/home-manager/release-25.05";
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -21,18 +20,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agenix-rekey = {
-      # 250202: Source of PR https://github.com/oddlama/agenix-rekey/pull/73 which adds a subcommand to reencrypt all source secrets with new masterIdentities.
-      # url = "github:charludo/agenix-rekey";
       url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     ### Darwin ###
     darwin = {
+      # url = "github:LnL7/nix-darwin/nix-darwin-25.05";
       url = "github:LnL7/nix-darwin/";
-      # Good commit:
-      # url = "github:LnL7/nix-darwin/57733bd1dc81900e13438e5b4439239f1b29db0e";
-      # commit be4c1b897accbdfc3429e99b5bd5234c5663776e introduces an openssh module to nix-darwin. However, agenix uses `services.openssh.enable` to detect darwin vs linux, and the introduction of this option seems to break that.
 
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -105,14 +100,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    bootdev = {
-      url = "github:bootdotdev/bootdev";
-      flake = false;
-    };
-
     nox = {
       url = "github:madsbv/nix-options-search";
-      # url = "git+file:///Users/mvilladsen/workspace/github.com/madsbv/nix-options-search/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

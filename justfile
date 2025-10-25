@@ -66,26 +66,23 @@ alias sd := switch-darwin
 switch-darwin: check-git # rekey
 	sudo darwin-rebuild switch --flake .#mbv-mba
 
+alias bn := build-nixos
 build-nixos: check-git
 	nixos-rebuild build --flake .#$(hostname)
 
-alias bn := build-nixos
-build-nixos:
-	sudo nixos-rebuild build --flake .#$(hostname)
-
 alias sn := switch-nixos
-switch-nixos:
+switch-nixos: check-git
 	sudo nixos-rebuild switch --flake .#$(hostname)
 
-switch-nixos-boot:
+switch-nixos-boot: check-git
 	sudo nixos-rebuild boot --flake .#$(hostname)
 
 alias d := deploy
-deploy:
+deploy: check-git
 	deploy --skip-checks --checksigs .
 
 alias dh := deploy-host
-deploy-host hostname:
+deploy-host hostname: check-git
 	deploy ".#{{hostname}}"
 
 alias dnl := deploy-non-laptops
@@ -96,7 +93,7 @@ deploy-non-laptops:
 	just deploy-host mbv-workstation
 
 alias dd := deploy-dry
-deploy-dry:
+deploy-dry: check-git
 	deploy --dry-activate --debug-logs .
 
 alias u := update
@@ -126,7 +123,7 @@ rekey *args: check-git
 	agenix rekey -a {{args}}
 
 alias e := agenix-edit
-agenix-edit *args:
+agenix-edit *args: check-git
 	agenix edit {{args}}
 	git add {{args}}
 

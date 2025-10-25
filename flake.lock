@@ -113,22 +113,6 @@
         "type": "github"
       }
     },
-    "bootdev": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1759839654,
-        "narHash": "sha256-kbNAlWppdGiIqDg/hV6coiDjuic6MJAHvN7lum3NLIg=",
-        "owner": "bootdotdev",
-        "repo": "bootdev",
-        "rev": "4e8e601b061f9d7c9d54bd66679e8522534d77ed",
-        "type": "github"
-      },
-      "original": {
-        "owner": "bootdotdev",
-        "repo": "bootdev",
-        "type": "github"
-      }
-    },
     "brew-src": {
       "flake": false,
       "locked": {
@@ -689,7 +673,6 @@
         "base16-kitty": "base16-kitty",
         "base16-schemes": "base16-schemes",
         "base16-vim": "base16-vim",
-        "bootdev": "bootdev",
         "darwin": "darwin_2",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
