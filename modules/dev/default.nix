@@ -28,6 +28,7 @@
   environment.systemPackages =
     with pkgs;
     [
+      devenv
       tree-sitter
       # Good to just have generally available
       gcc
