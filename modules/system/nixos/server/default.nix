@@ -18,7 +18,7 @@ in
 
   options.local.server = {
     user = lib.mkOption { default = "mvilladsen"; };
-    timezone = lib.mkOption { default = "America/Detroit"; };
+    timezone = lib.mkOption { default = "Europe/Copenhagen"; };
   };
 
   config = {

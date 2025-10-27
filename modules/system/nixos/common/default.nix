@@ -19,7 +19,7 @@ in
 
   options.local.nixos.common = {
     user = lib.mkOption { default = "mvilladsen"; };
-    timezone = lib.mkOption { default = "America/Detroit"; };
+    timezone = lib.mkOption { default = "Europe/Copenhagen"; };
   };
 
   config = {
