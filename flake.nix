@@ -1,5 +1,5 @@
 {
-  description = "Starter Configuration with secrets for MacOS and NixOS";
+  description = "Configuration with secrets for MacOS and NixOS";
   inputs = {
     ### Nix basics ###
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
@@ -21,6 +21,11 @@
     };
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-auth = {
+      url = "github:numtide/nix-auth";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -119,6 +124,7 @@
       agenix-rekey,
       disko,
       deploy-rs,
+      nix-auth,
       ...
     }@inputs:
     let
@@ -168,6 +174,7 @@
               age-plugin-yubikey
               agenix-rekey.packages.${system}.default
               deploy-rs.packages.${system}.default
+              nix-auth.packages.${system}.default
               statix
               deadnix
               nixfmt-tree
