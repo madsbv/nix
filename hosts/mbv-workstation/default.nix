@@ -24,6 +24,7 @@
       (builtins.readFile "${flake-root}/pubkeys/ssh/id_ed25519.mbv-workstation.mvilladsen.pub")
     ];
     mvilladsen.extraGroups = [
+      "libvirtd"
       "gamemode"
       "adbusers"
     ];
@@ -36,9 +37,28 @@
   virtualisation = {
     docker.enable = true;
     podman.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu = {
+        swtpm.enable = true;
+        # ovmf = {
+        #   enable = true;
+        #   packages = [ pkgs.OVMFFull.fd ];
+        # };
+      };
+    };
+    spiceUSBRedirection.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
+    virt-manager
+    virt-viewer
+    spice
+    spice-gtk
+    spice-protocol
+    virtio-win
+    win-spice
+
     protonup-qt
     mangohud
     docker
@@ -48,6 +68,8 @@
   ];
 
   programs = {
+    virt-manager.enable = true;
+    dconf.enable = true;
     adb.enable = true;
     steam = {
       enable = true;
