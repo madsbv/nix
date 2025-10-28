@@ -115,7 +115,13 @@ in
         viAlias = true;
         defaultEditor = true;
       };
-      git.enable = true;
+      git = {
+        enable = true;
+        lfs = {
+          enable = true;
+          enablePureSSHTransfer = true;
+        };
+      };
 
       # Conflicts with nix-index
       command-not-found.enable = false;
