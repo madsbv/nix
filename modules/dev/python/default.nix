@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   environment.systemPackages = with pkgs; [
@@ -10,5 +15,20 @@
     basedpyright
     uv
     ruff
+  ];
+
+  home-manager.sharedModules = lib.mkIf config.local.hm.enable [
+    (
+      { ... }:
+      {
+        programs.uv = {
+          enable = true;
+          settings = {
+            python-downloads = "never";
+            python-preference = "only-system";
+          };
+        };
+      }
+    )
   ];
 }
