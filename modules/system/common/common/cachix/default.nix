@@ -1,7 +1,7 @@
 _: {
   nix.settings = {
     substituters = [
-      "https://nix-community.cachix.org"
+      "https://nix-community.cachix.org/"
       "https://cache.nixos.org/"
       ## ca-derivations cache, seems to be down as of 251013, unable to find confirmation
       # "https://cache.ngi0.nixos.org/"

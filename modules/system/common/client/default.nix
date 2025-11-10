@@ -40,7 +40,7 @@ in
         hack-font
         meslo-lgs-nf
         noto-fonts
-        noto-fonts-emoji
+        noto-fonts-color-emoji
       ]
       ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
   };
