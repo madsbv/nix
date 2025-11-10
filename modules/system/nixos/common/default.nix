@@ -47,6 +47,11 @@ in
       allowReboot = true;
     };
 
+    nix = {
+      daemonCPUSchedPolicy = "idle";
+      daemonIOSchedClass = "idle";
+    };
+
     networking = {
       # hostId is set in configuration.nix
       hostName = hostname; # Define your hostname.

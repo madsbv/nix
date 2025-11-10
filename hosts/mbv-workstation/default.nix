@@ -126,7 +126,7 @@
     blueman.enable = true;
 
     ollama = {
-      enable = true;
+      enable = false;
       acceleration = "rocm";
       ## Setting to force ollama to use GPU
       rocmOverrideGfx = "11.0.1";
@@ -149,6 +149,9 @@
       };
     };
   };
-  local.restic.exclude = [ "/var/lib/ollama/models" ];
-  environment.persistence."/nix/persist".directories = [ "/var/lib/ollama/models" ];
+  local.restic.exclude = [
+    "/nix/persist/var/lib/private/ollama"
+    "/nix/persist/home/mvilladsen/.local/share/Steam"
+  ];
+  environment.persistence."/nix/persist".directories = [ "/var/lib/private/ollama/models" ];
 }

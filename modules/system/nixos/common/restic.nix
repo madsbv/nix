@@ -2,8 +2,11 @@
   config,
   lib,
   flake-root,
+  pkgs,
   ...
 }:
+
+# TODO: https://wiki.nixos.org/wiki/Restic#Security_Wrapper
 
 let
   cfg = config.local.restic;
@@ -11,12 +14,19 @@ let
   passwordFile = config.age.secrets.restic-password.path;
   repositoryFile = config.age.secrets.restic-repo.path;
 
+  niceRestic = pkgs.restic.overrideAttrs (old: {
+    installPhase = (old.installPhase or "") + ''
+      wrapProgram $out/bin/restic --set GOMAXPROCS 8
+    '';
+  });
+
   # Storage optimization
   resticOpts = [
     # For storage cost and especially transfer cost reasons, better compression might have some benefits
     "--compression=max"
     # We have plenty of memory to work with on all machines, and upload should be fast enough. Default pack size is 16MiB
     "--pack-size=64"
+    "--cleanup-cache"
   ];
 
   pruneSchedule = [
@@ -43,10 +53,11 @@ in
       persist = {
         inherit (cfg) exclude paths;
         inherit environmentFile passwordFile repositoryFile;
-        # TODO: Add initialize=true and confirm backups actually happen.
+
+        package = niceRestic;
 
         initialize = true;
-        inhibitsSleep = true;
+        # inhibitsSleep = true;
 
         # Creates restic-persist in path
         createWrapper = true;
@@ -91,7 +102,8 @@ in
       persist-prune = {
         inherit environmentFile passwordFile repositoryFile;
 
-        inhibitsSleep = true;
+        package = niceRestic;
+        # inhibitsSleep = true;
 
         # Explicitly disable taking backups
         paths = null;
@@ -125,7 +137,8 @@ in
       persist-check = {
         inherit environmentFile passwordFile repositoryFile;
 
-        inhibitsSleep = true;
+        package = niceRestic;
+        # inhibitsSleep = true;
 
         # Explicitly disable taking backups
         paths = null;
