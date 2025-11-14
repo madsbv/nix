@@ -71,6 +71,8 @@ in
     gnome.gnome-keyring.enable = true;
     # Image thumbnail service, for thunar
     tumbler.enable = true;
+    # For thunar to support removable media and such
+    gvfs.enable = true;
   };
 
   # Recommended by https://nixos.wiki/wiki/PipeWire
@@ -88,6 +90,8 @@ in
         thunar-media-tags-plugin
       ];
     };
+    # xfce config manager, to enable saving thunar configuration
+    xfconf.enable = true;
     # Some gnome-based software depends on dconf to store configuration settings
     dconf.enable = true;
   };
