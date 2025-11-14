@@ -12,3 +12,4 @@
 /secrets/other/healthchecks.sh
 /.projectile-cache.eld
 .direnv
+/secrets-temp/

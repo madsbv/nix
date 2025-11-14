@@ -55,6 +55,5 @@
 
       agePlugins = [ pkgs.age-plugin-yubikey ];
     };
-    secrets.healthchecks-sh.rekeyFile = flake-root + "/secrets/other/healthchecks.sh.age";
   };
 }

@@ -18,17 +18,14 @@
   ];
 
   home-manager.sharedModules = lib.mkIf config.local.hm.enable [
-    (
-      { ... }:
-      {
-        programs.uv = {
-          enable = true;
-          settings = {
-            python-downloads = "never";
-            python-preference = "only-system";
-          };
+    (_: {
+      programs.uv = {
+        enable = true;
+        settings = {
+          python-downloads = "never";
+          python-preference = "only-system";
         };
-      }
-    )
+      };
+    })
   ];
 }

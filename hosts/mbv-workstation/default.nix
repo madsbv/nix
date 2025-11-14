@@ -151,7 +151,10 @@
   };
   local.restic.exclude = [
     "/nix/persist/var/lib/private/ollama"
+    "/nix/persist/var/lib/libvirt/images"
     "/nix/persist/home/mvilladsen/.local/share/Steam"
+    "/nix/persist/home/mvilladsen/Downloads"
+    "/nix/persist/home/mvilladsen/.cache"
   ];
   environment.persistence."/nix/persist".directories = [ "/var/lib/private/ollama/models" ];
 }
