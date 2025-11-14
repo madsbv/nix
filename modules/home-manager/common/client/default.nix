@@ -223,9 +223,8 @@ in
       enable = true;
       settings.editor = "vim";
     };
-    git = {
-      userName = name;
-      userEmail = email;
+    git.settings.user = {
+      inherit name email;
     };
   };
 }

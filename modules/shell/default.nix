@@ -129,7 +129,7 @@ in
           git = {
             enable = true;
             ignores = gitignore_global;
-            extraConfig = {
+            settings = {
               init.defaultBranch = "main";
               credential.helper = "store";
               pull.rebase = true;

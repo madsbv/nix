@@ -112,7 +112,7 @@
     # NOTE: Provides rustc, cargo, rustfmt, clippy, from the nightly toolchain.
     # To get stable or beta toolchain, do ..darwin.stable.defaultToolchain, e.g., or to get the complete toolchain (including stuff like MIRI that I probably don't need) replace default.toolchain with complete.toolchain or latest.toolchain.
     # Can also get toolchains for specified targets, e.g. targets.wasm32-unknown-unknown.latest.toolchain
-    inputs.fenix.packages."${pkgs.system}".latest.toolchain
+    inputs.fenix.packages."${pkgs.stdenv.hostPlatform.system}".latest.toolchain
     # XXX: Define a justfile type situation for running common checks as one job? Could be more bacon jobs, but some of these are not really suitable for that
     cargo-audit
     cargo-flamegraph
