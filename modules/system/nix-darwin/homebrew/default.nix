@@ -15,10 +15,6 @@
       "pirj/noclamshell/noclamshell"
       "felixkratz/formulae/borders"
       "felixkratz/formulae/svim"
-      "virt-manager"
-      # "apple/apple/game-porting-toolkit"
-      # "qemu"
-      # "libvirt"
     ];
 
     # These app IDs are from using the mas CLI app

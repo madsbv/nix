@@ -7,7 +7,7 @@ _:
   "sf-symbols"
 
   # Math
-  "sage"
+  # "sage"
   "jabref"
 
   # Gaming

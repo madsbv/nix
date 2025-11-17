@@ -2,6 +2,7 @@
   flake-root,
   pkgs,
   mod,
+  lib,
   ...
 }:
 {
@@ -16,5 +17,9 @@
   home = {
     packages = pkgs.callPackage ./packages.nix { };
   };
-  programs.kitty.darwinLaunchOptions = [ "--single-instance" ];
+  programs = {
+    kitty.darwinLaunchOptions = [ "--single-instance" ];
+    # Awaiting GTK3 fix: https://nixpk.gs/pr-tracker.html?pr=449689
+    librewolf.enable = lib.mkForce false;
+  };
 }
