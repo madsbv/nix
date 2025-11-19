@@ -14,10 +14,6 @@
   home-manager.sharedModules = lib.mkIf config.local.hm.enable [
     (
       { config, ... }:
-      let
-        # Relative to home
-        cargo-home = ".cargo";
-      in
       {
         programs.bacon = {
           enable = true;
@@ -73,16 +69,18 @@
         # Enables using programs installed via Cargo
         home =
           let
-            cargoHome = "${config.home.homeDirectory}/${cargo-home}";
+            # Relative to home
+            cargoHomeName = ".cargo";
+            cargoHome = "${config.home.homeDirectory}/${cargoHomeName}";
           in
           {
-            sessionPath = [ "$HOME/.cargo/bin" ];
+            sessionPath = [ "${cargoHome}/bin" ];
             sessionVariables = {
               CARGO_HOME = cargoHome;
               CARGO_TARGET_DIR = "${cargoHome}/target";
             };
             file.cargo-toml = {
-              target = "${cargo-home}/config.toml";
+              target = "${cargoHomeName}/config.toml";
               text = ''
                 [alias]     # command aliases
                 b = "build"

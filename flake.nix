@@ -178,6 +178,7 @@
               statix
               deadnix
               nixfmt-tree
+              just
             ];
           };
         };
