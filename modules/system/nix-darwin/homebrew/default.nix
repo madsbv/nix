@@ -25,12 +25,12 @@
     # $ mas search <app name>
     #
     masApps = {
-      "WireGuard" = 1451685025;
-      "AdGuard for Safari" = 1440147259;
-      "Bitwarden" = 1352778147;
-      "MindNode" = 1289197285;
-      "Notability" = 360593530;
-      "StopTheMadness" = 1376402589;
+      # "WireGuard" = 1451685025;
+      # "AdGuard for Safari" = 1440147259;
+      # "Bitwarden" = 1352778147;
+      # "MindNode" = 1289197285;
+      # "Notability" = 360593530;
+      # "StopTheMadness" = 1376402589;
       "Xcode" = 497799835;
       "com.kagimacOS.Kagi-Search" = 1622835804;
     };

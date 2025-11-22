@@ -8,5 +8,5 @@ with pkgs;
   # LLM testing
   # llm.withPlugins
   # ([ "llm-gpt4all" ])
-  ollama
+  # ollama
 ]
