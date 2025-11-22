@@ -117,8 +117,10 @@
     cargo-generate
     cargo-diet
     cargo-msrv
-    cargo-semver-checks
+    # 251122: Version 0.45 failing to build on Darwin
+    (lib.mkIf stdenv.isLinux cargo-semver-checks)
     cargo-watch
+    # cargo-instruments is defined in an overlay, and needs updating to be used
     # (lib.mkIf stdenv.isDarwin cargo-instruments)
   ];
 }
