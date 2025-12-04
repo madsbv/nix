@@ -2,11 +2,11 @@
   description = "Configuration with secrets for MacOS and NixOS";
   inputs = {
     ### Nix basics ###
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      # url = "github:nix-community/home-manager/release-25.05";
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.11";
+      # url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     deploy-rs = {
@@ -31,7 +31,8 @@
 
     ### Darwin ###
     darwin = {
-      # url = "github:LnL7/nix-darwin/nix-darwin-25.05";
+      # release-25.11 not yet branched off: https://github.com/nix-darwin/nix-darwin/pull/1648
+      # url = "github:LnL7/nix-darwin/nix-darwin-25.11";
       url = "github:LnL7/nix-darwin/";
 
       inputs.nixpkgs.follows = "nixpkgs";
