@@ -40,11 +40,12 @@ in
 
     time.timeZone = cfg.timezone;
 
-    system.autoUpgrade = {
+    system.autoUpgrade = lib.mkDefault {
       enable = true;
       flake = "github:madsbv/nix";
       persistent = true;
       allowReboot = true;
+      randomizedDelaySec = "45min";
     };
 
     nix = {

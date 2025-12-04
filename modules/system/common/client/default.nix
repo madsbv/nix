@@ -3,6 +3,7 @@
   pkgs,
   nox,
   mod,
+  lib,
   ...
 }:
 let
@@ -16,12 +17,12 @@ in
     ./secrets/email.nix
   ];
 
-  local.emacs.enable = true;
+  local.emacs.enable = lib.mkDefault true;
 
   home-manager = {
     users.${user} = {
       imports = [ (mod "home-manager/common/client") ];
-      local.doomemacs.enable = true;
+      local.doomemacs.enable = lib.mkDefault true;
     };
     extraSpecialArgs = {
       inherit user inputs nox;

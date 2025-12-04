@@ -19,7 +19,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     home-manager.sharedModules = lib.mkIf config.local.hm.enable [
       (
         {
@@ -37,7 +37,7 @@ in
           options.local.doomemacs.enable = lib.mkEnableOption "Doomemacs";
 
           config = {
-            programs.emacs = {
+            programs.emacs = lib.mkIf cfg.enable {
               inherit (cfg) enable package;
               extraPackages =
                 epkgs: with epkgs; [
@@ -51,18 +51,16 @@ in
                 ];
             };
 
-            home = {
-              activation.installDoomEmacs = lib.mkIf config.local.doomemacs.enable (
-                lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-                  if [ ! -d "${doomDir}" ]; then
-                      ${pkgs.git}/bin/git clone ${cfg.doomConfigRepo} "${doomDir}"
-                  fi
-                  if [ ! -d "${emacsDir}" ]; then
-                      ${pkgs.git}/bin/git clone ${cfg.doomRepo} "${emacsDir}"
-                      ${emacsDir}/bin/doom install
-                  fi
-                ''
-              );
+            home = lib.mkIf config.local.doomemacs.enable {
+              activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+                if [ ! -d "${doomDir}" ]; then
+                    ${pkgs.git}/bin/git clone ${cfg.doomConfigRepo} "${doomDir}"
+                fi
+                if [ ! -d "${emacsDir}" ]; then
+                    ${pkgs.git}/bin/git clone ${cfg.doomRepo} "${emacsDir}"
+                    ${emacsDir}/bin/doom install
+                fi
+              '';
               # To make doom binary available
               sessionPath = [ "${emacsDir}/bin" ];
             };
@@ -70,11 +68,14 @@ in
         }
       )
     ];
-    environment.systemPackages = with pkgs; [
-      # Misc Doomemacs dependencies
-      coreutils-prefixed # Mostly for GNU ls on Darwin
-      cmake
-      pinentry-emacs # 2024-03-18: The pinentry packages has been split up into multiple different packages exposing the different frontends. pinentry-emacs should expose the emacs, curses and tty frontends, but not the gtk and qt frontends which require linux.
-    ];
+    environment.systemPackages = lib.mkIf cfg.enable (
+      with pkgs;
+      [
+        # Misc Doomemacs dependencies
+        coreutils-prefixed # Mostly for GNU ls on Darwin
+        cmake
+        pinentry-emacs # 2024-03-18: The pinentry packages has been split up into multiple different packages exposing the different frontends. pinentry-emacs should expose the emacs, curses and tty frontends, but not the gtk and qt frontends which require linux.
+      ]
+    );
   };
 }

@@ -6,7 +6,7 @@
   zoom-us
   discord
 
-  ## Clipboard management from terminal and neovim
+  ## Clipboard management for terminal and neovim
   xsel
 
   ## Media-related packages

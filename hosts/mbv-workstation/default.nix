@@ -13,9 +13,18 @@
     (mod "system/nixos/server")
     (mod "system/nixos/client")
     ./overclocking.nix
+    ./extrauser.nix
   ];
 
-  system.autoUpgrade.allowReboot = lib.mkForce false;
+  system.autoUpgrade = {
+    allowReboot = lib.mkForce false;
+    flake = "/etc/nixos/nix";
+    flags = [
+      "--update-input"
+      "nixpkgs"
+      "--commit-lock-file"
+    ];
+  };
 
   users.users = {
     root.openssh.authorizedKeys.keys = [

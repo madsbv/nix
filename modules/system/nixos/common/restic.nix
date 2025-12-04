@@ -16,9 +16,10 @@ let
   repositoryFile = config.age.secrets.restic-repo.path;
 
   niceRestic = pkgs.restic.overrideAttrs (old: {
-    installPhase = (old.installPhase or "") + ''
+    installPhase =
+      (old.installPhase or "") + "
       wrapProgram $out/bin/restic --set GOMAXPROCS 8
-    '';
+    ";
   });
 in
 {
@@ -233,7 +234,7 @@ in
             dynamicFilesFrom = null;
 
             # Don't use local cache to ensure that we check repo data, and additionally download 1G of random backup data and verify its integrity.
-            checkOpts = [ ''--read-data-subset="1G"'' ] ++ resticOpts;
+            checkOpts = [ "--read-data-subset='1G'" ] ++ resticOpts;
 
             # No pruning here, only in persist-prune.
             pruneOpts = [ ];

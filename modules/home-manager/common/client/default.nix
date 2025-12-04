@@ -31,7 +31,7 @@ in
 
   local = {
     email = {
-      enable = true;
+      enable = lib.mkDefault true;
       maildir = "${config.xdg.dataHome}/Mail";
       muhome = "${config.xdg.cacheHome}/mu";
       muAddressArgs = osConfig.age.secrets.mu-init-addresses.path;
