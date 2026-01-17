@@ -31,9 +31,7 @@
 
     ### Darwin ###
     darwin = {
-      # release-25.11 not yet branched off: https://github.com/nix-darwin/nix-darwin/pull/1648
-      # url = "github:LnL7/nix-darwin/nix-darwin-25.11";
-      url = "github:LnL7/nix-darwin/";
+      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
 
       inputs.nixpkgs.follows = "nixpkgs";
     };
