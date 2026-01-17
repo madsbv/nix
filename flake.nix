@@ -114,7 +114,10 @@
     };
     direnv-instant = {
       url = "github:Mic92/direnv-instant";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+      };
     };
   };
   outputs =
