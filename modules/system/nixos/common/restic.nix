@@ -6,7 +6,6 @@
   hostname,
   ...
 }:
-
 # TODO: https://wiki.nixos.org/wiki/Restic#Security_Wrapper
 
 let
@@ -105,7 +104,7 @@ in
         let
           args = healthchecksParams oargs;
         in
-        ''${hcsh} "${args.slug}" "${cmd}" ''\'${builtins.toJSON args}''\''';
+        ''${hcsh} "${args.slug}" "${cmd}" '${builtins.toJSON args}' '';
       hcBackupCommands = args: {
         backupPrepareCommand = healthchecksCmd "start" args;
         backupCleanupCommand = healthchecksCmd "$EXIT_STATUS" args;
