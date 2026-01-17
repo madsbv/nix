@@ -38,17 +38,22 @@ in
       enable = true;
       enableCompletion = true;
     };
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
     nix-index.enable = true;
   };
 
   home-manager.sharedModules = lib.mkIf config.local.hm.enable [
     (
-      { pkgs, config, ... }:
       {
+        inputs,
+        pkgs,
+        config,
+        ...
+      }:
+      {
+
+        imports = [
+          inputs.direnv-instant.homeModules.direnv-instant
+        ];
 
         home = {
           sessionVariables = {
@@ -68,6 +73,11 @@ in
           };
         };
         programs = {
+          direnv-instant.enable = true;
+          direnv = {
+            enable = true;
+            nix-direnv.enable = true;
+          };
           # Shared shell configuration
           zsh = {
             enable = true;
