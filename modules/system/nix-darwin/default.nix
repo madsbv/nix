@@ -81,6 +81,7 @@ in
   age.secrets = {
     # Build autorestic config with absolute paths to needed binaries by writing template, then doing text substitution in generator.
     # Proof of concept for combining secrets with nix-native information.
+    # XXX: The generator is not actually needed anymore, but keeping it here for discoverability reasons.
     "mbv-mba.autorestic.yml.base".rekeyFile = flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";
     "mbv-mba.autorestic.yml" = {
       generator = {
