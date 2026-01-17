@@ -15,15 +15,22 @@
     basedpyright
     uv
     ruff
+    ty
   ];
 
   home-manager.sharedModules = lib.mkIf config.local.hm.enable [
     (_: {
-      programs.uv = {
-        enable = true;
-        settings = {
-          python-downloads = "never";
-          python-preference = "only-system";
+      programs = {
+        uv = {
+          enable = true;
+          settings = {
+            python-downloads = "never";
+            python-preference = "only-system";
+          };
+        };
+        ty.enable = true;
+        ruff = {
+          enable = true;
         };
       };
     })
