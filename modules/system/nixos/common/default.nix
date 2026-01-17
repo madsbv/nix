@@ -79,6 +79,11 @@ in
         "2606:4700:4700::1112"
         "2606:4700:4700::1002"
       ];
+      stevenBlackHosts = {
+        enableIPv6 = true;
+        blockFakenews = true;
+        blockGambling = true;
+      };
     };
 
     systemd = {

@@ -108,6 +108,10 @@
       url = "github:madsbv/nix-options-search";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hosts = {
+      url = "github:StevenBlack/hosts"; # or a fork/mirror
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
   outputs =
@@ -124,6 +128,7 @@
       disko,
       deploy-rs,
       nix-auth,
+      hosts,
       ...
     }@inputs:
     let
@@ -199,6 +204,7 @@
         agenix-rekey.nixosModules.default
         impermanence.nixosModules.impermanence
         disko.nixosModules.disko
+        hosts.nixosModule
       ]
       ++ common-modules;
 
