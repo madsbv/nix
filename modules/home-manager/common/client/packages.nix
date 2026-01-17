@@ -3,7 +3,6 @@
 [ nox ]
 ++ (with pkgs; [
   ## Communication tools
-  zoom-us
   discord
 
   ## Clipboard management for terminal and neovim
@@ -17,7 +16,6 @@
   multimarkdown
   pandoc
   fontconfig
-  spotify
 
   ## Writing
   # Function provided by nixpkgs. Required to build aspell together with its dictionaries, otherwise they will be isolated from each other in the nix store.
