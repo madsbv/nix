@@ -20,7 +20,8 @@ let
     xts
   ];
   RWithPackages = pkgs.rWrapper.override { packages = myRPackages; };
-  RStudioWithPackages = pkgs.rstudioWrapper.override { packages = myRPackages; };
+  RStudio = pkgs.rstudio.override { hunspellDicts = {}; };
+  RStudioWithPackages = pkgs.rstudioWrapper.override { packages = myRPackages; rstudio = RStudio;};
 in
 {
   environment = {
