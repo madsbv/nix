@@ -28,10 +28,6 @@
             python-preference = "only-system";
           };
         };
-        ty.enable = true;
-        ruff = {
-          enable = true;
-        };
       };
     })
   ];
