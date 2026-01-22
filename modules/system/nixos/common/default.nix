@@ -189,7 +189,7 @@ in
         ];
         files = [ "/etc/machine-id" ];
         users.${cfg.user}.directories = [
-          "."
+          ""
         ];
       };
     };
@@ -218,8 +218,8 @@ in
       # "/".neededForBoot = true;
       # "/nix".neededForBoot = true;
       "/nix/persist".neededForBoot = true;
-      # "/nix/persist/home".neededForBoot = true;
-      "/etc/ssh".neededForBoot = true;
+      "/nix/persist/home".neededForBoot = true;
+      # "/etc/ssh".neededForBoot = true;
     };
 
     security.sudo = {

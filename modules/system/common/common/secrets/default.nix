@@ -24,9 +24,13 @@
           "/etc/ssh/ssh_host_rsa_key"
         ]
       else if (config.services.openssh.enable or false) then
-        map (e: e.path) (
+        (map (e: e.path) (
           lib.filter (e: e.type == "rsa" || e.type == "ed25519") config.services.openssh.hostKeys
-        )
+        ))
+        ++ [
+          "/nix/persist/etc/ssh/ssh_host_ed25519_key"
+          "/nix/persist/etc/ssh/ssh_host_rsa_key"
+        ]
       else
         [ ];
     rekey = {
