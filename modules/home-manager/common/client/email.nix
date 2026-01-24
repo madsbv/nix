@@ -83,7 +83,7 @@ in
           subFolders = "Verbatim";
           patterns = [
             "*"
-            ''!Recovered Messages''
+            "!Recovered Messages"
           ];
           extraConfig = {
             account = {

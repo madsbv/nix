@@ -8,6 +8,8 @@
   pkgs,
   color-scheme,
   mod,
+  # modules,
+  # moduleExports,
   ...
 }:
 

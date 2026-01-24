@@ -46,7 +46,7 @@ in
     };
     activation.librewolfNativeMessaging = lib.hm.dag.entryAfter [
       "writeBoundary"
-    ] ''ln -sf ~/.mozilla/native-messaging-hosts ~/.librewolf/native-messaging-hosts'';
+    ] "ln -sf ~/.mozilla/native-messaging-hosts ~/.librewolf/native-messaging-hosts";
   };
 
   xdg.configFile."tridactyl" = {
