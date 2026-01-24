@@ -7,11 +7,13 @@
   ];
 
   # Don't suspend on lid close
-  services.logind = {
-    lidSwitch = "ignore";
-    lidSwitchDocked = "ignore";
-    lidSwitchExternalPower = "ignore";
-    suspendKey = "ignore";
+  services.logind.settings = {
+    Login = {
+      HandleLidSwitch = "ignore";
+      HandleLidSwitchDocked = "ignore";
+      HandleLidSwitchExternalPower = "ignore";
+      HandleSuspendKey = "ignore";
+    };
   };
 
   networking.hostId = "8425e349";
