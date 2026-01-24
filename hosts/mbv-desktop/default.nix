@@ -30,10 +30,10 @@
       desktopManager.cinnamon = {
         enable = true;
       };
-      displayManager.gdm = {
-        enable = true;
-        autoSuspend = false;
-      };
+    };
+    displayManager.gdm = {
+      enable = true;
+      autoSuspend = false;
     };
   };
 
