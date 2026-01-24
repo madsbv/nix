@@ -1,7 +1,16 @@
-{ hostname, mod, ... }:
+{
+  hostname,
+  modules,
+  ...
+}:
 
 {
-  imports = [ (mod "system/nix-darwin") ];
+  imports = [
+    # Use module collections instead of mod helper
+    modules.darwin-client
+    modules.client-home
+    modules.base-darwin
+  ];
 
   networking = {
     computerName = hostname;

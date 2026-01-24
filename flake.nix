@@ -226,6 +226,10 @@
         nox = inputs.nox.packages.${system}.default;
         mod = m: ./. + "/modules/${m}";
         user = "mvilladsen";
+        # Pass module collections for easy access
+        modules = self.moduleCollections;
+        # Pass individual modules for granular access
+        moduleExports = self.modules;
       };
       darwin-args = common-args;
       nixos-args = common-args;
@@ -269,6 +273,201 @@
       };
     in
     {
+      # Top-level module exports
+      modules = {
+        # NixOS modules
+        nixos = {
+          system = import ./modules/system/common/common/default.nix;
+          nixos-common = import ./modules/system/nixos/common/default.nix;
+          client = import ./modules/system/nixos/client/default.nix;
+          server = import ./modules/system/nixos/server/default.nix;
+          common-restic = import ./modules/system/nixos/common/restic.nix;
+          common-wifi = import ./modules/system/nixos/common/wifi.nix;
+          client-yubikey = import ./modules/system/nixos/client/yubikey.nix;
+          server-laptop = import ./modules/system/nixos/server/laptop.nix;
+          common-laptop = import ./modules/system/nixos/common/laptop.nix;
+          server-secrets = import ./modules/system/nixos/server/secrets.nix;
+        };
+
+        # Darwin modules
+        darwin = {
+          system = import ./modules/system/nix-darwin/default.nix;
+          homebrew = import ./modules/system/nix-darwin/homebrew/default.nix;
+          homebrew-casks = import ./modules/system/nix-darwin/homebrew/casks.nix;
+          dock = import ./modules/system/nix-darwin/dock/default.nix;
+          autorestic = import ./modules/system/nix-darwin/autorestic.nix;
+        };
+
+        # Home-manager modules
+        home-manager = {
+          common = import ./modules/home-manager/common/common/default.nix;
+          client = import ./modules/home-manager/common/client/default.nix;
+          client-packages = import ./modules/home-manager/common/client/packages.nix;
+          client-email = import ./modules/home-manager/common/client/email.nix;
+          client-secrets-email = import ./modules/home-manager/common/client/secrets/email.nix;
+          darwin = import ./modules/home-manager/darwin/default.nix;
+          darwin-packages = import ./modules/home-manager/darwin/packages.nix;
+          nixos-client = import ./modules/home-manager/nixos/client/default.nix;
+          nixos-client-dropbox = import ./modules/home-manager/nixos/client/dropbox.nix;
+          nixos-common = import ./modules/home-manager/nixos/common/default.nix;
+        };
+
+        # Cross-platform modules
+        dev = import ./modules/dev/default.nix;
+        dev-fortran = import ./modules/dev/fortran/default.nix;
+        dev-docker = import ./modules/dev/docker/default.nix;
+        dev-go = import ./modules/dev/go/default.nix;
+        dev-java = import ./modules/dev/java/default.nix;
+        dev-javascript = import ./modules/dev/javascript/default.nix;
+        dev-lua = import ./modules/dev/lua/default.nix;
+        dev-nix = import ./modules/dev/nix/default.nix;
+        dev-python = import ./modules/dev/python/default.nix;
+        dev-rust = import ./modules/dev/rust/default.nix;
+        dev-r = import ./modules/dev/R/default.nix;
+        dev-shell = import ./modules/dev/shell/default.nix;
+        dev-tools = import ./modules/dev/tools/default.nix;
+
+        editor = import ./modules/editor/default.nix;
+        editor-neovim = import ./modules/editor/neovim/default.nix;
+        editor-emacs = import ./modules/editor/emacs/default.nix;
+
+        shell = import ./modules/shell/default.nix;
+
+        vpn = import ./modules/vpn/default.nix;
+
+        # Services modules
+        services = {
+          home-assistant = import ./modules/services/home-assistant/default.nix;
+          media-server = import ./modules/services/media-server/default.nix;
+          media-server-transmission = import ./modules/services/media-server/transmission/default.nix;
+          media-server-jellyfin = import ./modules/services/media-server/jellyfin/default.nix;
+          media-server-ripping = import ./modules/services/media-server/ripping/default.nix;
+        };
+
+        # System modules
+        system = {
+          common = import ./modules/system/common/common/default.nix;
+          common-cachix = import ./modules/system/common/common/cachix/default.nix;
+          common-secrets = import ./modules/system/common/common/secrets/default.nix;
+          common-system-packages = import ./modules/system/common/common/system-packages.nix;
+          common-builder = import ./modules/system/common/common/builder.nix;
+          common-keys = import ./modules/system/common/common/keys.nix;
+          srvos-upgrade-diff = import ./modules/system/common/common/srvos/upgrade-diff.nix;
+          srvos-terminfo = import ./modules/system/common/common/srvos/terminfo.nix;
+          client = import ./modules/system/common/client/default.nix;
+          server = import ./modules/system/common/server/default.nix;
+        };
+      };
+
+      # Module collections for reusable configuration sets
+      moduleCollections = {
+        base-nixos = [
+          # Core system modules
+          self.modules.system.common
+          self.modules.system.common-cachix
+          self.modules.system.common-secrets
+          self.modules.system.common-builder
+          self.modules.system.common-keys
+          self.modules.system.common-system-packages
+          self.modules.system.srvos-upgrade-diff
+          self.modules.system.srvos-terminfo
+
+          # NixOS-specific modules
+          self.modules.nixos.system
+          self.modules.nixos.nixos-common
+
+          # Cross-platform modules
+          self.modules.dev
+          self.modules.editor
+          self.modules.shell
+        ];
+
+        base-darwin = [
+          # Core system modules (Darwin-compatible)
+          self.modules.system.common
+          self.modules.system.common-cachix
+          self.modules.system.common-secrets
+          self.modules.system.common-builder
+          self.modules.system.common-keys
+          self.modules.system.common-system-packages
+
+          # Darwin-specific modules
+          self.modules.darwin.system
+          self.modules.darwin.homebrew
+
+          # Cross-platform modules
+          self.modules.dev
+          self.modules.editor
+          self.modules.shell
+        ];
+
+        client-home = [
+          # Home-manager client modules
+          self.modules.home-manager.common
+          self.modules.home-manager.client
+          self.modules.home-manager.client-packages
+          self.modules.home-manager.client-email
+        ];
+
+        server-home = [
+          # Home-manager server modules
+          self.modules.home-manager.common
+        ];
+
+        nixos-client = [
+          # NixOS client-specific modules
+          self.modules.nixos.client
+          self.modules.nixos.common-wifi
+          self.modules.nixos.client-yubikey
+          self.modules.nixos.common-laptop
+        ];
+
+        nixos-server = [
+          # NixOS server-specific modules
+          self.modules.nixos.server
+          self.modules.nixos.server-laptop
+          self.modules.nixos.server-secrets
+        ];
+
+        darwin-client = [
+          # Darwin client-specific modules
+          self.modules.darwin.dock
+          self.modules.darwin.autorestic
+          self.modules.home-manager.darwin
+          self.modules.home-manager.darwin-packages
+        ];
+
+        development = [
+          # Development environment modules
+          self.modules.dev-fortran
+          self.modules.dev-go
+          self.modules.dev-java
+          self.modules.dev-javascript
+          self.modules.dev-lua
+          self.modules.dev-nix
+          self.modules.dev-python
+          self.modules.dev-rust
+          self.modules.dev-r
+          self.modules.dev-shell
+          self.modules.dev-tools
+        ];
+
+        editors = [
+          # Editor-specific modules
+          self.modules.editor-neovim
+          self.modules.editor-emacs
+        ];
+
+        services = [
+          # Service modules
+          self.modules.services.home-assistant
+          self.modules.services.media-server
+          self.modules.services.media-server-transmission
+          self.modules.services.media-server-jellyfin
+          self.modules.services.media-server-ripping
+        ];
+      };
+
       devShells = forAllSystems devShell;
 
       agenix-rekey = agenix-rekey.configure {
