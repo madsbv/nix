@@ -51,9 +51,12 @@ in
               # nvim occasionally compiles stuff for its plugins, e.g. treesitter modules
               gcc
             ];
-            plugins = with pkgs.vimPlugins; [ supermaven-nvim ];
             withRuby = false;
             withPython3 = false;
+            plugins = with pkgs.vimPlugins; [
+              supermaven-nvim
+              nvim-treesitter.withAllGrammars
+            ];
             initLua = ''
               -- Load user config from nvimConfigRepo
               local user_config_path = "${nvimConfigDir}"
