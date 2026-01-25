@@ -51,7 +51,10 @@ in
               # nvim occasionally compiles stuff for its plugins, e.g. treesitter modules
               gcc
             ];
-            plugins = with pkgs.vimPlugins; [ supermaven-nvim ];
+            plugins = with pkgs.vimPlugins; [
+              supermaven-nvim
+              nvim-treesitter.withAllGrammars
+            ];
             extraLuaConfig = ''
               -- Load user config from nvimConfigRepo
               local user_config_path = "${nvimConfigDir}"

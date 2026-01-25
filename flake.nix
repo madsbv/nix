@@ -313,23 +313,27 @@
         };
 
         # Cross-platform modules
-        dev = import ./modules/dev/default.nix;
-        dev-fortran = import ./modules/dev/fortran/default.nix;
-        dev-docker = import ./modules/dev/docker/default.nix;
-        dev-go = import ./modules/dev/go/default.nix;
-        dev-java = import ./modules/dev/java/default.nix;
-        dev-javascript = import ./modules/dev/javascript/default.nix;
-        dev-lua = import ./modules/dev/lua/default.nix;
-        dev-nix = import ./modules/dev/nix/default.nix;
-        dev-python = import ./modules/dev/python/default.nix;
-        dev-rust = import ./modules/dev/rust/default.nix;
-        dev-r = import ./modules/dev/R/default.nix;
-        dev-shell = import ./modules/dev/shell/default.nix;
-        dev-tools = import ./modules/dev/tools/default.nix;
+        dev = {
+          default = import ./modules/dev/default.nix;
+          fortran = import ./modules/dev/fortran/default.nix;
+          docker = import ./modules/dev/docker/default.nix;
+          go = import ./modules/dev/go/default.nix;
+          java = import ./modules/dev/java/default.nix;
+          javascript = import ./modules/dev/javascript/default.nix;
+          lua = import ./modules/dev/lua/default.nix;
+          nix = import ./modules/dev/nix/default.nix;
+          python = import ./modules/dev/python/default.nix;
+          rust = import ./modules/dev/rust/default.nix;
+          r = import ./modules/dev/R/default.nix;
+          shell = import ./modules/dev/shell/default.nix;
+          tools = import ./modules/dev/tools/default.nix;
+        };
 
-        editor = import ./modules/editor/default.nix;
-        editor-neovim = import ./modules/editor/neovim/default.nix;
-        editor-emacs = import ./modules/editor/emacs/default.nix;
+        editor = {
+          default = import ./modules/editor/default.nix;
+          editor-neovim = import ./modules/editor/neovim/default.nix;
+          editor-emacs = import ./modules/editor/emacs/default.nix;
+        };
 
         shell = import ./modules/shell/default.nix;
 
