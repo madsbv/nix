@@ -6,6 +6,97 @@
         - We can also do 1-0 for one screen and F1-F10 for the other.
 - [ ] Try to figure out patching nixpkgs and nix-darwin to pull in pull requests early on build failures, see [nixpkgs patching](#nixpkgs patching). 
 
+## Golden snapshots
+Some example code snippets.
+
+### Code snippets
+Recursively list all derivations involved in building the system:
+``` sh
+nix derivation show -r .#nixosConfigurations.mbv-workstation.config.system.build.toplevel > mbv-worksation.json
+```
+
+This gives a json object with keys like: `zz9fllcfis17mgjg9v9x3i0dpml3iyj3-texlive-2025-tex-fmt-texmfdist.drv`.
+The values encode derivation dependencies, environment, and build cmds.
+
+jq filters to clean this in various ways:
+
+``` jq
+def remove_hash_prefix:
+  sub("^(/nix/store/)?[a-z0-9]{32}-"; "");
+
+def remove_version_suffix:
+  sub("-[0-9]+.*$"; "");
+
+
+def strip_hash:
+  walk(
+      if type == "object" then
+        with_entries(.key |= remove_hash_prefix)
+      elif type == "string" then
+        remove_hash_prefix
+      else
+        .
+      end
+    );
+
+def filter_keys(disallowed_keys):
+  if type == "object" then
+    with_entries(
+      select(.key as $k | $k | IN(disallowed_keys[]) | not) |
+      .value |= filter_keys(disallowed_keys)
+    )
+  elif type == "array" then
+    map(filter_keys(disallowed_keys))
+  else
+    .
+  end;
+
+filter_keys(["env"])
+```
+E.g. to just list the names of the derivations, with the hashes and most version information removed, run:
+
+``` sh
+nix derivation show -r .#nixosConfigurations.mbv-workstation.config.system.build.toplevel | jq keys | jq -f strip_hashes.jq | jq unique
+```
+where `strip_hashes.jq` contains the definition of `strip_hash` above and a call to the same function. The `unique` filter removes duplicates and sorts the result, so we get a list like
+
+``` sh
+[
+  ...
+  "zref-vario-0.1.12-tex.drv",
+  "zref-vario.r72978.tar.xz.drv",
+  "zref.r75450.tar.xz.drv",
+  "zsh-5.9.drv",
+  "zsh-5.9.tar.xz.drv",
+  "zsh-autocomplete-25.03.19.drv",
+  "zsh-autosuggestions-0.7.1.drv",
+  "zsh-syntax-highlighting-0.8.0.drv",
+  "zsh-vi-mode-0.12.0.drv",
+  "zstandard-0.23.0.tar.gz.drv",
+  "zstd-0.1.3.0.drv",
+  "zstd-0.1.3.0.tar.gz.drv",
+  "zstd-0.13.3.drv",
+  "zstd-1.5.7.2.tar.gz.drv",
+  "zstd-1.5.7.drv",
+  "zstd-safe-7.2.4.drv",
+  "zstd-sys-2.0.16+zstd.1.5.7.drv",
+  "zugferd-0.9d-tex.drv",
+  "zugferd.r73286.tar.xz.drv",
+  "zvbi-0.2.44.drv",
+  "zwgetfdate-15878-tex.drv",
+  "zwgetfdate.r15878.tar.xz.drv",
+  "zwpagelayout-1.4e-tex.drv",
+  "zwpagelayout.r63074.tar.xz.drv",
+  ...
+]
+```
+We can normalize slightly more by also filtering out version numbers and file endings, ending up with a fairly normalized list of what's built as part of the system.
+
+
+
+
+
+
 ## nixpkgs patching
 The following was some code and comments from an attempt on 250101 to do this.
 I think I can probably figure out how to inject the patched nixpkgs/pkgs into the nixos systems, but I can't figure out how to inject nixpkgs to nix-darwin, other than as a flake input, which I don't think I can patch.
