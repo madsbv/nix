@@ -13,3 +13,6 @@
 /.projectile-cache.eld
 .direnv
 /secrets-temp/
+__pycache__
+.venv
+/golden_test/*.json

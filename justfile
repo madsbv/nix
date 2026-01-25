@@ -36,6 +36,12 @@ fix:
 	statix fix
 	treefmt
 
+print_normalized_derivs target:
+    nix derivation show -r .#{{target}} | jq -f golden_test/filter_derivs.jq
+
+diff_derivs target base:
+    nix run nixpkgs#json-diff -- {{ base }} <(just print_normalized_derivs {{target}})
+
 # https://github.com/DeterminateSystems/flake-checker
 # Health check for flake.lock
 nfc:

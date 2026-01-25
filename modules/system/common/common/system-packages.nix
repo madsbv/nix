@@ -33,6 +33,7 @@ with pkgs;
   just
   watchexec
   jq
+  yq
   zellij
   ## CLI file manager
   yazi

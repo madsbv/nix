@@ -1,3 +1,8 @@
+## Programming
+# Python
+/__pycache__/
+/.venv/
+
 ## Dropbox settings and caches
 .dropbox
 .dropbox.attr
