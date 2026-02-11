@@ -8,9 +8,9 @@ let
   cfg = config.local.dev;
 
   # Get all directory names in the current folder
-  allDevModuleNames = builtins.attrNames (
-    builtins.filterAttrs (_name: type: type == "directory") (builtins.readDir ./.)
-  );
+  allDevModuleNames =
+    with builtins;
+    filter (p: readFileType (./. + "/${p}") == "directory") (attrNames (readDir ./.));
 in
 {
   # Import all directories in this folder
@@ -33,18 +33,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs = {
-      direnv = {
-        enable = true;
-        nix-direnv.enable = true;
-      };
-    };
-
     # Enable all modules specified in cfg.modules
     local.dev = lib.mkMerge (
       map (moduleName: {
-        ${moduleName}.enable = true;
-      }) cfg.modules
+        ${moduleName}.enable = lib.mkIf (builtins.elem moduleName cfg.modules) true;
+      }) allDevModuleNames
     );
   };
 }

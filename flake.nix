@@ -223,14 +223,11 @@
 
       common-args = system: {
         inherit nodes color-scheme inputs;
+        inherit (self) moduleCollections modules;
         flake-root = ./.;
         nox = inputs.nox.packages.${system}.default;
         mod = m: ./. + "/modules/${m}";
         user = "mvilladsen";
-        # Pass module collections for easy access
-        modules = self.moduleCollections;
-        # Pass individual modules for granular access
-        moduleExports = self.modules;
       };
       darwin-args = common-args;
       nixos-args = common-args;
@@ -311,24 +308,24 @@
           nixos-client = import ./modules/home-manager/nixos/client/default.nix;
           nixos-client-dropbox = import ./modules/home-manager/nixos/client/dropbox.nix;
           nixos-common = import ./modules/home-manager/nixos/common/default.nix;
+          dev = {
+            all = import ./modules/home-manager/dev/default.nix;
+            fortran = import ./modules/home-manager/dev/fortran/default.nix;
+            docker = import ./modules/home-manager/dev/docker/default.nix;
+            go = import ./modules/home-manager/dev/go/default.nix;
+            java = import ./modules/home-manager/dev/java/default.nix;
+            javascript = import ./modules/home-manager/dev/javascript/default.nix;
+            lua = import ./modules/home-manager/dev/lua/default.nix;
+            nix = import ./modules/home-manager/dev/nix/default.nix;
+            python = import ./modules/home-manager/dev/python/default.nix;
+            rust = import ./modules/home-manager/dev/rust/default.nix;
+            r = import ./modules/home-manager/dev/R/default.nix;
+            shell = import ./modules/home-manager/dev/shell/default.nix;
+            tools = import ./modules/home-manager/dev/tools/default.nix;
+          };
         };
 
         # Cross-platform modules
-        dev = {
-          default = import ./modules/dev/default.nix;
-          fortran = import ./modules/dev/fortran/default.nix;
-          docker = import ./modules/dev/docker/default.nix;
-          go = import ./modules/dev/go/default.nix;
-          java = import ./modules/dev/java/default.nix;
-          javascript = import ./modules/dev/javascript/default.nix;
-          lua = import ./modules/dev/lua/default.nix;
-          nix = import ./modules/dev/nix/default.nix;
-          python = import ./modules/dev/python/default.nix;
-          rust = import ./modules/dev/rust/default.nix;
-          r = import ./modules/dev/R/default.nix;
-          shell = import ./modules/dev/shell/default.nix;
-          tools = import ./modules/dev/tools/default.nix;
-        };
 
         editor = {
           default = import ./modules/editor/default.nix;
@@ -440,21 +437,6 @@
           self.modules.darwin.autorestic
           self.modules.home-manager.darwin
           self.modules.home-manager.darwin-packages
-        ];
-
-        development = [
-          # Development environment modules
-          self.modules.dev-fortran
-          self.modules.dev-go
-          self.modules.dev-java
-          self.modules.dev-javascript
-          self.modules.dev-lua
-          self.modules.dev-nix
-          self.modules.dev-python
-          self.modules.dev-rust
-          self.modules.dev-r
-          self.modules.dev-shell
-          self.modules.dev-tools
         ];
 
         editors = [

@@ -12,7 +12,7 @@ in
   options.local.dev.javascript.enable = lib.mkEnableOption "JavaScript";
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs.nodePackages; [
+    home.packages = with pkgs; [
       nodejs
       typescript-language-server
       js-beautify

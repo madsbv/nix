@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.local.dev.r;
+  cfg = config.local.dev.R;
   myRPackages = with pkgs.rPackages; [
     ggplot2
     dplyr
@@ -30,7 +30,7 @@ let
   };
 in
 {
-  options.local.dev.r.enable = lib.mkEnableOption "R";
+  options.local.dev.R.enable = lib.mkEnableOption "R";
 
   config = lib.mkIf cfg.enable {
     home.packages = [

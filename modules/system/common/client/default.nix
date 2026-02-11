@@ -4,6 +4,7 @@
   nox,
   mod,
   lib,
+  modules,
   ...
 }:
 let
@@ -12,7 +13,6 @@ in
 {
   imports = [
     (mod "system/common/common")
-    (mod "dev")
     (mod "editor")
     ./secrets/email.nix
   ];
@@ -21,8 +21,14 @@ in
 
   home-manager = {
     users.${user} = {
-      imports = [ (mod "home-manager/common/client") ];
-      local.doomemacs.enable = lib.mkDefault true;
+      imports = [
+        (mod "home-manager/common/client")
+        modules.home-manager.dev.all
+      ];
+      local = {
+        doomemacs.enable = lib.mkDefault true;
+        dev.enable = true;
+      };
     };
     extraSpecialArgs = {
       inherit user inputs nox;

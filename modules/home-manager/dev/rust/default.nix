@@ -78,7 +78,9 @@ in
         sessionVariables = {
           CARGO_HOME = cargoHome;
           CARGO_TARGET_DIR = "${cargoHome}/target";
-          LIBRARY_PATH = lib.mkIf pkgs.stdenv.isDarwin [ "${pkgs.darwin.libiconv}/lib" ];
+        }
+        // lib.mkIf pkgs.stdenv.isDarwin {
+          LIBRARY_PATH = [ "${pkgs.darwin.libiconv}/lib" ];
         };
         file.cargo-toml = {
           target = "${cargoHomeName}/config.toml";
@@ -123,6 +125,6 @@ in
 
     # This overlay needs to be applied at the system level since it affects how packages are built
     # In a pure home-manager setup, this would need to be configured differently
-    nixpkgs.overlays = [ inputs.fenix.overlays.default ];
+    # nixpkgs.overlays = [ inputs.fenix.overlays.default ];
   };
 }
