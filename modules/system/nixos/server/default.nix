@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  mod,
   ...
 }:
 
@@ -11,10 +10,12 @@ let
 in
 {
   imports = [
-    (mod "system/nixos/common")
-    (mod "system/common/server")
     ./secrets.nix
-  ];
+  ]
+  ++ (with modules; [
+    nixos.common
+    system.common.server
+  ]);
 
   options.local.server = {
     user = lib.mkOption { default = "mvilladsen"; };

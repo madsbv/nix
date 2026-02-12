@@ -1,5 +1,4 @@
 {
-  mod,
   user,
   config,
   lib,
@@ -22,7 +21,7 @@ in
 {
   imports = [
     ./email.nix
-    (mod "home-manager/common/common")
+    self.modules.home.common
   ];
 
   home = {

@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  mod,
   hostname,
   ...
 }:
@@ -12,10 +11,12 @@ let
 in
 {
   imports = [
-    (mod "system/common/common")
     ./restic.nix
     ./wifi.nix
-  ];
+  ]
+  ++ (with modules; [
+    system.common.common
+  ]);
 
   options.local.nixos.common = {
     user = lib.mkOption { default = "mvilladsen"; };
@@ -28,7 +29,7 @@ in
         ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
         root.home.homeDirectory = "/root";
       };
-      sharedModules = [ (mod "home-manager/nixos/common") ];
+      sharedModules = [ self.modules.home.nixos-common ];
     };
 
     local = {

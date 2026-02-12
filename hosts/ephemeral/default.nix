@@ -1,11 +1,13 @@
-{ mod, pkgs, ... }:
+{ moduleCollections, pkgs, ... }:
 
 {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (mod "system/common/common/keys.nix")
-  ];
+  ]
+  ++ (with moduleCollections; [
+    base-nixos
+  ]);
 
   local.keys = {
     enable = true;

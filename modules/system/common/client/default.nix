@@ -2,7 +2,6 @@
   inputs,
   pkgs,
   nox,
-  mod,
   lib,
   modules,
   ...
@@ -11,18 +10,21 @@ let
   user = "mvilladsen";
 in
 {
-  imports = [
-    (mod "system/common/common")
-    (mod "editor")
-    ./secrets/email.nix
-  ];
+  imports =
+    (with self.modules; [
+      system.common.common
+      editor.all
+    ])
+    ++ [
+      ./secrets/email.nix
+    ];
 
   local.emacs.enable = lib.mkDefault true;
 
   home-manager = {
     users.${user} = {
       imports = [
-        (mod "home-manager/common/client")
+        self.modules.home.common-client
         modules.home-manager.dev.all
       ];
       local = {

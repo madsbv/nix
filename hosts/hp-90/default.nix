@@ -1,11 +1,14 @@
-{ mod, ... }:
+{ moduleCollections, ... }:
 
 {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (mod "system/nixos/server")
-  ];
+  ]
+  ++ (with moduleCollections; [
+    base-nixos
+    nixos-server
+  ]);
 
   local = {
     # Extremely slow laptop (Intel Celeron N1000)

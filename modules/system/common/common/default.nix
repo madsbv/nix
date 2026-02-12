@@ -7,7 +7,6 @@
   config,
   pkgs,
   color-scheme,
-  mod,
   # modules,
   # moduleExports,
   ...
@@ -21,9 +20,11 @@
     ./secrets
     ./keys.nix
     ./builder.nix
-    (mod "editor")
-    (mod "shell")
-  ];
+  ]
+  ++ (with modules; [
+    editor.all
+    shell
+  ]);
 
   options.local.hm.enable = lib.mkOption {
     default = true;
@@ -54,7 +55,6 @@
         inherit
           hostname
           flake-root
-          mod
           inputs
           ;
       };

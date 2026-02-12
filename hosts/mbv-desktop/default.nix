@@ -1,12 +1,17 @@
-{ mod, pkgs, ... }:
+{ moduleCollections, pkgs, ... }:
 
 {
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    (mod "system/nixos/server")
-    (mod "services/media-server")
-  ];
+  ]
+  ++ (with moduleCollections; [
+    base-nixos
+    nixos-server
+  ])
+  ++ (with moduleCollections.services; [
+    media-server
+  ]);
 
   nixpkgs.config = {
     cudaSupport = true;

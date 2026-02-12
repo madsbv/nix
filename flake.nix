@@ -224,9 +224,9 @@
       common-args = system: {
         inherit nodes color-scheme inputs;
         inherit (self) moduleCollections modules;
+        inherit self;
         flake-root = ./.;
         nox = inputs.nox.packages.${system}.default;
-        mod = m: ./. + "/modules/${m}";
         user = "mvilladsen";
       };
       darwin-args = common-args;
@@ -237,7 +237,7 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = (nixos-args system) // {
-            inherit hostname;
+            inherit hostname self;
           };
           modules = [ ./hosts/${hostname} ] ++ nixos-modules;
         };
@@ -247,7 +247,7 @@
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = (darwin-args system) // {
-            inherit hostname;
+            inherit hostname self;
           };
           modules = [ ./hosts/${hostname} ] ++ darwin-modules;
         };

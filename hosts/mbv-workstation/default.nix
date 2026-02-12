@@ -1,5 +1,5 @@
 {
-  mod,
+  moduleCollections,
   pkgs,
   flake-root,
   lib,
@@ -10,12 +10,15 @@
   imports = [
     # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
-    # Use mod helper for now, until we can fully migrate to exports
-    (mod "system/nixos/server")
-    (mod "system/nixos/client")
     ./overclocking.nix
     ./extrauser.nix
-  ];
+  ]
+  ++ (with moduleCollections; [
+    base-nixos
+    nixos-server
+    nixos-client
+    client-home
+  ]);
 
   system.autoUpgrade = {
     allowReboot = lib.mkForce false;

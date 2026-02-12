@@ -3,7 +3,6 @@
   config,
   pkgs,
   inputs,
-  mod,
   ...
 }:
 
@@ -16,8 +15,10 @@ in
     ./dock
     ./homebrew
     ./autorestic.nix
-    (mod "system/common/client")
-  ];
+  ]
+  ++ (with modules; [
+    system.common.client
+  ]);
 
   users = {
     users.${user} = {
@@ -75,7 +76,7 @@ in
 
   home-manager = {
     users.${user}.home.homeDirectory = config.users.users.${user}.home;
-    sharedModules = [ (mod "home-manager/darwin") ];
+    sharedModules = [ self.modules.home.darwin ];
   };
 
   age.secrets = {

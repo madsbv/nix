@@ -1,22 +1,24 @@
-{ pkgs, mod, ... }:
+{ pkgs, ... }:
 
 let
   user = "mvilladsen";
 in
 {
   imports = [
-    (mod "system/common/client")
-    (mod "system/nixos/common")
     ./yubikey.nix
-  ];
+  ]
+  ++ (with modules; [
+    system.common.client
+    nixos.common
+  ]);
 
   # TODO: Really needs some refactoring to accomodate mbv-desktop as well.
 
   home-manager = {
     users.${user} = {
-      imports = [ (mod "home-manager/nixos/client") ];
+      imports = [ self.modules.home.nixos-client ];
     };
-    sharedModules = [ (mod "home-manager/nixos/common") ];
+    sharedModules = [ self.modules.home.nixos-common ];
   };
 
   # local.emacs.package = pkgs.emacs;

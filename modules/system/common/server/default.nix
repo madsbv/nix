@@ -1,5 +1,5 @@
-{ mod, ... }:
+{ ... }:
 
 {
-  imports = [ (mod "system/common/common") ];
+  imports = [ self.modules.system.common.common ];
 }
