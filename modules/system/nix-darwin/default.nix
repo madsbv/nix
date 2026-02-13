@@ -1,4 +1,5 @@
 {
+  modules,
   flake-root,
   config,
   pkgs,

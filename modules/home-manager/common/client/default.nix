@@ -1,4 +1,5 @@
 {
+  self,
   user,
   config,
   lib,

@@ -224,7 +224,8 @@
       common-args = system: {
         inherit nodes color-scheme inputs;
         inherit (self) moduleCollections modules;
-        inherit self;
+        # NEW: Namespaced module sets
+        inherit (self) nixosModules homeManagerModules darwinModules;
         flake-root = ./.;
         nox = inputs.nox.packages.${system}.default;
         user = "mvilladsen";
@@ -237,7 +238,9 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = (nixos-args system) // {
-            inherit hostname self;
+            inherit hostname;
+            systemModules = self.nixosModules; # NEW: Unified system modules
+            inherit (self) homeManagerModules;
           };
           modules = [ ./hosts/${hostname} ] ++ nixos-modules;
         };
@@ -247,7 +250,9 @@
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = (darwin-args system) // {
-            inherit hostname self;
+            inherit hostname;
+            systemModules = self.darwinModules; # NEW: Unified system modules
+            inherit (self) homeManagerModules;
           };
           modules = [ ./hosts/${hostname} ] ++ darwin-modules;
         };
@@ -365,6 +370,17 @@
       moduleCollections = {
         base-nixos = [
           # Core system modules
+          self.nixosModules.system
+          self.nixosModules.common
+          self.nixosModules.common-wifi
+          self.nixosModules.common-restic
+          self.nixosModules.editor
+          self.nixosModules.shell
+        ];
+
+        base-darwin = [
+          # Core system modules (Darwin-compatible)
+          # Keep existing modules not yet duplicated
           self.modules.system.common
           self.modules.system.common-cachix
           self.modules.system.common-secrets
@@ -374,85 +390,116 @@
           self.modules.system.srvos-upgrade-diff
           self.modules.system.srvos-terminfo
 
-          # NixOS-specific modules
-          self.modules.nixos.system
-          self.modules.nixos.nixos-common
-
-          # Cross-platform modules
-          self.modules.dev
-          self.modules.editor
-          self.modules.shell
-        ];
-
-        base-darwin = [
-          # Core system modules (Darwin-compatible)
-          self.modules.system.common
-          self.modules.system.common-cachix
-          self.modules.system.common-secrets
-          self.modules.system.common-builder
-          self.modules.system.common-keys
-          self.modules.system.common-system-packages
-
           # Darwin-specific modules
-          self.modules.darwin.system
-          self.modules.darwin.homebrew
+          self.darwinModules.system
+          self.darwinModules.homebrew
 
           # Cross-platform modules
-          self.modules.dev
-          self.modules.editor
-          self.modules.shell
+          self.darwinModules.dev
+          self.darwinModules.editor
+          self.darwinModules.shell
         ];
 
         client-home = [
-          # Home-manager client modules
-          self.modules.home-manager.common
-          self.modules.home-manager.client
-          self.modules.home-manager.client-packages
-          self.modules.home-manager.client-email
+          self.homeManagerModules.common
+          self.homeManagerModules.common-client
+          self.homeManagerModules.client-packages
+          self.homeManagerModules.client-email
+          self.homeManagerModules.dev
+          self.homeManagerModules.editor
+          self.homeManagerModules.shell
         ];
 
         server-home = [
-          # Home-manager server modules
-          self.modules.home-manager.common
+          self.homeManagerModules.common
         ];
 
         nixos-client = [
-          # NixOS client-specific modules
-          self.modules.nixos.client
-          self.modules.nixos.common-wifi
-          self.modules.nixos.client-yubikey
-          self.modules.nixos.common-laptop
+          self.nixosModules.client
+          self.nixosModules.common-wifi
+          self.nixosModules.client-yubikey
+          self.nixosModules.common-laptop
+          self.homeManagerModules.nixos-client
+          self.homeManagerModules.nixos-common
         ];
 
         nixos-server = [
-          # NixOS server-specific modules
-          self.modules.nixos.server
-          self.modules.nixos.server-laptop
-          self.modules.nixos.server-secrets
+          self.nixosModules.server
+          self.nixosModules.server-laptop
+          self.nixosModules.server-secrets
+          self.homeManagerModules.nixos-common
         ];
 
         darwin-client = [
-          # Darwin client-specific modules
-          self.modules.darwin.dock
-          self.modules.darwin.autorestic
-          self.modules.home-manager.darwin
-          self.modules.home-manager.darwin-packages
+          self.darwinModules.dock
+          self.darwinModules.autorestic
+          self.homeManagerModules.darwin
+          self.homeManagerModules.darwin-packages
         ];
 
         editors = [
-          # Editor-specific modules
-          self.modules.editor-neovim
-          self.modules.editor-emacs
+          self.nixosModules.editor-neovim
+          self.nixosModules.editor-emacs
         ];
 
         services = [
-          # Service modules
-          self.modules.services.home-assistant
-          self.modules.services.media-server
-          self.modules.services.media-server-transmission
-          self.modules.services.media-server-jellyfin
-          self.modules.services.media-server-ripping
+          self.nixosModules.services.home-assistant
+          self.nixosModules.services.media-server
+          self.nixosModules.services.media-server-transmission
+          self.nixosModules.services.media-server-jellyfin
+          self.nixosModules.services.media-server-ripping
         ];
+      };
+
+      # NEW: Namespaced exports following Nix ecosystem conventions
+      nixosModules = {
+        # System modules (NixOS compatible)
+        inherit (self.modules) system;
+        # NixOS-specific modules
+        common = self.modules.nixos.nixos-common;
+        inherit (self.modules.nixos) client;
+        inherit (self.modules.nixos) server;
+        inherit (self.modules.nixos) common-wifi;
+        inherit (self.modules.nixos) common-restic;
+        inherit (self.modules.nixos) client-yubikey;
+        inherit (self.modules.nixos) common-laptop;
+        inherit (self.modules.nixos) server-laptop;
+        inherit (self.modules.nixos) server-secrets;
+        # Cross-platform modules duplicated here
+        inherit (self.modules) editor;
+        inherit (self.modules) shell;
+        inherit (self.modules) vpn;
+        # Services (only in nixosModules as requested)
+        inherit (self.modules) services;
+        services-home-assistant = self.modules.services.home-assistant;
+        services-media-server = self.modules.services.media-server;
+        services-media-server-transmission = self.modules.services.media-server-transmission;
+        services-media-server-jellyfin = self.modules.services.media-server-jellyfin;
+        services-media-server-ripping = self.modules.services.media-server-ripping;
+      };
+
+      homeManagerModules = {
+        # Home-manager modules
+        inherit (self.modules.home-manager) common;
+        inherit (self.modules.home-manager) common-client;
+        inherit (self.modules.home-manager) nixos-common;
+        inherit (self.modules.home-manager) nixos-client;
+        inherit (self.modules.home-manager) darwin;
+        # Cross-platform modules duplicated here
+        inherit (self.modules.home-manager) dev;
+        inherit (self.modules) editor;
+        inherit (self.modules) shell;
+      };
+
+      darwinModules = {
+        inherit (self.modules.darwin) system;
+        inherit (self.modules.darwin) homebrew;
+        inherit (self.modules.darwin) dock;
+        inherit (self.modules.darwin) autorestic;
+        # Cross-platform modules duplicated here
+        inherit (self.modules) dev;
+        inherit (self.modules) editor;
+        inherit (self.modules) shell;
       };
 
       devShells = forAllSystems devShell;

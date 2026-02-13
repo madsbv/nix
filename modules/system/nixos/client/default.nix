@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, self, ... }:
 
 let
   user = "mvilladsen";
@@ -7,7 +7,7 @@ in
   imports = [
     ./yubikey.nix
   ]
-  ++ (with modules; [
+  ++ (with self.modules; [
     system.common.client
     nixos.common
   ]);
@@ -16,9 +16,9 @@ in
 
   home-manager = {
     users.${user} = {
-      imports = [ self.modules.home.nixos-client ];
+      imports = [ self.modules.home-manager.nixos-client ];
     };
-    sharedModules = [ self.modules.home.nixos-common ];
+    sharedModules = [ self.modules.home-manager.nixos-common ];
   };
 
   # local.emacs.package = pkgs.emacs;

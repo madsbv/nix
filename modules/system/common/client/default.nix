@@ -1,4 +1,5 @@
 {
+  self,
   inputs,
   pkgs,
   nox,
@@ -10,14 +11,13 @@ let
   user = "mvilladsen";
 in
 {
-  imports =
-    (with self.modules; [
-      system.common.common
-      editor.all
-    ])
-    ++ [
-      ./secrets/email.nix
-    ];
+  imports = [
+    ./secrets/email.nix
+  ]
+  ++ (with self.modules; [
+    system.common.common
+    editor.all
+  ]);
 
   local.emacs.enable = lib.mkDefault true;
 

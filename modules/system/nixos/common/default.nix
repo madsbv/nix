@@ -3,6 +3,7 @@
   lib,
   pkgs,
   hostname,
+  self,
   ...
 }:
 
@@ -14,7 +15,7 @@ in
     ./restic.nix
     ./wifi.nix
   ]
-  ++ (with modules; [
+  ++ (with self.modules; [
     system.common.common
   ]);
 
@@ -29,7 +30,7 @@ in
         ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
         root.home.homeDirectory = "/root";
       };
-      sharedModules = [ self.modules.home.nixos-common ];
+      sharedModules = [ self.home-manager.nixos-common ];
     };
 
     local = {

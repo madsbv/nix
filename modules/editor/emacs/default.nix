@@ -15,7 +15,7 @@ in
       default = "https://github.com/doomemacs/doomemacs.git";
     };
     doomConfigRepo = lib.mkOption {
-      default = "https://github.com/madsbv/doom.d.git";
+      default = "https://github.com/madsbv/personal-doom.git";
     };
   };
 
@@ -55,6 +55,7 @@ in
               activation.installDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
                 if [ ! -d "${doomDir}" ]; then
                     ${pkgs.git}/bin/git clone ${cfg.doomConfigRepo} "${doomDir}"
+                    ${pkgs.git}/bin/git -C "${doomDir}" submodule update --init --recursive
                 fi
                 if [ ! -d "${emacsDir}" ]; then
                     ${pkgs.git}/bin/git clone ${cfg.doomRepo} "${emacsDir}"

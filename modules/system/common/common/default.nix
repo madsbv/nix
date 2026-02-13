@@ -7,8 +7,7 @@
   config,
   pkgs,
   color-scheme,
-  # modules,
-  # moduleExports,
+  modules,
   ...
 }:
 

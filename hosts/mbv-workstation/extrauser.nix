@@ -1,6 +1,6 @@
 {
   lib,
-  self,
+  moduleCollections,
   ...
 }:
 let
@@ -27,7 +27,7 @@ in
       local.restic.exclude = [ "/nix/persist/home/${user}" ];
 
       home-manager.users.${user} = {
-        imports = [ self.modules.home.nixos-client ];
+        imports = [ moduleCollections.home-nixos-client ];
         local = {
           email.enable = false;
         };
