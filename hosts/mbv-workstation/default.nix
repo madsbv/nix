@@ -8,17 +8,14 @@
 
 {
   imports = [
-    # Generalizable config should be in default.nix, machine-specific stuff should be in configuration.nix and hardware-configuration.nix
     ./configuration.nix
     ./overclocking.nix
-    ./extrauser.nix
+    # ./extrauser.nix
   ]
-  ++ (with moduleCollections; [
-    base-nixos
-    nixos-server
-    nixos-client
-    client-home
-  ]);
+  ++ moduleCollections.base-nixos
+  ++ moduleCollections.nixos-server
+  ++ moduleCollections.nixos-client;
+  # ++ moduleCollections.client-home;
 
   system.autoUpgrade = {
     allowReboot = lib.mkForce false;
@@ -49,23 +46,6 @@
     permittedInsecurePackages = [
       "electron-39.8.10"
     ];
-  };
-
-  virtualisation = {
-    docker.enable = true;
-    podman.enable = true;
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-        # ovmf = {
-        #   enable = true;
-        #   packages = [ pkgs.OVMFFull.fd ];
-        # };
-        vhostUserPackages = [ pkgs.virtiofsd ];
-      };
-    };
-    spiceUSBRedirection.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -136,20 +116,4 @@
       };
     };
   };
-
-  services = {
-    # Provides blueman-applet and blueman-manager for managing bluetooth connections
-    blueman.enable = true;
-    printing = {
-      enable = true;
-    };
-  };
-  local.restic.exclude = [
-    "/nix/persist/var/lib/private/ollama"
-    "/nix/persist/var/lib/libvirt/images"
-    "/nix/persist/home/mvilladsen/.local/share/Steam"
-    "/nix/persist/home/mvilladsen/Downloads"
-    "/nix/persist/home/mvilladsen/.cache"
-  ];
-  environment.persistence."/nix/persist".directories = [ "/var/lib/private/ollama/models" ];
 }

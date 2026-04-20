@@ -1,16 +1,20 @@
 {
   hostname,
   moduleCollections,
+  systemModules,
   ...
 }:
 
 {
-  imports = [
-    # Use module collections instead of mod helper
-    moduleCollections.darwin-client
-    moduleCollections.client-home
-    moduleCollections.base-darwin
-  ];
+  imports =
+    [
+      systemModules.dock
+      systemModules.autorestic
+      ./nix-darwin
+    ]
+      moduleCollections.darwin-client
+    ++ moduleCollections.client-home
+    ++ moduleCollections.base-darwin;
 
   networking = {
     computerName = hostname;
@@ -36,14 +40,4 @@
     ];
   };
 
-  # Reimplementation of the launchd plist installed by tailscaled itself when invoked as `tailscaled install-system-daemonf (see https://github.com/tailscale/tailscale/wiki/Tailscaled-on-macOS)`
-  # launchd.daemons = {
-  #   tailscaled = {
-  #     command = "${pkgs.tailscale}/bin/tailscaled";
-  #     serviceConfig = {
-  #       RunAtLoad = true;
-  #       Label = "com.tailscale.tailscaled";
-  #     };
-  #   };
-  # };
 }

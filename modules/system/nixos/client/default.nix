@@ -1,42 +1,19 @@
-{ pkgs, self, ... }:
+{ pkgs, modules, ... }:
 
 let
   user = "mvilladsen";
 in
 {
-  imports = [
-    ./yubikey.nix
-  ]
-  ++ (with self.modules; [
-    system.common.client
-    nixos.common
-  ]);
-
   # TODO: Really needs some refactoring to accomodate mbv-desktop as well.
 
   home-manager = {
     users.${user} = {
-      imports = [ self.modules.home-manager.nixos-client ];
+      imports = [ modules.home-manager.nixos-client ];
     };
-    sharedModules = [ self.modules.home-manager.nixos-common ];
+    sharedModules = [ modules.home-manager.nixos-common ];
   };
 
-  # local.emacs.package = pkgs.emacs;
-
-  # No longer exists on nix-darwin
   fonts.fontDir.enable = true;
-
-  xdg = {
-    portal = {
-      enable = true;
-      config = {
-        common = {
-          default = [ "gtk" ];
-        };
-      };
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    };
-  };
 
   services = {
     xserver = {
@@ -60,12 +37,6 @@ in
         luaModules = [ ];
       };
     };
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      pulse.enable = true;
-    };
-
     protonmail-bridge = {
       enable = true;
       path = with pkgs; [ gnome-keyring ];
@@ -76,9 +47,6 @@ in
     # For thunar to support removable media and such
     gvfs.enable = true;
   };
-
-  # Recommended by https://nixos.wiki/wiki/PipeWire
-  security.rtkit.enable = true;
 
   programs = {
     i3lock.enable = true;

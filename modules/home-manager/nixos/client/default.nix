@@ -1,18 +1,14 @@
 {
   pkgs,
   flake-root,
-  modules,
+  homeManagerModules,
   ...
 }:
 
 {
   imports = [
-    ./dropbox.nix
-  ]
-  ++ (with modules; [
-    home.common-client
-    home.nixos-common
-  ]);
+    homeManagerModules.dropbox
+  ];
 
   home.packages = with pkgs; [
     signal-desktop

@@ -20,11 +20,6 @@
     hostId = "dcb6c4ed";
   };
   nixpkgs.hostPlatform = "x86_64-linux";
-  # Use the systemd-boot EFI boot loader.
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-  };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

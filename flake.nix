@@ -223,15 +223,17 @@
 
       common-args = system: {
         inherit nodes color-scheme inputs;
-        inherit (self) moduleCollections modules;
+        inherit (self) moduleCollections;
         # NEW: Namespaced module sets
-        inherit (self) nixosModules homeManagerModules darwinModules;
+        inherit (self) homeManagerModules;
         flake-root = ./.;
         nox = inputs.nox.packages.${system}.default;
         user = "mvilladsen";
+        # Legacy: modules from old pattern (for modules that still reference it)
+        modules = self.modules;
       };
-      darwin-args = common-args;
-      nixos-args = common-args;
+      darwin-args = system: (common-args system) // { inherit (self) darwinModules; };
+      nixos-args = system: (common-args system) // { inherit (self) nixosModules; };
 
       nixos-system =
         system: hostname:
@@ -284,7 +286,6 @@
           nixos-common = import ./modules/system/nixos/common/default.nix;
           client = import ./modules/system/nixos/client/default.nix;
           server = import ./modules/system/nixos/server/default.nix;
-          common-restic = import ./modules/system/nixos/common/restic.nix;
           common-wifi = import ./modules/system/nixos/common/wifi.nix;
           client-yubikey = import ./modules/system/nixos/client/yubikey.nix;
           server-laptop = import ./modules/system/nixos/server/laptop.nix;
@@ -313,6 +314,7 @@
           nixos-client = import ./modules/home-manager/nixos/client/default.nix;
           nixos-client-dropbox = import ./modules/home-manager/nixos/client/dropbox.nix;
           nixos-common = import ./modules/home-manager/nixos/common/default.nix;
+          dev-all = import ./modules/home-manager/dev/default.nix;
           dev = {
             all = import ./modules/home-manager/dev/default.nix;
             fortran = import ./modules/home-manager/dev/fortran/default.nix;
@@ -370,11 +372,11 @@
       moduleCollections = {
         base-nixos = [
           # Core system modules
-          self.nixosModules.system
+          self.nixosModules.system.common
           self.nixosModules.common
           self.nixosModules.common-wifi
-          self.nixosModules.common-restic
-          self.nixosModules.editor
+          self.nixosModules.restic
+          self.nixosModules.editor.default
           self.nixosModules.shell
         ];
 
@@ -402,7 +404,7 @@
 
         client-home = [
           self.homeManagerModules.common
-          self.homeManagerModules.common-client
+          self.homeManagerModules.client
           self.homeManagerModules.client-packages
           self.homeManagerModules.client-email
           self.homeManagerModules.dev
@@ -419,8 +421,8 @@
           self.nixosModules.common-wifi
           self.nixosModules.client-yubikey
           self.nixosModules.common-laptop
-          self.homeManagerModules.nixos-client
-          self.homeManagerModules.nixos-common
+          # self.homeManagerModules.nixos-client
+          # self.homeManagerModules.nixos-common
         ];
 
         nixos-server = [
@@ -451,19 +453,37 @@
         ];
       };
 
+      pathNixosModules =
+        with builtins;
+        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/nixosModules)) (
+          dir: import ./modules/nixosModules/${dir}
+        );
+      pathDarwinModules =
+        with builtins;
+        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/darwinModules)) (
+          dir: import ./modules/darwinModules/${dir}
+        );
+      pathHomeManagerModules =
+        with builtins;
+        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/homeManagerModules)) (
+          dir: import ./modules/homeManagerModules/${dir}
+        );
+
       # NEW: Namespaced exports following Nix ecosystem conventions
       nixosModules = {
         # System modules (NixOS compatible)
         inherit (self.modules) system;
         # NixOS-specific modules
-        common = self.modules.nixos.nixos-common;
-        inherit (self.modules.nixos) client;
+        client = self.modules.nixos.client;
         inherit (self.modules.nixos) server;
-        inherit (self.modules.nixos) common-wifi;
-        inherit (self.modules.nixos) common-restic;
-        inherit (self.modules.nixos) client-yubikey;
+        common = import ./modules/nixos/common;
+        wifi = import ./modules/nixos/wifi;
+        restic = import ./modules/nixos/restic;
+        laptop = import ./modules/nixos/laptop;
+        server-laptop = import ./modules/nixos/server-laptop;
+        yubikey = import ./modules;
+
         inherit (self.modules.nixos) common-laptop;
-        inherit (self.modules.nixos) server-laptop;
         inherit (self.modules.nixos) server-secrets;
         # Cross-platform modules duplicated here
         inherit (self.modules) editor;
@@ -481,10 +501,13 @@
       homeManagerModules = {
         # Home-manager modules
         inherit (self.modules.home-manager) common;
-        inherit (self.modules.home-manager) common-client;
+        inherit (self.modules.home-manager) client;
         inherit (self.modules.home-manager) nixos-common;
         inherit (self.modules.home-manager) nixos-client;
         inherit (self.modules.home-manager) darwin;
+        # Aliases for backwards compatibility
+        client-packages = self.modules.home-manager.client-packages;
+        client-email = self.modules.home-manager.client-email;
         # Cross-platform modules duplicated here
         inherit (self.modules.home-manager) dev;
         inherit (self.modules) editor;
@@ -502,7 +525,7 @@
         inherit (self.modules) shell;
       };
 
-      devShells = forAllSystems devShell;
+      # devShells = forAllSystems devShell;
 
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
@@ -576,36 +599,37 @@
 
       nixosConfigurations = {
         mbv-workstation = nixos-system "x86_64-linux" "mbv-workstation";
-        mbv-desktop = nixos-system "x86_64-linux" "mbv-desktop";
-        mbv-xps13 = nixos-system "x86_64-linux" "mbv-xps13";
-        hp-90 = nixos-system "x86_64-linux" "hp-90";
-      }
-      // forLinuxSystems (system: {
-        # A system configuration for ephemeral systems--either temporary VMs or for installers.
-        # Use nixos-generators to build a VM or ISO with
-        # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
-        # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
-        # Example formats: install-iso qcow-efi (for qemu vm)
-        "ephemeral-${system}" = nixpkgs.lib.nixosSystem {
-          inherit system;
+        # mbv-desktop = nixos-system "x86_64-linux" "mbv-desktop";
+        # mbv-xps13 = nixos-system "x86_64-linux" "mbv-xps13";
+        # hp-90 = nixos-system "x86_64-linux" "hp-90";
+      };
+      # // forLinuxSystems (system: {
+      #   # A system configuration for ephemeral systems--either temporary VMs or for installers.
+      #   # Use nixos-generators to build a VM or ISO with
+      #   # `nix build .#nixosConfigurations.ephemeral.config.formats.<format>`
+      #   # Supported formats: https://github.com/nix-community/nixos-generators?tab=readme-ov-file#supported-formats
+      #   # Example formats: install-iso qcow-efi (for qemu vm)
+      #   "ephemeral-${system}" = nixpkgs.lib.nixosSystem {
+      #     inherit system;
 
-          # For VMs
-          # Specific formats can be configured with something like:
-          # formatConfigs.vmware = { config, ... }: {
-          #   services.openssh.enable = true;
-          # };
-          # nixpkgs.hostPlatform = "aarch64-darwin";
-          specialArgs = (nixos-args system) // {
-            inherit system;
-            hostname = "ephemeral";
-          };
-          modules = [
-            impermanence.nixosModules.impermanence
-            nixos-generators.nixosModules.all-formats
-            disko.nixosModules.disko
-            ./hosts/ephemeral
-          ];
-        };
-      });
+      #     # For VMs
+      #     # Specific formats can be configured with something like:
+      #     # formatConfigs.vmware = { config, ... }: {
+      #     #   services.openssh.enable = true;
+      #     # };
+      #     # nixpkgs.hostPlatform = "aarch64-darwin";
+      #     specialArgs = (nixos-args system) // {
+      #       inherit system;
+      #       hostname = "ephemeral";
+      #     };
+      #     modules = [
+      #       # impermanence.nixosModules.impermanence
+      #       nixos-generators.nixosModules.all-formats
+      #       # disko.nixosModules.disko
+      #       ./hosts/ephemeral
+      #     ]
+      #     ++ nixos-modules;
+      #   };
+      # });
     };
 }

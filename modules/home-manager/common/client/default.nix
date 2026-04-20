@@ -1,5 +1,4 @@
 {
-  self,
   user,
   config,
   lib,
@@ -9,6 +8,8 @@
   flake-root,
   nox,
   inputs,
+  modules,
+  homeManagerModules,
   ...
 }:
 
@@ -21,8 +22,8 @@ let
 in
 {
   imports = [
-    ./email.nix
-    self.modules.home.common
+    homeManagerModules.email
+    modules.home-manager.common
   ];
 
   home = {
