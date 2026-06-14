@@ -17,4 +17,8 @@
     stateVersion = "23.11";
     preferXdgDirectories = true;
   };
+  local = {
+    emacs.enable = lib.mkDefault true;
+    dev.enable = true;
+  };
 }

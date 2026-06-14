@@ -1,34 +1,44 @@
-{ pkgs, ... }:
-
 {
-  # For laptop-based servers: Turn screen brightness on and off when lid is opened and closed.
-  # From here, modified to user brightnessctl instead of writing directly to /sys files. https://github.com/waxlamp/nixos-config/blob/f8aecac4eb6e145f32d3c10f3842da18c217dd34/machines/kahless/configuration.nix#L171-L194
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+let
+  cfg = config.local.server.laptop;
+in
+{
+  options.local.server.laptop.enable = lib.mkEnableOption "Laptop as server configuration";
+  config = lib.mkIf cfg.enable {
+    # For laptop-based servers: Turn screen brightness on and off when lid is opened and closed.
+    # From here, modified to user brightnessctl instead of writing directly to /sys files. https://github.com/waxlamp/nixos-config/blob/f8aecac4eb6e145f32d3c10f3842da18c217dd34/machines/kahless/configuration.nix#L171-L194
 
-  services = {
-    # Turn off logind handling of events; it can only do power off/suspend/hibernate/lock commands.
-    logind.settings.Login = {
-      lidSwitch = "ignore";
-      HandlePowerKey = "ignore";
-    };
+    services = {
+      # Turn off logind handling of events; it can only do power off/suspend/hibernate/lock commands.
+      logind.settings.Login = {
+        lidSwitch = "ignore";
+        HandlePowerKey = "ignore";
+      };
 
-    acpid = {
-      enable = true;
-      lidEventCommands = ''
-        export PATH=$PATH:/run/current-system/sw/bin:${pkgs.brightnessctl}/bin:
+      acpid = {
+        enable = true;
+        lidEventCommands = ''
+          export PATH=$PATH:/run/current-system/sw/bin:${pkgs.brightnessctl}/bin:
 
-        lid_state=$(cat /proc/acpi/button/lid/LID0/state | awk '{print $NF}')
-        if [ $lid_state = "closed" ]; then
-          # Set brightness to zero
-          brightnessctl set 0%
-        else
-          # Reset the brightness
-          brightnessctl set 50%
-        fi
-      '';
+          lid_state=$(cat /proc/acpi/button/lid/LID0/state | awk '{print $NF}')
+          if [ $lid_state = "closed" ]; then
+            # Set brightness to zero
+            brightnessctl set 0%
+          else
+            # Reset the brightness
+            brightnessctl set 50%
+          fi
+        '';
 
-      powerEventCommands = ''
-        systemctl suspend
-      '';
+        powerEventCommands = ''
+          systemctl suspend
+        '';
+      };
     };
   };
 }

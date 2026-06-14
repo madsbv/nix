@@ -14,12 +14,14 @@ in
     useAuthkey = lib.mkOption { default = false; };
     authkeyPath = lib.mkOption;
   };
-  services = lib.mkIf cfg.enable {
-    tailscale = {
-      enable = true;
-      authKeyFile = lib.mkIf cfg.useAuthkey cfg.authkeyPath;
-      extraUpFlags = [ "--ssh" ];
+  config = lib.mkIf cfg.enable {
+    services = {
+      tailscale = {
+        enable = true;
+        authKeyFile = lib.mkIf cfg.useAuthkey cfg.authkeyPath;
+        extraUpFlags = [ "--ssh" ];
+      };
     };
-  };
 
+  };
 }

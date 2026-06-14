@@ -1,18 +1,24 @@
 {
   config,
+  lib,
   flake-root,
   ...
 }:
-
+let
+  cfg = config.local.networking.protonvpn;
+in
 {
-  networking.wg-quick = {
-    interfaces = {
-      protonvpn = {
-        configFile = config.age.secrets.mbv-desktop-protonvpn.path;
-        # TODO: Use the pre/post up/down commands to set up a network namespace for this/hook into the transmission module
+  options.local.networking.protonvpn.enable = lib.mkEnable "protonvpn via networking interface";
+  config = lib.mkIf cfg.enable {
+    networking.wg-quick = {
+      interfaces = {
+        protonvpn = {
+          configFile = config.age.secrets.mbv-desktop-protonvpn.path;
+          # TODO: Use the pre/post up/down commands to set up a network namespace for this/hook into the transmission module
+        };
       };
     };
-  };
 
-  age.secrets.mbv-desktop-protonvpn.rekeyFile = flake-root + "/secrets/protonvpn/mbv-desktop.wg.age";
+    age.secrets.mbv-desktop-protonvpn.rekeyFile = flake-root + "/secrets/protonvpn/mbv-desktop.wg.age";
+  };
 }

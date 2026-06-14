@@ -12,7 +12,9 @@ in
     enable = lib.mkEnableOption "Emacs";
     package = lib.mkPackageOption pkgs "my-emacs" { };
     doomemacs = {
-      enable = lib.mkEnableOption "Doomemacs";
+      enable = lib.mkEnableOption "Doomemacs" // {
+        default = cfg.enable;
+      };
       repo = lib.mkOption {
         default = "https://github.com/doomemacs/doomemacs.git";
       };

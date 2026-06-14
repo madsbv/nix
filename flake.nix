@@ -128,19 +128,20 @@
   };
   outputs =
     {
-      self,
-      nixos-generators,
-      impermanence,
-      darwin,
-      nix-homebrew,
-      home-manager,
-      nixpkgs,
       agenix,
       agenix-rekey,
-      disko,
+      darwin,
       deploy-rs,
-      nix-auth,
+      direnv-instant,
+      disko,
+      home-manager,
       hosts,
+      impermanence,
+      nix-auth,
+      nix-homebrew,
+      nixos-generators,
+      nixpkgs,
+      self,
       ...
     }@inputs:
     let
@@ -176,7 +177,7 @@
       ];
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
-      forLinuxSystems = f: nixpkgs.lib.mergeAttrsList (map f linuxSystems);
+      # forLinuxSystems = f: nixpkgs.lib.mergeAttrsList (map f linuxSystems);
 
       devShell =
         system:
@@ -200,40 +201,72 @@
           };
         };
 
-      common-modules = [
-        inputs.base16.nixosModule
-        { scheme = color-scheme; }
-      ];
-      darwin-modules = [
-        home-manager.darwinModules.home-manager
-        nix-homebrew.darwinModules.nix-homebrew
-        agenix.darwinModules.default
-        agenix-rekey.nixosModules.default
-      ]
-      ++ common-modules;
-      nixos-modules = [
-        home-manager.nixosModules.home-manager
-        agenix.nixosModules.default
-        agenix-rekey.nixosModules.default
-        impermanence.nixosModules.impermanence
-        disko.nixosModules.disko
-        hosts.nixosModule
-      ]
-      ++ common-modules;
+      homeManagerModules =
+        with builtins;
+        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/homeManagerModules)) (
+          dir: import ./modules/homeManagerModules/${dir}
+        )
+        ++ [ direnv-instant.homeModules.direnv-instant ];
 
+      systemModules =
+        with builtins;
+        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/systemModules)) (
+          dir: import ./modules/systemModules/${dir}
+        )
+        ++ [
+          inputs.base16.nixosModule
+          { scheme = color-scheme; }
+          (
+            { lib, config, ... }:
+            let
+              cfg = config.local.homeManager;
+            in
+            {
+              options.local.homeManager.enable = lib.mkEnableOption "home-manager";
+              config = lib.mkIf cfg.enable {
+                home-manager.sharedModules = homeManagerModules;
+              };
+            }
+          )
+        ];
+
+      nixosModules =
+        with builtins;
+        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/nixosModules)) (
+          dir: import ./modules/nixosModules/${dir}
+        )
+        ++ [
+          home-manager.nixosModules.home-manager
+          agenix.nixosModules.default
+          agenix-rekey.nixosModules.default
+          impermanence.nixosModules.impermanence
+          disko.nixosModules.disko
+          hosts.nixosModule
+        ]
+        ++ systemModules;
+
+      darwinModules =
+        with builtins;
+        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/darwinModules)) (
+          dir: import ./modules/darwinModules/${dir}
+        )
+        ++ [
+          home-manager.darwinModules.home-manager
+          nix-homebrew.darwinModules.nix-homebrew
+          agenix.darwinModules.default
+          agenix-rekey.nixosModules.default
+        ]
+        ++ systemModules;
       common-args = system: {
         inherit nodes color-scheme inputs;
-        inherit (self) moduleCollections;
         # NEW: Namespaced module sets
         inherit (self) homeManagerModules;
         flake-root = ./.;
         nox = inputs.nox.packages.${system}.default;
         user = "mvilladsen";
-        # Legacy: modules from old pattern (for modules that still reference it)
-        modules = self.modules;
       };
-      darwin-args = system: (common-args system) // { inherit (self) darwinModules; };
-      nixos-args = system: (common-args system) // { inherit (self) nixosModules; };
+      darwin-args = system: (common-args system);
+      nixos-args = system: (common-args system);
 
       nixos-system =
         system: hostname:
@@ -241,10 +274,9 @@
           inherit system;
           specialArgs = (nixos-args system) // {
             inherit hostname;
-            systemModules = self.nixosModules; # NEW: Unified system modules
             inherit (self) homeManagerModules;
           };
-          modules = [ ./hosts/${hostname} ] ++ nixos-modules;
+          modules = [ ./hosts/${hostname} ] ++ nixosModules;
         };
 
       darwin-system =
@@ -253,10 +285,9 @@
           inherit system;
           specialArgs = (darwin-args system) // {
             inherit hostname;
-            systemModules = self.darwinModules; # NEW: Unified system modules
             inherit (self) homeManagerModules;
           };
-          modules = [ ./hosts/${hostname} ] ++ darwin-modules;
+          modules = [ ./hosts/${hostname} ] ++ darwinModules;
         };
 
       # NOTE: When adding new nodes, update this, agenix-rekey, and deploy-rs node lists
@@ -276,256 +307,12 @@
           "mbv-xps13"
         ];
       };
+
     in
     {
-      # Top-level module exports
-      modules = {
-        # NixOS modules
-        nixos = {
-          system = import ./modules/system/common/common/default.nix;
-          nixos-common = import ./modules/system/nixos/common/default.nix;
-          client = import ./modules/system/nixos/client/default.nix;
-          server = import ./modules/system/nixos/server/default.nix;
-          common-wifi = import ./modules/system/nixos/common/wifi.nix;
-          client-yubikey = import ./modules/system/nixos/client/yubikey.nix;
-          server-laptop = import ./modules/system/nixos/server/laptop.nix;
-          common-laptop = import ./modules/system/nixos/common/laptop.nix;
-          server-secrets = import ./modules/system/nixos/server/secrets.nix;
-        };
+      inherit nixosModules darwinModules homeManagerModules;
 
-        # Darwin modules
-        darwin = {
-          system = import ./modules/system/nix-darwin/default.nix;
-          homebrew = import ./modules/system/nix-darwin/homebrew/default.nix;
-          homebrew-casks = import ./modules/system/nix-darwin/homebrew/casks.nix;
-          dock = import ./modules/system/nix-darwin/dock/default.nix;
-          autorestic = import ./modules/system/nix-darwin/autorestic.nix;
-        };
-
-        # Home-manager modules
-        home-manager = {
-          common = import ./modules/home-manager/common/common/default.nix;
-          client = import ./modules/home-manager/common/client/default.nix;
-          client-packages = import ./modules/home-manager/common/client/packages.nix;
-          client-email = import ./modules/home-manager/common/client/email.nix;
-          client-secrets-email = import ./modules/home-manager/common/client/secrets/email.nix;
-          darwin = import ./modules/home-manager/darwin/default.nix;
-          darwin-packages = import ./modules/home-manager/darwin/packages.nix;
-          nixos-client = import ./modules/home-manager/nixos/client/default.nix;
-          nixos-client-dropbox = import ./modules/home-manager/nixos/client/dropbox.nix;
-          nixos-common = import ./modules/home-manager/nixos/common/default.nix;
-          dev-all = import ./modules/home-manager/dev/default.nix;
-          dev = {
-            all = import ./modules/home-manager/dev/default.nix;
-            fortran = import ./modules/home-manager/dev/fortran/default.nix;
-            docker = import ./modules/home-manager/dev/docker/default.nix;
-            go = import ./modules/home-manager/dev/go/default.nix;
-            java = import ./modules/home-manager/dev/java/default.nix;
-            javascript = import ./modules/home-manager/dev/javascript/default.nix;
-            lua = import ./modules/home-manager/dev/lua/default.nix;
-            nix = import ./modules/home-manager/dev/nix/default.nix;
-            python = import ./modules/home-manager/dev/python/default.nix;
-            rust = import ./modules/home-manager/dev/rust/default.nix;
-            r = import ./modules/home-manager/dev/R/default.nix;
-            shell = import ./modules/home-manager/dev/shell/default.nix;
-            tools = import ./modules/home-manager/dev/tools/default.nix;
-          };
-        };
-
-        # Cross-platform modules
-
-        editor = {
-          default = import ./modules/editor/default.nix;
-          editor-neovim = import ./modules/editor/neovim/default.nix;
-          editor-emacs = import ./modules/editor/emacs/default.nix;
-        };
-
-        shell = import ./modules/shell/default.nix;
-
-        vpn = import ./modules/vpn/default.nix;
-
-        # Services modules
-        services = {
-          home-assistant = import ./modules/services/home-assistant/default.nix;
-          media-server = import ./modules/services/media-server/default.nix;
-          media-server-transmission = import ./modules/services/media-server/transmission/default.nix;
-          media-server-jellyfin = import ./modules/services/media-server/jellyfin/default.nix;
-          media-server-ripping = import ./modules/services/media-server/ripping/default.nix;
-        };
-
-        # System modules
-        system = {
-          common = import ./modules/system/common/common/default.nix;
-          common-cachix = import ./modules/system/common/common/cachix/default.nix;
-          common-secrets = import ./modules/system/common/common/secrets/default.nix;
-          common-system-packages = import ./modules/system/common/common/system-packages.nix;
-          common-builder = import ./modules/system/common/common/builder.nix;
-          common-keys = import ./modules/system/common/common/keys.nix;
-          srvos-upgrade-diff = import ./modules/system/common/common/srvos/upgrade-diff.nix;
-          srvos-terminfo = import ./modules/system/common/common/srvos/terminfo.nix;
-          client = import ./modules/system/common/client/default.nix;
-          server = import ./modules/system/common/server/default.nix;
-        };
-      };
-
-      # Module collections for reusable configuration sets
-      moduleCollections = {
-        base-nixos = [
-          # Core system modules
-          self.nixosModules.system.common
-          self.nixosModules.common
-          self.nixosModules.common-wifi
-          self.nixosModules.restic
-          self.nixosModules.editor.default
-          self.nixosModules.shell
-        ];
-
-        base-darwin = [
-          # Core system modules (Darwin-compatible)
-          # Keep existing modules not yet duplicated
-          self.modules.system.common
-          self.modules.system.common-cachix
-          self.modules.system.common-secrets
-          self.modules.system.common-builder
-          self.modules.system.common-keys
-          self.modules.system.common-system-packages
-          self.modules.system.srvos-upgrade-diff
-          self.modules.system.srvos-terminfo
-
-          # Darwin-specific modules
-          self.darwinModules.system
-          self.darwinModules.homebrew
-
-          # Cross-platform modules
-          self.darwinModules.dev
-          self.darwinModules.editor
-          self.darwinModules.shell
-        ];
-
-        client-home = [
-          self.homeManagerModules.common
-          self.homeManagerModules.client
-          self.homeManagerModules.client-packages
-          self.homeManagerModules.client-email
-          self.homeManagerModules.dev
-          self.homeManagerModules.editor
-          self.homeManagerModules.shell
-        ];
-
-        server-home = [
-          self.homeManagerModules.common
-        ];
-
-        nixos-client = [
-          self.nixosModules.client
-          self.nixosModules.common-wifi
-          self.nixosModules.client-yubikey
-          self.nixosModules.common-laptop
-          # self.homeManagerModules.nixos-client
-          # self.homeManagerModules.nixos-common
-        ];
-
-        nixos-server = [
-          self.nixosModules.server
-          self.nixosModules.server-laptop
-          self.nixosModules.server-secrets
-          self.homeManagerModules.nixos-common
-        ];
-
-        darwin-client = [
-          self.darwinModules.dock
-          self.darwinModules.autorestic
-          self.homeManagerModules.darwin
-          self.homeManagerModules.darwin-packages
-        ];
-
-        editors = [
-          self.nixosModules.editor-neovim
-          self.nixosModules.editor-emacs
-        ];
-
-        services = [
-          self.nixosModules.services.home-assistant
-          self.nixosModules.services.media-server
-          self.nixosModules.services.media-server-transmission
-          self.nixosModules.services.media-server-jellyfin
-          self.nixosModules.services.media-server-ripping
-        ];
-      };
-
-      pathNixosModules =
-        with builtins;
-        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/nixosModules)) (
-          dir: import ./modules/nixosModules/${dir}
-        );
-      pathDarwinModules =
-        with builtins;
-        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/darwinModules)) (
-          dir: import ./modules/darwinModules/${dir}
-        );
-      pathHomeManagerModules =
-        with builtins;
-        nixpkgs.lib.genAttrs (attrNames (readDir ./modules/homeManagerModules)) (
-          dir: import ./modules/homeManagerModules/${dir}
-        );
-
-      # NEW: Namespaced exports following Nix ecosystem conventions
-      nixosModules = {
-        # System modules (NixOS compatible)
-        inherit (self.modules) system;
-        # NixOS-specific modules
-        client = self.modules.nixos.client;
-        inherit (self.modules.nixos) server;
-        common = import ./modules/nixos/common;
-        wifi = import ./modules/nixos/wifi;
-        restic = import ./modules/nixos/restic;
-        laptop = import ./modules/nixos/laptop;
-        server-laptop = import ./modules/nixos/server-laptop;
-        yubikey = import ./modules;
-
-        inherit (self.modules.nixos) common-laptop;
-        inherit (self.modules.nixos) server-secrets;
-        # Cross-platform modules duplicated here
-        inherit (self.modules) editor;
-        inherit (self.modules) shell;
-        inherit (self.modules) vpn;
-        # Services (only in nixosModules as requested)
-        inherit (self.modules) services;
-        services-home-assistant = self.modules.services.home-assistant;
-        services-media-server = self.modules.services.media-server;
-        services-media-server-transmission = self.modules.services.media-server-transmission;
-        services-media-server-jellyfin = self.modules.services.media-server-jellyfin;
-        services-media-server-ripping = self.modules.services.media-server-ripping;
-      };
-
-      homeManagerModules = {
-        # Home-manager modules
-        inherit (self.modules.home-manager) common;
-        inherit (self.modules.home-manager) client;
-        inherit (self.modules.home-manager) nixos-common;
-        inherit (self.modules.home-manager) nixos-client;
-        inherit (self.modules.home-manager) darwin;
-        # Aliases for backwards compatibility
-        client-packages = self.modules.home-manager.client-packages;
-        client-email = self.modules.home-manager.client-email;
-        # Cross-platform modules duplicated here
-        inherit (self.modules.home-manager) dev;
-        inherit (self.modules) editor;
-        inherit (self.modules) shell;
-      };
-
-      darwinModules = {
-        inherit (self.modules.darwin) system;
-        inherit (self.modules.darwin) homebrew;
-        inherit (self.modules.darwin) dock;
-        inherit (self.modules.darwin) autorestic;
-        # Cross-platform modules duplicated here
-        inherit (self.modules) dev;
-        inherit (self.modules) editor;
-        inherit (self.modules) shell;
-      };
-
-      # devShells = forAllSystems devShell;
+      devShells = forAllSystems devShell;
 
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;

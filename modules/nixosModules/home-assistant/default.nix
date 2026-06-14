@@ -6,6 +6,7 @@
   ...
 }:
 let
+  cfg = config.local.server.homeAssistant;
   appdaemonConfig = pkgs.writeText "appdaemon.toml" ''
     secrets = "${config.age.secrets."appdaemon-secrets.toml".path}"
 
@@ -64,111 +65,116 @@ let
 
 in
 {
-
-  services = {
-    # TODO: Configure
-    # Available on mbv-xps13:8123
-    home-assistant = {
-      enable = true;
-      configWritable = true;
-      lovelaceConfigWritable = true;
-      extraComponents = [
-        "awair"
-        "accuweather"
-        "tailscale"
-        # Supposedly for Smart Life
-        # See also https://github.com/rospogrigio/localtuya
-        "tuya"
-        "wake_on_lan"
-        "jellyfin"
-        "seventeentrack"
-        "speedtestdotnet"
-        "default_config"
-        "met"
-        "esphome"
-        "tplink"
-        "tplink_tapo"
-        "ecobee"
-        "homekit_controller"
-        "roomba"
-        "mobile_app"
-      ];
-      config.homeassistant = {
-        name = "!secret name";
-        time_zone = "!secret time_zone";
-        latitude = "!secret latitude";
-        longitude = "!secret longitude";
-        elevation = "!secret elevation";
-        unit_system = "metric";
-        temperature_unit = "C";
-      };
-    };
+  options.local.server.homeAssistant = {
+    enable = lib.mkEnableOption "home-assistant";
   };
+  config = lib.mkIf cfg.enable {
 
-  system.activationScripts = {
-    linkHomeAssistantSecrets = lib.stringAfter [ "var" ] ''
-      if [[ -e /var/lib/hass/secrets.yaml ]]
-      then
-          rm /var/lib/hass/secrets.yaml
-      fi
-
-      ln -s ${config.age.secrets."home-assistant-secrets.yaml".path} /var/lib/hass/secrets.yaml
-    '';
-    # Make sure hass owns appdaemon's directory and that the hass group can write to it (for justfile rsync development)
-    fixAppdaemonConfigPermissions = lib.stringAfter [ "etc" ] ''
-      chown -R hass /etc/appdaemon
-      chmod -R u=rwx,g=rwx,o= /etc/appdaemon
-    '';
-  };
-
-  environment = {
-    systemPackages = [ pkgs.appdaemon ];
-    etc =
-      # Copy all appdaemon apps in this repo to /etc/appdaemon/apps.
-      # Allows live modification for testing and development, though /etc/appdaemon is not a persistent directory.
-      dirToEtcAttrs (flake-root + "/modules/services/home-assistant/appdaemon/apps") "appdaemon/apps" {
-        # 0770 is equivalent to u=rwx,g=rwx,o=, as above.
-        mode = "0770";
-        user = "hass";
-      }
-      // {
-        "/appdaemon/appdaemon.toml" = {
-          source = appdaemonConfig;
-          mode = "0770";
-          user = "hass";
+    services = {
+      # TODO: Configure
+      # Available on mbv-xps13:8123
+      home-assistant = {
+        enable = true;
+        configWritable = true;
+        lovelaceConfigWritable = true;
+        extraComponents = [
+          "awair"
+          "accuweather"
+          "tailscale"
+          # Supposedly for Smart Life
+          # See also https://github.com/rospogrigio/localtuya
+          "tuya"
+          "wake_on_lan"
+          "jellyfin"
+          "seventeentrack"
+          "speedtestdotnet"
+          "default_config"
+          "met"
+          "esphome"
+          "tplink"
+          "tplink_tapo"
+          "ecobee"
+          "homekit_controller"
+          "roomba"
+          "mobile_app"
+        ];
+        config.homeassistant = {
+          name = "!secret name";
+          time_zone = "!secret time_zone";
+          latitude = "!secret latitude";
+          longitude = "!secret longitude";
+          elevation = "!secret elevation";
+          unit_system = "metric";
+          temperature_unit = "C";
         };
       };
-  };
-
-  # To allow me to remote transfer files directly to appdaemon/apps for development.
-  users.groups.hass.members = [ "mvilladsen" ];
-
-  age.secrets = {
-    "appdaemon-secrets.toml" = {
-      rekeyFile = flake-root + "/secrets/other/appdaemon-secrets.toml.age";
-      owner = "hass";
     };
-    "home-assistant-secrets.yaml" = {
-      rekeyFile = flake-root + "/secrets/other/home-assistant-secrets.yaml.age";
-      owner = "hass";
+
+    system.activationScripts = {
+      linkHomeAssistantSecrets = lib.stringAfter [ "var" ] ''
+        if [[ -e /var/lib/hass/secrets.yaml ]]
+        then
+            rm /var/lib/hass/secrets.yaml
+        fi
+
+        ln -s ${config.age.secrets."home-assistant-secrets.yaml".path} /var/lib/hass/secrets.yaml
+      '';
+      # Make sure hass owns appdaemon's directory and that the hass group can write to it (for justfile rsync development)
+      fixAppdaemonConfigPermissions = lib.stringAfter [ "etc" ] ''
+        chown -R hass /etc/appdaemon
+        chmod -R u=rwx,g=rwx,o= /etc/appdaemon
+      '';
     };
-  };
 
-  systemd.services.appdaemon-ha = {
-    description = "Appdaemon attached to home-assistant";
+    environment = {
+      systemPackages = [ pkgs.appdaemon ];
+      etc =
+        # Copy all appdaemon apps in this repo to /etc/appdaemon/apps.
+        # Allows live modification for testing and development, though /etc/appdaemon is not a persistent directory.
+        dirToEtcAttrs (flake-root + "/modules/services/home-assistant/appdaemon/apps") "appdaemon/apps" {
+          # 0770 is equivalent to u=rwx,g=rwx,o=, as above.
+          mode = "0770";
+          user = "hass";
+        }
+        // {
+          "/appdaemon/appdaemon.toml" = {
+            source = appdaemonConfig;
+            mode = "0770";
+            user = "hass";
+          };
+        };
+    };
 
-    wantedBy = [ "multi-user.target" ];
-    after = [
-      "network.target"
-      "home-assistant.target"
-    ];
+    # To allow me to remote transfer files directly to appdaemon/apps for development.
+    users.groups.hass.members = [ "mvilladsen" ];
 
-    restartIfChanged = true; # set to false, if restarting is problematic
+    age.secrets = {
+      "appdaemon-secrets.toml" = {
+        rekeyFile = flake-root + "/secrets/other/appdaemon-secrets.toml.age";
+        owner = "hass";
+      };
+      "home-assistant-secrets.yaml" = {
+        rekeyFile = flake-root + "/secrets/other/home-assistant-secrets.yaml.age";
+        owner = "hass";
+      };
+    };
 
-    serviceConfig = {
-      User = "hass";
-      ExecStart = ''${pkgs.appdaemon}/bin/appdaemon --toml --config "/etc/appdaemon"'';
-      Restart = "always";
+    systemd.services.appdaemon-ha = {
+      description = "Appdaemon attached to home-assistant";
+
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "home-assistant.target"
+      ];
+
+      restartIfChanged = true; # set to false, if restarting is problematic
+
+      serviceConfig = {
+        User = "hass";
+        ExecStart = ''${pkgs.appdaemon}/bin/appdaemon --toml --config "/etc/appdaemon"'';
+        Restart = "always";
+      };
     };
   };
 }

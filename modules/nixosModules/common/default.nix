@@ -8,21 +8,21 @@
 }:
 
 let
-  cfg = config.local.nixos.common;
+  cfg = config.local.common;
 in
 {
-  options.local.nixos.common = {
+  options.local.common = {
+    enable = lib.mkEnableOption "common nixos config";
     user = lib.mkOption { default = "mvilladsen"; };
     timezone = lib.mkOption { default = "Europe/Copenhagen"; };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager = {
       users = {
         ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
         root.home.homeDirectory = "/root";
       };
-      sharedModules = [ modules.home-manager.nixos-common ];
     };
 
     local = {

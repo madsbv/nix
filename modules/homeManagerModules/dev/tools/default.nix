@@ -13,6 +13,17 @@ in
 
   config = lib.mkIf cfg.enable {
     programs = {
+      fd = {
+        enable = true;
+        hidden = true;
+        ignores = [ ".git/" ];
+      };
+      git = {
+        enable = true;
+        lfs = {
+          enable = true;
+        };
+      };
       direnv = {
         enable = true;
         nix-direnv.enable = true;
