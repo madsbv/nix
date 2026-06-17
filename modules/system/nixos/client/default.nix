@@ -83,7 +83,7 @@ in
     nm-applet.enable = true;
     thunar = {
       enable = true;
-      plugins = with pkgs.xfce; [
+      plugins = with pkgs; [
         thunar-volman
         thunar-dropbox-plugin
         thunar-archive-plugin
@@ -102,7 +102,7 @@ in
     pwvucontrol
     bitwarden-desktop
 
-    protonvpn-gui
+    proton-vpn
 
     # Image viewers
     # geeqie # Depends on libsoup-2 which has vulnerability

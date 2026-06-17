@@ -42,6 +42,10 @@
 
   nixpkgs.config = {
     rocmSupport = true;
+    # TODO: Figure out reverse dependency issue and remove this
+    permittedInsecurePackages = [
+      "electron-39.8.10"
+    ];
   };
 
   virtualisation = {
@@ -81,7 +85,6 @@
   programs = {
     virt-manager.enable = true;
     dconf.enable = true;
-    adb.enable = true;
     steam = {
       enable = true;
       package = pkgs.steam.override {
@@ -99,7 +102,7 @@
       # extest.enable = true; # Maybe useful for controllers?
     };
 
-    tuxclocker.enable = true;
+    tuxclocker.enable = false;
 
     # TODO: Run Steam with gamemoderun automatically--probably a wrapper script, but how to register as application with Awesomewm program launcher?
     gamemode = {
@@ -134,29 +137,8 @@
   services = {
     # Provides blueman-applet and blueman-manager for managing bluetooth connections
     blueman.enable = true;
-
-    ollama = {
-      enable = false;
-      acceleration = "rocm";
-      ## Setting to force ollama to use GPU
-      rocmOverrideGfx = "11.0.1";
-
-      # The default, repeated for documentation
-      # listenAddress = "0.0.0.0:11434";
-      # host = "0.0.0.0";
-      # port = "11434";
-      home = "/var/lib/ollama";
-      models = "/var/lib/ollama/models";
-      loadModels = [
-        "deepseek-r1:14b"
-        "qwen2.5-coder:14b-instruct-q6_K"
-        "qwen2.5:14b"
-      ];
-      environmentVariables = {
-        OLLAMA_KEEP_ALIVE = "30m";
-        OLLAMA_LOAD_TIMEOUT = "30m";
-        OLLAMA_FLASH_ATTENTION = "1";
-      };
+    printing = {
+      enable = true;
     };
   };
   local.restic.exclude = [

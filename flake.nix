@@ -2,10 +2,10 @@
   description = "Configuration with secrets for MacOS and NixOS";
   inputs = {
     ### Nix basics ###
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       # url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -31,7 +31,7 @@
 
     ### Darwin ###
     darwin = {
-      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
+      url = "github:LnL7/nix-darwin/nix-darwin-26.05";
 
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -186,10 +186,11 @@
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
+              # NOTE: Because deploy-rs is also the name of an input flake, the `pkgs` is necessary here
+              pkgs.deploy-rs
               git
               age-plugin-yubikey
               agenix-rekey.packages.${system}.default
-              deploy-rs.packages.${system}.default
               nix-auth.packages.${system}.default
               statix
               deadnix
