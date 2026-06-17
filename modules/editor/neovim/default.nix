@@ -52,7 +52,9 @@ in
               gcc
             ];
             plugins = with pkgs.vimPlugins; [ supermaven-nvim ];
-            extraLuaConfig = ''
+            withRuby = false;
+            withPython3 = false;
+            initLua = ''
               -- Load user config from nvimConfigRepo
               local user_config_path = "${nvimConfigDir}"
               if vim.fn.isdirectory(user_config_path) == 1 then

@@ -205,16 +205,16 @@ in
       enable = true;
       package = pkgs.openssh;
       enableDefaultConfig = false;
-      matchBlocks = {
+      settings = {
         "*" = {
-          serverAliveInterval = 0;
-          serverAliveCountMax = 3;
-          hashKnownHosts = false;
-          userKnownHostsFile = "~/.ssh/known_hosts";
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
         };
         "github.com" = {
-          hostname = "github.com";
-          identitiesOnly = true;
+          HostName = "github.com";
+          IdentitiesOnly = true;
         };
       };
       extraOptionOverrides.IdentityFile = osConfig.age.secrets."id.${hostname}.${user}".path;

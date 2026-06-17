@@ -12,12 +12,17 @@
   };
   nixpkgs.hostPlatform = "x86_64-linux";
   # Use the systemd-boot EFI boot loader.
-  boot.loader = {
-    systemd-boot = {
-      enable = true;
-      memtest86.enable = true;
+  boot = {
+    # Explicitly set new default from nixpkgs 26.11
+    # Supposedly safer
+    zfs.forceImportRoot = false;
+    loader = {
+      systemd-boot = {
+        enable = true;
+        memtest86.enable = true;
+      };
+      efi.canTouchEfiVariables = true;
     };
-    efi.canTouchEfiVariables = true;
   };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
