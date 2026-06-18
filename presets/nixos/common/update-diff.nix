@@ -2,13 +2,10 @@
   config,
   lib,
   pkgs,
-  systemModules,
   ...
 }:
 
 {
-  imports = [ systemModules.update-diff ];
-
   config = lib.mkIf config.srvos.update-diff.enable {
     system.preSwitchChecks.update-diff = ''
       incoming="''${1-}"

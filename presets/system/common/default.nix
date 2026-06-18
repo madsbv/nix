@@ -26,7 +26,6 @@
       remoteBuilders_x86-64 = nodes.buildMachines;
       inherit hostname;
     };
-    neovim.enable = true;
     keys = {
       enable = true;
     };

@@ -1,20 +1,21 @@
 {
   hostname,
-  moduleCollections,
-  systemModules,
   ...
 }:
 
 {
-  imports =
-    [
-      systemModules.dock
-      systemModules.autorestic
-      ./nix-darwin
-    ]
-      moduleCollections.darwin-client
-    ++ moduleCollections.client-home
-    ++ moduleCollections.base-darwin;
+  imports = [
+    ./nix-darwin
+    ../../presets/system/common
+    ../../presets/system/home-manager
+    ../../presets/darwin/common
+    ../../presets/secrets/email
+  ];
+
+  local = {
+    dock.enable = true;
+    autorestic.enable = true;
+  };
 
   networking = {
     computerName = hostname;

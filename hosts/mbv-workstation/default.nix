@@ -1,5 +1,4 @@
 {
-  moduleCollections,
   pkgs,
   flake-root,
   lib,
@@ -11,11 +10,20 @@
     ./configuration.nix
     ./overclocking.nix
     # ./extrauser.nix
-  ]
-  ++ moduleCollections.base-nixos
-  ++ moduleCollections.nixos-server
-  ++ moduleCollections.nixos-client;
-  # ++ moduleCollections.client-home;
+    ../../presets/system/common
+    ../../presets/system/home-manager
+    ../../presets/system/yubikey-agenix-rekey
+    ../../presets/nixos/common
+    ../../presets/nixos/desktop
+    ../../presets/nixos/efi
+    ../../presets/nixos/awesomewm
+  ];
+
+  local = {
+    laptop.enable = true;
+    wifi.enable = true;
+    yubikey.enable = true;
+  };
 
   system.autoUpgrade = {
     allowReboot = lib.mkForce false;

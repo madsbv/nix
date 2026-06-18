@@ -51,7 +51,7 @@ in
               ${pkgs.git}/bin/git -C "${doomDir}" submodule update --init --recursive
           fi
           if [ ! -d "${emacsDir}" ]; then
-              ${pkgs.git}/bin/git clone ${cfg.doom.repo} "${emacsDir}"
+              ${pkgs.git}/bin/git clone ${cfg.doomemacs.repo} "${emacsDir}"
               ${emacsDir}/bin/doom install
           fi
         '';

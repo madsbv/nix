@@ -1,12 +1,16 @@
-{ moduleCollections, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
     ./configuration.nix
-    moduleCollections.services.media-server
-  ]
-  ++ moduleCollections.base-nixos
-  ++ moduleCollections.nixos-server;
+    ../../presets/system/common
+    ../../presets/system/home-manager
+    ../../presets/nixos/common
+    ../../presets/nixos/desktop
+    ../../presets/nixos/efi
+  ];
+
+  local.server.media.enable = true;
 
   nixpkgs.config = {
     cudaSupport = true;

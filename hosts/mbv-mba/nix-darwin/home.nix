@@ -2,11 +2,10 @@
   flake-root,
   pkgs,
   lib,
-  modules,
   ...
 }:
 {
-  imports = [ modules.home-manager.client ];
+  imports = [ ../../../modules/home-manager/common/client ];
 
   xdg.configFile = {
     "svim".source = flake-root + "/config/svim";

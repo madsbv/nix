@@ -8,7 +8,7 @@ let
   cfg = config.local.networking.protonvpn;
 in
 {
-  options.local.networking.protonvpn.enable = lib.mkEnable "protonvpn via networking interface";
+  options.local.networking.protonvpn.enable = lib.mkEnableOption "protonvpn via networking interface";
   config = lib.mkIf cfg.enable {
     networking.wg-quick = {
       interfaces = {

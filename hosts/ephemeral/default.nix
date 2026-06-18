@@ -1,7 +1,10 @@
-{ pkgs, moduleCollections, ... }:
+{ pkgs, ... }:
 
 {
-  imports = [ ./configuration.nix ] ++ moduleCollections.base-nixos;
+  imports = [
+    ./configuration.nix
+    ../../presets/system/common
+  ];
 
   local.keys = {
     enable = true;

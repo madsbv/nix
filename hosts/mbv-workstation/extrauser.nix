@@ -1,6 +1,5 @@
 {
   lib,
-  moduleCollections,
   ...
 }:
 let
@@ -27,10 +26,9 @@ in
       local.restic.exclude = [ "/nix/persist/home/${user}" ];
 
       home-manager.users.${user} = {
-        imports = moduleCollections.home-nixos-client;
-        local = {
-          email.enable = false;
-        };
+        imports = [
+          { local.email.enable = false; }
+        ];
         home = {
           homeDirectory = "/home/${user}";
           preferXdgDirectories = true;

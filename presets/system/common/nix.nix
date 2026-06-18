@@ -3,15 +3,13 @@
   config,
   lib,
   pkgs,
-  systemModules,
   flake-root,
   ...
 }:
 
 {
-  imports = [ systemModules.register-flake ];
-
-  srvos.flake = flake-root;
+  srvos.flake = lib.mkForce flake-root;
+  srvos.registerSelf = false;
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake

@@ -3,8 +3,6 @@
   lib,
   pkgs,
   hostname,
-  modules,
-  systemModules,
   ...
 }:
 
@@ -17,7 +15,6 @@ in
     ./nix.nix
     ./zfs.nix
     ./update-diff.nix
-    systemModules.detect-hostname-change
   ];
   options.local.nixos.common = {
     user = lib.mkOption { default = "mvilladsen"; };
@@ -28,9 +25,12 @@ in
     home-manager = {
       users = {
         ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
-        root.home.homeDirectory = "/root";
+        root = {
+          home.homeDirectory = "/root";
+          home.stateVersion = "23.11";
+        };
       };
-      sharedModules = [ modules.home-manager.nixos-common ];
+      sharedModules = [ ../../home-manager/nixos ];
     };
 
     local = {
@@ -142,6 +142,7 @@ in
 
       # Conflicts with nix-index
       command-not-found.enable = false;
+      zsh.enable = true;
       # NixOS-only options
       zsh.syntaxHighlighting = {
         enable = true;

@@ -1,13 +1,10 @@
 {
   config,
   lib,
-  systemModules,
   ...
 }:
 
 {
-  imports = [ systemModules.update-diff ];
-
   nix = {
     daemonIOLowPriority = lib.mkDefault true;
     settings.trusted-users = [ "@admin" ];

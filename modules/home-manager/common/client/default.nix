@@ -8,8 +8,6 @@
   flake-root,
   nox,
   inputs,
-  modules,
-  homeManagerModules,
   ...
 }:
 
@@ -22,8 +20,7 @@ let
 in
 {
   imports = [
-    homeManagerModules.email
-    modules.home-manager.common
+    ../../../../presets/home-manager/common
   ];
 
   home = {

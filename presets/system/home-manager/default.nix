@@ -2,10 +2,13 @@
   inputs,
   flake-root,
   hostname,
+  color-scheme,
   ...
 }:
 
 {
+  local.homeManager.enable = true;
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -15,6 +18,7 @@
         hostname
         flake-root
         inputs
+        color-scheme
         ;
     };
   };

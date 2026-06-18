@@ -1,7 +1,6 @@
 # Use pipewire instead of PulseAudio. See https://wiki.nixos.org/wiki/PipeWire
 {
   inputs,
-  modules,
   nox,
   lib,
   config,
@@ -12,11 +11,13 @@ let
   user = "mvilladsen";
 in
 {
+  imports = [ ../../secrets/email ];
+
   home-manager = {
     users.${user} = {
       imports = [
-        modules.home-manager.common-client
-        modules.home-manager.dev-all
+        ../../../modules/home-manager/common/client
+        { local.dev.enable = true; }
       ];
     };
     extraSpecialArgs = {

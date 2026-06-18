@@ -1,10 +1,16 @@
-{ moduleCollections, ... }:
+{ ... }:
 
 {
   imports = [
     ./configuration.nix
-  ]
-  ++ moduleCollections.base-nixos
-  ++ moduleCollections.nixos-server
-  ++ moduleCollections.nixos-client;
+    ../../presets/system/common
+    ../../presets/system/home-manager
+    ../../presets/nixos/common
+    ../../presets/nixos/efi
+  ];
+
+  local = {
+    laptop.enable = true;
+    server.homeAssistant.enable = true;
+  };
 }

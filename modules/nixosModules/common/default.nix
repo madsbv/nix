@@ -3,7 +3,6 @@
   lib,
   pkgs,
   hostname,
-  modules,
   ...
 }:
 
@@ -130,6 +129,7 @@ in
 
       # Conflicts with nix-index
       command-not-found.enable = false;
+      zsh.enable = true;
       # NixOS-only options
       zsh.syntaxHighlighting = {
         enable = true;
