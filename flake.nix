@@ -388,9 +388,9 @@
 
       nixosConfigurations = {
         mbv-workstation = nixos-system "x86_64-linux" "mbv-workstation";
-        # mbv-desktop = nixos-system "x86_64-linux" "mbv-desktop";
-        # mbv-xps13 = nixos-system "x86_64-linux" "mbv-xps13";
-        # hp-90 = nixos-system "x86_64-linux" "hp-90";
+        mbv-desktop = nixos-system "x86_64-linux" "mbv-desktop";
+        mbv-xps13 = nixos-system "x86_64-linux" "mbv-xps13";
+        hp-90 = nixos-system "x86_64-linux" "hp-90";
       };
       # // forLinuxSystems (system: {
       #   # A system configuration for ephemeral systems--either temporary VMs or for installers.

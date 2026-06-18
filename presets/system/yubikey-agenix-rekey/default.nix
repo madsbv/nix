@@ -14,10 +14,6 @@
   # and run `agenix edit secret.age` to edit or create a secret, or `agenix edit -i plain.text secret.age` to encrypt an existing file. To rekey, run `agenix rekey -a`, where `-a` ensures the new files are added to git.
   # Remember to add all keys and (ENCRYPTED) secrets to git!
 
-  options.local.ssh-clients.users = lib.mkOption {
-    description = "List of users for which to deploy age-encrypted private SSH keys.";
-    default = [ ];
-  };
   # NOTE: Agenix does not error on build if decryption fails. See launchd service if weirdness occurs.
   config.age = {
     identityPaths =

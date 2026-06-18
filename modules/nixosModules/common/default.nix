@@ -10,18 +10,28 @@ let
   cfg = config.local.common;
 in
 {
-  options.local.common = {
-    enable = lib.mkEnableOption "common nixos config";
-    user = lib.mkOption { default = "mvilladsen"; };
-    timezone = lib.mkOption { default = "Europe/Copenhagen"; };
+  options = {
+    local.common = {
+      enable = lib.mkEnableOption "common nixos config";
+      user = lib.mkOption { default = "mvilladsen"; };
+      timezone = lib.mkOption { default = "Europe/Copenhagen"; };
+    };
+    local.ssh-clients.users = lib.mkOption {
+      description = "List of users for which to deploy age-encrypted private SSH keys.";
+      default = [ ];
+    };
   };
 
   config = lib.mkIf cfg.enable {
     home-manager = {
       users = {
         ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
-        root.home.homeDirectory = "/root";
+        root = {
+          home.homeDirectory = "/root";
+          home.stateVersion = "23.11";
+        };
       };
+      sharedModules = [ ../../../presets/home-manager/common ];
     };
 
     local = {

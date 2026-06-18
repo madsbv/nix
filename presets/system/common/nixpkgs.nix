@@ -9,6 +9,7 @@
       allowUnfree = true;
       allowBroken = false;
       # allowInsecure = false;
+      permittedInsecurePackages = [ "electron-39.8.10" ];
       allowUnsupportedSystem = false;
       warnUndeclaredOptions = true;
     };

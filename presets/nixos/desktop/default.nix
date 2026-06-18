@@ -16,7 +16,7 @@ in
   home-manager = {
     users.${user} = {
       imports = [
-        ../../../modules/home-manager/common/client
+        ../../../presets/home-manager/client
         { local.dev.enable = true; }
       ];
     };
@@ -36,22 +36,15 @@ in
     };
     # Provides blueman-applet and blueman-manager for managing bluetooth connections
     blueman.enable = true;
-    xserver = {
-      # Equivalent to `xset r rate 200 25`; xset takes repeat rate in hz, autoRepeatInterval is the interval in ms.
-      autoRepeatDelay = 200;
-      autoRepeatInterval = 40;
-      xkb = {
-        layout = "us";
-        variant = "altgr-intl";
+      xserver = {
+        # Equivalent to `xset r rate 200 25`; xset takes repeat rate in hz, autoRepeatInterval is the interval in ms.
+        autoRepeatDelay = 200;
+        autoRepeatInterval = 40;
+        xkb = {
+          layout = "us";
+          variant = "altgr-intl";
+        };
       };
-
-      displayManager.lightdm = {
-        enable = true;
-      };
-      # desktopManager.cinnamon = {
-      #   enable = true;
-      # };
-    };
     protonmail-bridge = {
       enable = true;
       path = with pkgs; [ gnome-keyring ];
