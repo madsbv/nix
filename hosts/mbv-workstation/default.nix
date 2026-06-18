@@ -139,9 +139,34 @@
     blueman.enable = true;
     printing = {
       enable = true;
-      drivers = with pkgs; [ canon-cups-ufr2 ];
+      drivers = with pkgs; [
+        cups-filters
+        canon-capt         # patched overlay with LBP6300 support
+      ];
+    };
+    avahi = {
+      enable = true;       # mDNS/DNS-SD for network printer discovery
+      nssmdns4 = true;
+      openFirewall = true;
     };
   };
+  # Uncomment after rebuild and verifying `lpinfo -v` shows the USB printer:
+  # hardware.printers = {
+  #   ensurePrinters = [
+  #     {
+  #       name = "Canon_LBP6300dn";
+  #       location = "Home Office";
+  #       # Get the exact deviceUri from `lpinfo -v` output, e.g.:
+  #       #   direct usb://Canon/LBP6300dn?serial=XXXXXXXXXXXX
+  #       deviceUri = "usb://Canon/LBP6300dn?serial=XXXXXXXXXXXX";
+  #       model = "canon/CanonLBP-6300-6300dn.ppd";
+  #       ppdOptions = {
+  #         PageSize = "A4";
+  #       };
+  #     }
+  #   ];
+  #   ensureDefaultPrinter = "Canon_LBP6300dn";
+  # };
   local.restic.exclude = [
     "/nix/persist/var/lib/private/ollama"
     "/nix/persist/var/lib/libvirt/images"

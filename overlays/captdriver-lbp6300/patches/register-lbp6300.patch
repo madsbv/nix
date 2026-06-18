@@ -1,0 +1,15 @@
+Register LBP6300/LBP6300dn printer models in captdriver.
+
+The printer responds to the CAPT identify command with an IEEE 1284 MODEL
+string. Without a matching registration, rastertocapt exits with
+"ERROR: CAPT: unknown printer". Add entries using the same ops as the
+LBP3010 which has the most generic page setup sequence.
+
+diff --git a/src/prn_lbp2900.c b/src/prn_lbp2900.c
+index 1111111..2222222 100644
+--- a/src/prn_lbp2900.c
++++ b/src/prn_lbp2900.c
+@@ -551,3 +551,5 @@ register_printer("LBP3100/LBP3108/LBP3150", lbp3010_ops.ops, EXPERIMENTAL);
+ register_printer("LBP6000/LBP6018", lbp6000_ops.ops, EXPERIMENTAL);
++register_printer("LBP6300", lbp3010_ops.ops, EXPERIMENTAL);
++register_printer("LBP6300dn", lbp3010_ops.ops, EXPERIMENTAL);
