@@ -37,12 +37,16 @@ in
     # Provides blueman-applet and blueman-manager for managing bluetooth connections
     blueman.enable = true;
       xserver = {
+        enable = true;
         # Equivalent to `xset r rate 200 25`; xset takes repeat rate in hz, autoRepeatInterval is the interval in ms.
         autoRepeatDelay = 200;
         autoRepeatInterval = 40;
         xkb = {
           layout = "us";
           variant = "altgr-intl";
+        };
+        displayManager.lightdm = {
+          enable = true;
         };
       };
     protonmail-bridge = {

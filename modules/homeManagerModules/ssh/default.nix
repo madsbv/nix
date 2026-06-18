@@ -31,7 +31,9 @@ in {
           IdentitiesOnly = true;
         };
       };
-      extraOptionOverrides.IdentityFile = osConfig.age.secrets."id.${hostname}.${user}".path;
+      extraOptionOverrides = lib.mkIf (osConfig ? age.secrets."id.${hostname}.${user}") {
+        IdentityFile = osConfig.age.secrets."id.${hostname}.${user}".path;
+      };
     };
   };
 }

@@ -12,13 +12,8 @@ let
 in
 {
   imports = [
-    ./dock
     ./homebrew
-    ./autorestic.nix
   ];
-  # ++ (with modules; [
-  #   system.client
-  # ]);
 
   users = {
     users.${user} = {

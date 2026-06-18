@@ -14,7 +14,10 @@ in {
 
   local.common.enable = true;
 
-  home-manager.sharedModules = [../../home-manager/nixos];
+  home-manager = {
+    sharedModules = [../../home-manager/nixos ../../home-manager/common];
+    users.root.home.stateVersion = "23.11";
+  };
 
   local.restic.exclude = [
     "/nix/persist/var/lib/private/ollama"
