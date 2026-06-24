@@ -11,49 +11,51 @@ let
   cfg = config.local.users;
 in
 {
-  options.local.users = {
-    enable = lib.mkEnableOption "user management abstraction";
+  options.local = {
     primaryUser = lib.mkOption {
       type = types.str;
       default = "mvilladsen";
       description = "Username of the primary user for the system.";
     };
-    users = lib.mkOption {
-      type = types.attrsOf (
-        types.submodule {
-          options = {
-            username = lib.mkOption { type = types.str; };
-            fullName = lib.mkOption { type = types.str; };
-            email = lib.mkOption {
-              type = types.nullOr types.str;
-              default = null;
+    users = {
+      enable = lib.mkEnableOption "user management abstraction";
+      users = lib.mkOption {
+        type = types.attrsOf (
+          types.submodule {
+            options = {
+              username = lib.mkOption { type = types.str; };
+              fullName = lib.mkOption { type = types.str; };
+              email = lib.mkOption {
+                type = types.nullOr types.str;
+                default = null;
+              };
+              extraGroups = lib.mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+              };
+              isAuthorized = lib.mkOption {
+                type = types.bool;
+                default = false;
+                description = "Whether this user gets SSH authorized_keys access.";
+              };
+              homeManager = lib.mkOption {
+                type = types.listOf types.raw;
+                default = [ ];
+                description = "Home-manager module imports for this user.";
+              };
             };
-            extraGroups = lib.mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-            };
-            isAuthorized = lib.mkOption {
-              type = types.bool;
-              default = false;
-              description = "Whether this user gets SSH authorized_keys access.";
-            };
-            homeManager = lib.mkOption {
-              type = types.listOf types.raw;
-              default = [ ];
-              description = "Home-manager module imports for this user.";
-            };
+          }
+        );
+        default = {
+          mvilladsen = {
+            username = "mvilladsen";
+            fullName = "Mads Bach Villadsen";
+            email = "mvilladsen@pm.me";
+            isAuthorized = true;
           };
-        }
-      );
-      default = {
-        mvilladsen = {
-          username = "mvilladsen";
-          fullName = "Mads Bach Villadsen";
-          email = "mvilladsen@pm.me";
-          isAuthorized = true;
         };
+        description = "User definitions with identity and home-manager config.";
       };
-      description = "User definitions with identity and home-manager config.";
     };
   };
 

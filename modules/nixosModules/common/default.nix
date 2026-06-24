@@ -26,7 +26,7 @@ in
         enable = true;
         persistCache = true;
       };
-      users.${config.local.users.primaryUser}.extraGroups = [
+      users.${config.local.primaryUser}.extraGroups = [
         "wheel"
         "networkmanager"
         "docker"
@@ -182,7 +182,7 @@ in
           "/root"
         ];
         files = [ "/etc/machine-id" ];
-        users.${config.local.users.primaryUser}.directories = [
+        users.${config.local.primaryUser}.directories = [
           ""
         ];
       };
@@ -191,7 +191,7 @@ in
     users = {
       mutableUsers = false;
       defaultUserShell = pkgs.zsh;
-      users.${config.local.users.primaryUser}.initialHashedPassword =
+      users.${config.local.primaryUser}.initialHashedPassword =
         "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
     };
 

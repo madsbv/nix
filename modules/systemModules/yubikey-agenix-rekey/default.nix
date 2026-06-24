@@ -16,6 +16,7 @@
 
 let
   cfg = config.local.agenix;
+  hostname = config.local.common.hostname;
 in
 {
   options.local.agenix = {
