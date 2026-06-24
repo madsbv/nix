@@ -103,7 +103,7 @@ in
 
   local = {
     autorestic.ymlFile = config.age.secrets."mbv-mba.autorestic.yml".path;
-    agenix.ssh-clients.users = [ user ];
+
 
     keys.enable_authorized_access = true;
 

@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  hostname,
   flake-root,
   ...
 }:
@@ -21,10 +20,6 @@ in
 {
   options.local.agenix = {
     enable = lib.mkEnableOption "agenix-rekey";
-    ssh-clients.users = lib.mkOption {
-      description = "List of users for which to deploy age-encrypted private SSH keys.";
-      default = [ ];
-    };
     identityPaths = lib.mkOption {
       default =
         if pkgs.stdenv.isDarwin then
@@ -77,13 +72,5 @@ in
       generatedSecretsDir = flake-root + "/secrets/generated";
       agePlugins = [ pkgs.age-plugin-yubikey ];
     };
-    secrets = lib.mkMerge (
-      map (user: {
-        "id.${hostname}.${user}" = {
-          rekeyFile = flake-root + "/secrets/ssh/id_ed25519.${hostname}.${user}.age";
-          owner = user;
-        };
-      }) cfg.ssh-clients.users
-    );
   };
 }
