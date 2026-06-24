@@ -5,19 +5,16 @@
   inputs,
   ...
 }:
-
-# Just a single user on this machine
-let
-  user = "mvilladsen";
-in
 {
   imports = [
     ./homebrew
   ];
 
+  local.users.primaryUser = "mvilladsen";
+
   users = {
-    users.${user} = {
-      home = "/Users/${user}";
+    users.${config.local.users.primaryUser} = {
+      home = "/Users/${config.local.users.primaryUser}";
       isHidden = false;
       # Set as users.defaultShell on nixos, but that option doesn't exist on nix-darwin
       shell = pkgs.zsh;
@@ -56,7 +53,7 @@ in
   nix-homebrew = {
     enable = true;
     enableRosetta = true;
-    user = "${user}";
+    user = "${config.local.users.primaryUser}";
     taps = with inputs; {
       "homebrew/homebrew-core" = homebrew-core;
       "homebrew/homebrew-cask" = homebrew-cask;
@@ -70,7 +67,7 @@ in
   };
 
   home-manager = {
-    users.${user}.home.homeDirectory = config.users.users.${user}.home;
+    users.${config.local.users.primaryUser}.home.homeDirectory = config.users.users.${config.local.users.primaryUser}.home;
     sharedModules = [ ./home.nix ];
   };
 
@@ -118,12 +115,12 @@ in
         { path = "/System/Applications/Music.app/"; }
         { path = "/System/Applications/Photos.app/"; }
         {
-          path = "${config.users.users.${user}.home}/Dropbox/docs/work";
+          path = "${config.users.users.${config.local.users.primaryUser}.home}/Dropbox/docs/work";
           section = "others";
           options = "--sort name --view grid --display folder";
         }
         {
-          path = "${config.users.users.${user}.home}/Downloads";
+          path = "${config.users.users.${config.local.users.primaryUser}.home}/Downloads";
           section = "others";
           options = "--sort name --view grid --display stack";
         }
@@ -179,7 +176,7 @@ in
   # # See which options changed
   # ```
   system = {
-    primaryUser = user;
+    primaryUser = config.local.users.primaryUser;
     stateVersion = 4;
     defaults = {
       NSGlobalDomain = {

@@ -1,9 +1,8 @@
 {
+  config,
   lib,
   ...
-}: let
-  user = "mvilladsen";
-in {
+}: {
   imports = [
     ./sudo.nix
     ./nix.nix
@@ -23,8 +22,8 @@ in {
   local.restic.exclude = [
     "/nix/persist/var/lib/private/ollama"
     "/nix/persist/var/lib/libvirt/images"
-    "/nix/persist/home/${user}/.local/share/Steam"
-    "/nix/persist/home/${user}/Downloads"
-    "/nix/persist/home/${user}/.cache"
+    "/nix/persist/home/${config.local.users.primaryUser}/.local/share/Steam"
+    "/nix/persist/home/${config.local.users.primaryUser}/Downloads"
+    "/nix/persist/home/${config.local.users.primaryUser}/.cache"
   ];
 }
