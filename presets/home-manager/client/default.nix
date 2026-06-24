@@ -1,20 +1,12 @@
 {
-  user,
   config,
   lib,
   osConfig,
   hostname,
   pkgs,
-  flake-root,
   nox,
-  inputs,
   ...
-}:
-
-let
-  name = "Mads Bach Villadsen";
-  email = "mvilladsen@pm.me";
-in {
+}: {
   imports = [
     ../common
   ];
@@ -27,6 +19,7 @@ in {
     };
     ssh.enable = true;
     zathura.enable = true;
+    git.enable = true;
     email = {
       enable = lib.mkDefault true;
       maildir = "${config.xdg.dataHome}/Mail";
@@ -38,7 +31,7 @@ in {
 
   home = {
     packages = pkgs.callPackage ../../../modules/home-manager/common/client/packages.nix { inherit nox; };
-    sessionPath = ["$HOME/go/bin"];
+    sessionPath = [ "$HOME/go/bin" ];
     sessionVariables.TERMINAL = "kitty";
   };
 
@@ -51,10 +44,5 @@ in {
       enable = true;
       settings.editor = "vim";
     };
-    git.settings.user = { inherit name email; };
-  };
-
-  xdg.configFile."tridactyl" = {
-    source = flake-root + "/config/tridactyl/";
   };
 }
