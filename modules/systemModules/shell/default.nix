@@ -9,8 +9,7 @@
 let
   cfg = config.local.shell;
   gitignore_global = [ (builtins.readFile ./gitignore_global) ];
-  # TODO: Pass in username via variable or option (or just find other way to pass flakedir)
-  flakedir = if pkgs.stdenv.isDarwin then "/Users/mvilladsen/.config/nix/" else "/etc/nixos/nix/";
+  flakedir = if pkgs.stdenv.isDarwin then "/Users/${config.local.users.primaryUser}/.config/nix/" else "/etc/nixos/nix/";
   shellAliases = {
     gj = "${pkgs.just}/bin/just ${flakedir}";
     j = "${pkgs.just}/bin/just";

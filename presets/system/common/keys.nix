@@ -20,7 +20,8 @@ in
     };
     authorized_users = lib.mkOption {
       description = "Users to allow key-authenticated access for.";
-      default = [ "mvilladsen" ];
+      default = lib.mapAttrsToList (_: u: u.username)
+        (lib.filterAttrs (_: u: u.isAuthorized) config.local.users.users);
     };
     authorized_user_keys = lib.mkOption {
       description = "List of public keys for the authorized user.";
