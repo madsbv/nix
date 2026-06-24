@@ -231,7 +231,6 @@
         inherit (self) homeManagerModules;
         flake-root = ./.;
         nox = inputs.nox.packages.${system}.default;
-        user = "mvilladsen";
       };
       darwin-args = system: (common-args system);
       nixos-args = system: (common-args system);
