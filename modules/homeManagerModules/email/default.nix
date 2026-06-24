@@ -15,10 +15,23 @@ in
     enable = lib.mkEnableOption "Email";
     maildir = lib.mkOption { default = "~/Maildir"; };
     muhome = lib.mkOption { default = "${config.xdg.cacheHome}/mu"; };
-    muAddressArgs = lib.mkOption { default = ""; };
-    pmbridge-password = lib.mkOption { default = ""; };
+    muAddressArgs = lib.mkOption {
+      type = lib.types.path;
+      description = "Path to mu init address args file. Required when email is enabled.";
+    };
+    pmbridgePasswordFile = lib.mkOption {
+      type = lib.types.path;
+      description = "Path to Protonmail Bridge password file. Required when email is enabled.";
+    };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    (lib.mkAssert (cfg.muAddressArgs != null) ''
+      local.email.muAddressArgs must be set when email is enabled
+    '')
+    (lib.mkAssert (cfg.pmbridgePasswordFile != null) ''
+      local.email.pmbridgePasswordFile must be set when email is enabled
+    '')
+    {
     home = {
       sessionVariables = {
         MUHOME = cfg.muhome;
@@ -72,7 +85,7 @@ in
           host = "127.0.0.1";
           port = 1025;
         };
-        passwordCommand = "cat ${cfg.pmbridge-password}";
+        passwordCommand = "cat ${cfg.pmbridgePasswordFile}";
         # NOTE: The home manager mu module is not amenable to keeping secrets, use our own implementation
         mu.enable = false;
         mbsync = {
@@ -103,5 +116,5 @@ in
         };
       };
     };
-  };
-}
+  }]
+);

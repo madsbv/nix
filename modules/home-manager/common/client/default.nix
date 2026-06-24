@@ -33,7 +33,7 @@ in
       maildir = "${config.xdg.dataHome}/Mail";
       muhome = "${config.xdg.cacheHome}/mu";
       muAddressArgs = osConfig.age.secrets.mu-init-addresses.path;
-      pmbridge-password = osConfig.age.secrets.pmbridge-password.path;
+      pmbridgePasswordFile = osConfig.age.secrets.pmbridge-password.path;
     };
   };
 
