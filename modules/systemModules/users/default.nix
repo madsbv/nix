@@ -22,30 +22,40 @@ in
         options = {
           enable = lib.mkEnableOption "user management abstraction";
         };
-        freeformType = types.attrsOf (types.submodule {
-          options = {
-            username = lib.mkOption { type = types.str; };
-            fullName = lib.mkOption { type = types.str; };
-            email = lib.mkOption {
-              type = types.nullOr types.str;
-              default = null;
-            };
-            extraGroups = lib.mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-            };
-            isAuthorized = lib.mkOption {
-              type = types.bool;
-              default = false;
-              description = "Whether this user gets SSH authorized_keys access.";
-            };
-            homeManager = lib.mkOption {
-              type = types.listOf types.raw;
-              default = [ ];
-              description = "Home-manager module imports for this user.";
-            };
-          };
-        });
+        freeformType = types.attrsOf (
+          types.submodule (
+            { name, ... }: {
+              options = {
+                username = lib.mkOption {
+                  type = types.str;
+                  default = name;
+                };
+                fullName = lib.mkOption {
+                  type = types.str;
+                  default = name;
+                };
+                email = lib.mkOption {
+                  type = types.nullOr types.str;
+                  default = null;
+                };
+                extraGroups = lib.mkOption {
+                  type = types.listOf types.str;
+                  default = [ ];
+                };
+                isAuthorized = lib.mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = "Whether this user gets SSH authorized_keys access.";
+                };
+                homeManager = lib.mkOption {
+                  type = types.listOf types.raw;
+                  default = [ ];
+                  description = "Home-manager module imports for this user.";
+                };
+              };
+            }
+          )
+        );
       };
       default = {
         enable = false;
@@ -74,15 +84,18 @@ in
             stateVersion = lib.mkDefault "23.11";
           };
         }
-      ) (builtins.removeAttrs cfg ["enable"]);
+      ) (builtins.removeAttrs cfg [ "enable" ]);
       sharedModules = [
         ({ osConfig, config, ... }: {
           imports = [ ../../homeManagerModules/user-profile ];
-          config.local.userProfile = lib.mkIf (builtins.hasAttr config.home.username (builtins.removeAttrs osConfig.local.users ["enable"])) {
-            username = config.home.username;
-            fullName = osConfig.local.users.${config.home.username}.fullName;
-            email = osConfig.local.users.${config.home.username}.email;
-          };
+          config.local.userProfile =
+            lib.mkIf
+              (builtins.hasAttr config.home.username (builtins.removeAttrs osConfig.local.users [ "enable" ]))
+              {
+                username = config.home.username;
+                fullName = osConfig.local.users.${config.home.username}.fullName;
+                email = osConfig.local.users.${config.home.username}.email;
+              };
         })
       ];
     };
@@ -95,7 +108,7 @@ in
             + "/secrets/ssh/id_ed25519.${config.local.common.hostname or hostname}.${u.username}.age";
           owner = u.username;
         }
-      ) (builtins.removeAttrs cfg ["enable"])
+      ) (builtins.removeAttrs cfg [ "enable" ])
     );
   };
 }
