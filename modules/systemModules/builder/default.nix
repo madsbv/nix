@@ -22,6 +22,7 @@ in
     };
     remoteBuilders_x86-64 = lib.mkOption { default = [ ]; };
     hostname = lib.mkOption {
+      default = config.local.common.hostname;
       description = "The hostname of this machine, to be excluded from the list of buildmachines";
     };
   };
