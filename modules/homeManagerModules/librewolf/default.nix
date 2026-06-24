@@ -1,10 +1,5 @@
-{
-  config,
-  lib,
-  pkgs,
-  flake-root,
-  ...
-}:
+{ config, lib, pkgs, ... }:
+
 let
   cfg = config.local.librewolf;
 in
@@ -18,9 +13,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    xdg.configFile."tridactyl" = {
-      source = flake-root + "/config/tridactyl/";
-    };
+    xdg.configFile."tridactyl/tridactylrc".source = ./tridactylrc;
     programs.librewolf = {
       enable = true;
       languagePacks = [
