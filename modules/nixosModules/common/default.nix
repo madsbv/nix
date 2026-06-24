@@ -18,10 +18,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home-manager = {
-      users = {
-        ${cfg.user}.home.homeDirectory = "/home/${cfg.user}";
-        root.home.homeDirectory = "/root";
-      };
+      users.root.home.homeDirectory = "/root";
     };
 
     local = {
@@ -29,6 +26,11 @@ in
         enable = true;
         persistCache = true;
       };
+      users.${config.local.users.primaryUser}.extraGroups = [
+        "wheel"
+        "networkmanager"
+        "docker"
+      ];
     };
 
     time.timeZone = cfg.timezone;
@@ -180,7 +182,7 @@ in
           "/root"
         ];
         files = [ "/etc/machine-id" ];
-        users.${cfg.user}.directories = [
+        users.${config.local.users.primaryUser}.directories = [
           ""
         ];
       };
@@ -189,18 +191,8 @@ in
     users = {
       mutableUsers = false;
       defaultUserShell = pkgs.zsh;
-      users = {
-        ${cfg.user} = {
-          isNormalUser = true;
-          extraGroups = [
-            "wheel"
-            "networkmanager"
-            "docker"
-          ];
-          # You can get the hash of a given password with `mkpasswd -m SHA-512`
-          initialHashedPassword = "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
-        };
-      };
+      users.${config.local.users.primaryUser}.initialHashedPassword =
+        "$6$qLCSEZb7i07pNwf4$QogfJ3DbSqtwrI29Uoe0jlehHKn.A62w2N3E5ZqQIhWPQvdeUBR8DcMgTv9CUpLKSIisjOZChfbDQo9ycJS9f.";
     };
 
     fileSystems = {
