@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   hostname,
   ...
 }:
@@ -11,7 +10,10 @@ in
 {
   options.local.common = {
     # A collection of general user/system information that might be accessed in multiple modules
-    user = lib.mkOption { default = "mvilladsen"; };
+    user = lib.mkOption {
+      default = "mvilladsen";
+      description = "Deprecated: use local.users.primaryUser instead.";
+    };
     timezone = lib.mkOption { default = "Europe/Copenhagen"; };
     hostname = lib.mkOption { default = hostname; };
   };
