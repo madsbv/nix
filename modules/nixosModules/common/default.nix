@@ -13,8 +13,6 @@ in
   options = {
     local.common = {
       enable = lib.mkEnableOption "common nixos config";
-      user = lib.mkOption { default = "mvilladsen"; };
-      timezone = lib.mkOption { default = "Europe/Copenhagen"; };
     };
   };
 
@@ -50,7 +48,7 @@ in
 
     networking = {
       # hostId is set in configuration.nix
-      hostName = hostname; # Define your hostname.
+      hostName = cfg.hostname; # Define your hostname.
       firewall = {
         # Allow PMTU / DHCP
         allowPing = true;
@@ -143,10 +141,6 @@ in
     };
 
     services = {
-      tailscale = {
-        enable = true;
-        extraUpFlags = [ "--ssh" ];
-      };
       openssh = {
         enable = true;
         settings = {
@@ -176,6 +170,8 @@ in
           "/etc/nixos"
           "/etc/ssh" # We need the entire directory so we can set neededForBoot
           "/etc/NetworkManager/system-connections"
+          # To persist uids/gids of users/groups
+          "/var/lib/nixos"
 
           # Preserve some history and cached stuff for easier shell usage
           "/var/cache/nix-index"
@@ -189,8 +185,6 @@ in
         ];
       };
     };
-
-    local.ssh-clients.users = [ cfg.user ];
 
     users = {
       mutableUsers = false;

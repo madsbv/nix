@@ -9,7 +9,8 @@
 }:
 let
   cfg = config.local.ssh;
-in {
+in
+{
   options.local.ssh = {
     enable = lib.mkEnableOption "SSH client";
   };

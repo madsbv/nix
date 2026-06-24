@@ -8,12 +8,19 @@
 }:
 let
   cfg = config.local.terminal;
-in {
+in
+{
   options.local.terminal = {
     enable = lib.mkEnableOption "Terminal emulators";
-    kitty.enable = lib.mkEnableOption "kitty terminal" // { default = true; };
-    wezterm.enable = lib.mkEnableOption "wezterm terminal" // { default = true; };
-    alacritty.enable = lib.mkEnableOption "alacritty terminal" // { default = true; };
+    kitty.enable = lib.mkEnableOption "kitty terminal" // {
+      default = true;
+    };
+    wezterm.enable = lib.mkEnableOption "wezterm terminal" // {
+      default = true;
+    };
+    alacritty.enable = lib.mkEnableOption "alacritty terminal" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -37,8 +44,12 @@ in {
           cursor.style = "Block";
           window = {
             opacity = 1.0;
-            padding = { x = 24; y = 24; };
+            padding = {
+              x = 24;
+              y = 24;
+            };
           };
+
           font = {
             normal = {
               family = "MesloLGS NF";
@@ -49,19 +60,35 @@ in {
               (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin 14)
             ];
           };
-          colors = with config.scheme.withHashtag; let
-            default = {
-              black = base00;
-              white = base07;
-              inherit red green yellow blue cyan magenta;
+          colors =
+            with config.scheme.withHashtag;
+            let
+              default = {
+                black = base00;
+                white = base07;
+                inherit
+                  red
+                  green
+                  yellow
+                  blue
+                  cyan
+                  magenta
+                  ;
+              };
+            in
+            {
+              primary = {
+                background = base00;
+                foreground = base07;
+              };
+              cursor = {
+                text = base02;
+                cursor = base07;
+              };
+              normal = default;
+              bright = default;
+              dim = default;
             };
-          in {
-            primary = { background = base00; foreground = base07; };
-            cursor = { text = base02; cursor = base07; };
-            normal = default;
-            bright = default;
-            dim = default;
-          };
         };
       };
     };

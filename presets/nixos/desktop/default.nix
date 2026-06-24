@@ -36,19 +36,19 @@ in
     };
     # Provides blueman-applet and blueman-manager for managing bluetooth connections
     blueman.enable = true;
-      xserver = {
-        enable = true;
-        # Equivalent to `xset r rate 200 25`; xset takes repeat rate in hz, autoRepeatInterval is the interval in ms.
-        autoRepeatDelay = 200;
-        autoRepeatInterval = 40;
-        xkb = {
-          layout = "us";
-          variant = "altgr-intl";
-        };
-        displayManager.lightdm = {
-          enable = true;
-        };
+    xserver = {
+      enable = true;
+      # Equivalent to `xset r rate 200 25`; xset takes repeat rate in hz, autoRepeatInterval is the interval in ms.
+      autoRepeatDelay = 200;
+      autoRepeatInterval = 40;
+      xkb = {
+        layout = "us";
+        variant = "altgr-intl";
       };
+      displayManager.lightdm = {
+        enable = true;
+      };
+    };
     protonmail-bridge = {
       enable = true;
       path = with pkgs; [ gnome-keyring ];
@@ -77,7 +77,7 @@ in
     nm-applet.enable = true;
     thunar = {
       enable = true;
-      plugins = with pkgs.xfce; [
+      plugins = with pkgs; [
         thunar-volman
         thunar-dropbox-plugin
         thunar-archive-plugin
@@ -96,7 +96,7 @@ in
     pwvucontrol
     bitwarden-desktop
 
-    protonvpn-gui
+    proton-vpn
 
     # Image viewers
     # geeqie # Depends on libsoup-2 which has vulnerability

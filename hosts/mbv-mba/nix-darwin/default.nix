@@ -80,6 +80,7 @@ in
     # XXX: The generator is not actually needed anymore, but keeping it here for discoverability reasons.
     "mbv-mba.autorestic.yml.base".rekeyFile = flake-root + "/secrets/other/mbv-mba.autorestic.yml.age";
     "mbv-mba.autorestic.yml" = {
+      rekeyFile = flake-root + "/secrets/generated/mbv-mba.autorestic.yml.age";
       generator = {
         dependencies = {
           autorestic-base = config.age.secrets."mbv-mba.autorestic.yml.base";
@@ -102,13 +103,9 @@ in
 
   local = {
     autorestic.ymlFile = config.age.secrets."mbv-mba.autorestic.yml".path;
-    ssh-clients.users = [ user ];
+    agenix.ssh-clients.users = [ user ];
 
     keys.enable_authorized_access = true;
-    emacs = {
-      enable = true;
-      # package = pkgs.my-emacs-mac;
-    };
 
     # TODO: Configure
     # Fully declarative dock using the latest from Nix Store

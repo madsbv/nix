@@ -7,6 +7,7 @@
     ../../presets/system/home-manager
     ../../presets/nixos/common
     ../../presets/nixos/efi
+    ../../presets/system/yubikey-agenix-rekey
   ];
 
   local = {

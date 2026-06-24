@@ -10,6 +10,7 @@
     ../../presets/system/home-manager
     ../../presets/darwin/common
     ../../presets/secrets/email
+    ../../presets/system/yubikey-agenix-rekey
   ];
 
   local = {

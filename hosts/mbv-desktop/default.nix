@@ -8,6 +8,7 @@
     ../../presets/nixos/common
     ../../presets/nixos/desktop
     ../../presets/nixos/efi
+    ../../presets/system/yubikey-agenix-rekey
   ];
 
   local.server.media.enable = true;

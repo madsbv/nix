@@ -9,6 +9,7 @@ in {
     ./nix.nix
     # ./zfs.nix (redundant — handled by nixosModules/common)
     ./update-diff.nix
+    ./virtualisation.nix
     ../../system/yubikey-agenix-rekey
   ];
 

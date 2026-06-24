@@ -20,7 +20,6 @@
   ];
 
   local = {
-    laptop.enable = true;
     wifi.enable = true;
     yubikey.enable = true;
   };

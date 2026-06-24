@@ -35,17 +35,4 @@
     );
     systemPackages = import ./system-packages.nix { inherit pkgs; };
   };
-
-  virtualisation = {
-    podman.enable = true;
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-        vhostUserPackages = [ pkgs.virtiofsd ];
-      };
-    };
-    # NOTE: Gives users arbitrary USB access, should not be enabled on servers
-    # spiceUSBRedirection.enable = true;
-  };
 }
