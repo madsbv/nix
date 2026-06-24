@@ -17,45 +17,46 @@ in
       default = "mvilladsen";
       description = "Username of the primary user for the system.";
     };
-    users = {
-      enable = lib.mkEnableOption "user management abstraction";
-      users = lib.mkOption {
-        type = types.attrsOf (
-          types.submodule {
-            options = {
-              username = lib.mkOption { type = types.str; };
-              fullName = lib.mkOption { type = types.str; };
-              email = lib.mkOption {
-                type = types.nullOr types.str;
-                default = null;
-              };
-              extraGroups = lib.mkOption {
-                type = types.listOf types.str;
-                default = [ ];
-              };
-              isAuthorized = lib.mkOption {
-                type = types.bool;
-                default = false;
-                description = "Whether this user gets SSH authorized_keys access.";
-              };
-              homeManager = lib.mkOption {
-                type = types.listOf types.raw;
-                default = [ ];
-                description = "Home-manager module imports for this user.";
-              };
-            };
-          }
-        );
-        default = {
-          mvilladsen = {
-            username = "mvilladsen";
-            fullName = "Mads Bach Villadsen";
-            email = "mvilladsen@pm.me";
-            isAuthorized = true;
-          };
+    users = lib.mkOption {
+      type = types.submodule {
+        options = {
+          enable = lib.mkEnableOption "user management abstraction";
         };
-        description = "User definitions with identity and home-manager config.";
+        freeformType = types.attrsOf (types.submodule {
+          options = {
+            username = lib.mkOption { type = types.str; };
+            fullName = lib.mkOption { type = types.str; };
+            email = lib.mkOption {
+              type = types.nullOr types.str;
+              default = null;
+            };
+            extraGroups = lib.mkOption {
+              type = types.listOf types.str;
+              default = [ ];
+            };
+            isAuthorized = lib.mkOption {
+              type = types.bool;
+              default = false;
+              description = "Whether this user gets SSH authorized_keys access.";
+            };
+            homeManager = lib.mkOption {
+              type = types.listOf types.raw;
+              default = [ ];
+              description = "Home-manager module imports for this user.";
+            };
+          };
+        });
       };
+      default = {
+        enable = false;
+        mvilladsen = {
+          username = "mvilladsen";
+          fullName = "Mads Bach Villadsen";
+          email = "mvilladsen@pm.me";
+          isAuthorized = true;
+        };
+      };
+      description = "User definitions with identity and home-manager config.";
     };
   };
 
@@ -73,28 +74,28 @@ in
             stateVersion = lib.mkDefault "23.11";
           };
         }
-      ) cfg.users;
+      ) (builtins.removeAttrs cfg ["enable"]);
       sharedModules = [
         ({ osConfig, config, ... }: {
           imports = [ ../../homeManagerModules/user-profile ];
-          config.local.userProfile = lib.mkIf (osConfig.local.users.users ? ${config.home.username}) {
+          config.local.userProfile = lib.mkIf (builtins.hasAttr config.home.username (builtins.removeAttrs osConfig.local.users ["enable"])) {
             username = config.home.username;
-            fullName = osConfig.local.users.users.${config.home.username}.fullName;
-            email = osConfig.local.users.users.${config.home.username}.email;
+            fullName = osConfig.local.users.${config.home.username}.fullName;
+            email = osConfig.local.users.${config.home.username}.email;
           };
         })
       ];
     };
-    age = lib.mkIf (config.local.agenix.enable or false) (
+    age.secrets.id = lib.mkIf (config.local.agenix.enable or false) (
       lib.mapAttrs' (
         _: u:
-        lib.nameValuePair "secrets.id.${config.local.common.hostname or hostname}.${u.username}" {
+        lib.nameValuePair "${config.local.common.hostname or hostname}.${u.username}" {
           rekeyFile =
             flake-root
             + "/secrets/ssh/id_ed25519.${config.local.common.hostname or hostname}.${u.username}.age";
           owner = u.username;
         }
-      ) cfg.users
+      ) (builtins.removeAttrs cfg ["enable"])
     );
   };
 }

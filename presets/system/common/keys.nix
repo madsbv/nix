@@ -21,7 +21,7 @@ in
     authorized_users = lib.mkOption {
       description = "Users to allow key-authenticated access for.";
       default = lib.mapAttrsToList (_: u: u.username)
-        (lib.filterAttrs (_: u: u.isAuthorized) config.local.users.users);
+        (lib.filterAttrs (_: u: u.isAuthorized) (builtins.removeAttrs config.local.users ["enable"]));
     };
     authorized_user_keys = lib.mkOption {
       description = "List of public keys for the authorized user.";

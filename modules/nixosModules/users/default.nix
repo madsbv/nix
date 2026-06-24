@@ -16,6 +16,6 @@ in
         isNormalUser = true;
         extraGroups = u.extraGroups;
       }
-    ) cfg.users
+    ) (builtins.removeAttrs cfg ["enable"])
   );
 }

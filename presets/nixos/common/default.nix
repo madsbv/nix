@@ -20,6 +20,7 @@ in
     common.enable = true;
     primaryUser = user;
     users = {
+      enable = true;
       ${user}.extraGroups = [
         "wheel"
         "networkmanager"
