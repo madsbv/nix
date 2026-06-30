@@ -5,12 +5,9 @@
 }:
 
 {
-  imports = [
+  imports =
     # Use module collections instead of mod helper
-    modules.darwin-client
-    modules.client-home
-    modules.base-darwin
-  ];
+    modules.darwin-client ++ modules.client-home ++ modules.base-darwin;
 
   networking = {
     computerName = hostname;
