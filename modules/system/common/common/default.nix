@@ -151,9 +151,10 @@
           "ca-derivations"
         ];
       };
+      extraOptions = "!include ${config.age.secrets.nix-access-tokens.path}";
       distributedBuilds = true;
     };
-
+    age.secrets.nix-access-tokens.rekeyFile = flake-root + "/secrets/other/nix-access-tokens.conf.age";
     nixpkgs = {
       config = {
         # Required for Zoom, Furmark, mprime
@@ -162,6 +163,7 @@
         # allowInsecure = false;
         allowUnsupportedSystem = false;
         warnUndeclaredOptions = true;
+        permittedInsecurePackages = [ "electron-38.8.4" ];
       };
 
       overlays =
