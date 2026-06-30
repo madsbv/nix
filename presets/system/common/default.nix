@@ -22,7 +22,6 @@
       remoteBuilders_x86-64 = nodes.buildMachines;
       inherit hostname;
     };
-    keys.enable = true;
   };
 
   environment = {

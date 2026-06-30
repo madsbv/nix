@@ -28,10 +28,10 @@ in
     lib.mkMerge [
       (lib.mkAssert (cfg.muAddressArgs != null) ''
         local.email.muAddressArgs must be set when email is enabled
-      '')
+      '' { })
       (lib.mkAssert (cfg.pmbridgePasswordFile != null) ''
         local.email.pmbridgePasswordFile must be set when email is enabled
-      '')
+      '' { })
       {
         home = {
           sessionVariables = {

@@ -206,7 +206,9 @@
         nixpkgs.lib.genAttrs (attrNames (readDir ./modules/homeManagerModules)) (
           dir: import ./modules/homeManagerModules/${dir}
         )
-        // { direnv-instant = direnv-instant.homeModules.direnv-instant; };
+        // {
+          direnv-instant = direnv-instant.homeModules.direnv-instant;
+        };
 
       systemModules =
         with builtins;
@@ -226,7 +228,12 @@
           dir: import ./modules/darwinModules/${dir}
         );
       common-args = system: {
-        inherit nodes color-scheme inputs systemModules;
+        inherit
+          nodes
+          color-scheme
+          inputs
+          systemModules
+          ;
         # NEW: Namespaced module sets
         inherit (self) homeManagerModules;
         flake-root = ./.;
@@ -241,27 +248,28 @@
           inherit system;
           specialArgs = (nixos-args system) // {
             inherit hostname;
-            inherit (self) homeManagerModules;
           };
-          modules = [ ./hosts/${hostname} ]
-            ++ (with builtins; attrValues nixosModules)
-            ++ [
-              home-manager.nixosModules.home-manager
-              agenix.nixosModules.default
-              agenix-rekey.nixosModules.default
-              impermanence.nixosModules.impermanence
-              disko.nixosModules.disko
-              hosts.nixosModule
-              inputs.base16.nixosModule
-              { scheme = color-scheme; }
-              ({ lib, config, ... }: {
-                options.local.homeManager.enable = lib.mkEnableOption "home-manager";
-                config = lib.mkIf config.local.homeManager.enable {
-                  home-manager.sharedModules = with builtins; attrValues homeManagerModules;
-                };
-              })
-            ]
-            ++ (with builtins; attrValues systemModules);
+          modules = [
+            ./hosts/${hostname}
+          ]
+          ++ (builtins.attrValues nixosModules)
+          ++ [
+            home-manager.nixosModules.home-manager
+            agenix.nixosModules.default
+            agenix-rekey.nixosModules.default
+            impermanence.nixosModules.impermanence
+            disko.nixosModules.disko
+            hosts.nixosModule
+            inputs.base16.nixosModule
+            { scheme = color-scheme; }
+            ({ lib, config, ... }: {
+              options.local.homeManager.enable = lib.mkEnableOption "home-manager";
+              config = lib.mkIf config.local.homeManager.enable {
+                home-manager.sharedModules = builtins.attrValues homeManagerModules;
+              };
+            })
+          ]
+          ++ (builtins.attrValues systemModules);
         };
 
       darwin-system =
@@ -270,25 +278,26 @@
           inherit system;
           specialArgs = (darwin-args system) // {
             inherit hostname;
-            inherit (self) homeManagerModules;
           };
-          modules = [ ./hosts/${hostname} ]
-            ++ (with builtins; attrValues darwinModules)
-            ++ [
-              home-manager.darwinModules.home-manager
-              nix-homebrew.darwinModules.nix-homebrew
-              agenix.darwinModules.default
-              agenix-rekey.nixosModules.default
-              inputs.base16.nixosModule
-              { scheme = color-scheme; }
-              ({ lib, config, ... }: {
-                options.local.homeManager.enable = lib.mkEnableOption "home-manager";
-                config = lib.mkIf config.local.homeManager.enable {
-                  home-manager.sharedModules = with builtins; attrValues homeManagerModules;
-                };
-              })
-            ]
-            ++ (with builtins; attrValues systemModules);
+          modules = [
+            ./hosts/${hostname}
+          ]
+          ++ (builtins.attrValues darwinModules)
+          ++ [
+            home-manager.darwinModules.home-manager
+            nix-homebrew.darwinModules.nix-homebrew
+            agenix.darwinModules.default
+            agenix-rekey.nixosModules.default
+            inputs.base16.nixosModule
+            { scheme = color-scheme; }
+            ({ lib, config, ... }: {
+              options.local.homeManager.enable = lib.mkEnableOption "home-manager";
+              config = lib.mkIf config.local.homeManager.enable {
+                home-manager.sharedModules = with builtins; attrValues homeManagerModules;
+              };
+            })
+          ]
+          ++ (with builtins; attrValues systemModules);
         };
 
       # NOTE: When adding new nodes, update this, agenix-rekey, and deploy-rs node lists

@@ -12,6 +12,7 @@
     # ./extrauser.nix
     ../../presets/system/common
     ../../presets/system/home-manager
+    ../../presets/system/desktop
     ../../presets/system/yubikey-agenix-rekey
     ../../presets/nixos/common
     ../../presets/nixos/desktop

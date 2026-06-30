@@ -16,6 +16,7 @@ in
       enable = true;
       env = {
         CGO_ENABLED = "0";
+        GOPATH = lib.mkDefault "${config.home.homeDirectory}/.go";
       };
       telemetry.mode = "off";
     };

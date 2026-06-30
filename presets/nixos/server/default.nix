@@ -14,9 +14,6 @@
     };
   };
   local = {
-    nixos.common = {
-      inherit (cfg) timezone user;
-    };
     keys = {
       enable = true;
       enable_authorized_access = true;

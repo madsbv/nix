@@ -24,7 +24,8 @@ in
         };
         freeformType = types.attrsOf (
           types.submodule (
-            { name, ... }: {
+            { name, ... }:
+            {
               options = {
                 username = lib.mkOption {
                   type = types.str;
@@ -99,10 +100,10 @@ in
         })
       ];
     };
-    age.secrets.id = lib.mkIf (config.local.agenix.enable or false) (
+    age.secrets = lib.mkIf (config.local.agenix.enable or false) (
       lib.mapAttrs' (
         _: u:
-        lib.nameValuePair "${config.local.common.hostname or hostname}.${u.username}" {
+        lib.nameValuePair "id.${config.local.common.hostname or hostname}.${u.username}" {
           rekeyFile =
             flake-root
             + "/secrets/ssh/id_ed25519.${config.local.common.hostname or hostname}.${u.username}.age";

@@ -131,7 +131,7 @@ in
       etc =
         # Copy all appdaemon apps in this repo to /etc/appdaemon/apps.
         # Allows live modification for testing and development, though /etc/appdaemon is not a persistent directory.
-        dirToEtcAttrs (flake-root + "/modules/services/home-assistant/appdaemon/apps") "appdaemon/apps" {
+        dirToEtcAttrs ./appdaemon/apps "appdaemon/apps" {
           # 0770 is equivalent to u=rwx,g=rwx,o=, as above.
           mode = "0770";
           user = "hass";

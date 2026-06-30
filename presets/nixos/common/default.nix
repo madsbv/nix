@@ -34,7 +34,9 @@ in
       ../../home-manager/nixos
       ../../home-manager/common
     ];
-    users.root.home.stateVersion = "23.11";
+    users.root = {
+      home.stateVersion = "23.11";
+    };
   };
 
   local.restic.exclude = [

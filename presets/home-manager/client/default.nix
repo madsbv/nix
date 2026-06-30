@@ -6,7 +6,8 @@
   pkgs,
   nox,
   ...
-}: {
+}:
+{
   imports = [
     ../common
   ];
@@ -30,15 +31,14 @@
   };
 
   home = {
-    packages = pkgs.callPackage ../../../modules/home-manager/common/client/packages.nix { inherit nox; };
-    sessionPath = [ "$HOME/go/bin" ];
+    sessionPath = [ "$HOME/.go/bin" ];
     sessionVariables.TERMINAL = "kitty";
   };
 
   programs = {
     go = {
       enable = true;
-      env.GOPATH = "${config.home.homeDirectory} go";
+      env.GOPATH = "${config.home.homeDirectory}/.go";
     };
     gh = {
       enable = true;
